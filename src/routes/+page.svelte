@@ -3,7 +3,7 @@
   import { browser } from "$app/environment";
   import { panelStore, createEmptyPanel } from "../stores/panelStore";
   import { uiStore, setLoading, setCurrentStep } from "../stores/uiStore";
-  import { panelStorage } from "../lib/utils/panelStorage";
+
   import { exportService } from "../lib/services/exportService";
   import type { Panel } from "../lib/types/panel";
 
@@ -11,16 +11,15 @@
   let ImageCropper: any = $state(undefined);
   let TextManager: any = $state(undefined);
   let PanelPreview: any = $state(undefined);
-  let PanelList: any = $state(undefined);
+
 
   onMount(async () => {
     if (browser) {
-      [ImageUpload, ImageCropper, TextManager, PanelPreview, PanelList] = await Promise.all([
+      [ImageUpload, ImageCropper, TextManager, PanelPreview] = await Promise.all([
         import("../components/ImageUpload.svelte"),
         import("../components/ImageCropper.svelte"),
         import("../components/TextManager.svelte"),
-        import("../components/PanelPreview.svelte"),
-        import("../components/PanelList.svelte")
+        import("../components/PanelPreview.svelte")
       ]);
     }
   });
@@ -35,12 +34,7 @@
   });
 
   onMount(() => {
-    // Загружаем сохраненные панели
-    const savedPanels = panelStorage.getAllPanels();
-    if (savedPanels.length > 0) {
-      // Если есть сохраненные панели, можно загрузить последнюю
-      // panelStore.set(savedPanels[0]);
-    }
+    // Инициализация
   });
 
   function handleImageUpload(image: string) {
@@ -59,9 +53,6 @@
     panelStore.set(newPanel);
     currentPanel = newPanel;
 
-    // Сохраняем панель
-    panelStorage.savePanel(newPanel);
-
     setCurrentStep("text");
   }
 
@@ -78,21 +69,6 @@
         updatedAt: new Date(),
       };
       panelStore.set(updatedPanel);
-      panelStorage.savePanel(updatedPanel);
-    }
-  }
-
-  function handlePanelSelect(panel: Panel) {
-    panelStore.set(panel);
-    currentPanel = panel;
-    setCurrentStep("preview");
-  }
-
-  function handlePanelDelete(panelId: string) {
-    if (currentPanel?.id === panelId) {
-      panelStore.set(null);
-      currentPanel = null;
-      setCurrentStep("upload");
     }
   }
 
@@ -116,19 +92,12 @@
     }
   }
 
-  function handleNewPanel() {
-    panelStore.set(null);
-    currentPanel = null;
-    uploadedImage = null;
-    croppedImage = null;
-    setCurrentStep("upload");
-  }
+
 </script>
 
 <div class="app-container">
   <div class="app-header">
     <h1>Twitch Panels Creator</h1>
-    <button class="btn btn-primary" onclick={handleNewPanel}>Новая панель</button>
   </div>
 
   {#if errorMessage}
@@ -163,10 +132,6 @@
     </div>
 
     <div class="sidebar">
-      {#if PanelList}
-        {@const List = PanelList.default}
-        <List onPanelSelect={handlePanelSelect} onPanelDelete={handlePanelDelete} />
-      {/if}
     </div>
   </div>
 </div>
