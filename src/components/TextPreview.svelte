@@ -12,10 +12,10 @@
     height: number;
   } = $props();
 
-  let Stage: any;
-  let Layer: any;
-  let KonvaImage: any;
-  let Text: any;
+  let Stage = $state.raw<any>(undefined);
+  let Layer = $state.raw<any>(undefined);
+  let KonvaImage = $state.raw<any>(undefined);
+  let Text = $state.raw<any>(undefined);
   let bgImage: HTMLImageElement | undefined = $state(undefined);
   let currentPanel = $state($panelStore);
 

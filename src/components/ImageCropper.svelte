@@ -6,7 +6,7 @@
   import { ImageService } from "../lib/services/imageService";
   import { uiStore, setLoading } from "../stores/uiStore";
   
-  let Cropper: any;
+  let Cropper = $state.raw<any>(undefined);
 
   onMount(async () => {
     if (browser) {

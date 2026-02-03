@@ -8,10 +8,10 @@
     onDownload?: () => void;
   } = $props();
 
-  let Stage: any;
-  let Layer: any;
-  let KonvaImage: any;
-  let Text: any;
+  let Stage = $state.raw<any>(undefined);
+  let Layer = $state.raw<any>(undefined);
+  let KonvaImage = $state.raw<any>(undefined);
+  let Text = $state.raw<any>(undefined);
 
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);
 
