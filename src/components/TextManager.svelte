@@ -266,28 +266,32 @@
     <div class="text-list">
       {#each currentPanel.texts as textItem (textItem.id)}
         <div class="text-item">
-          <div class="text-info">
-            <span class="text-content">{textItem.text}</span>
-            <button
-              class="btn-icon btn-delete"
-              onclick={() => handleRemoveText(textItem.id)}
-              aria-label="Удалить текст"
-            >
-              ×
-            </button>
-          </div>
-          {#if currentPanel?.backgroundImage}
-            <TextPreview
-              textItem={textItem}
-              height={currentPanel.height}
-            />
-          {/if}
+          <span class="text-content">{textItem.text}</span>
+          <button
+            class="btn-icon btn-delete"
+            onclick={() => handleRemoveText(textItem.id)}
+            aria-label="Удалить текст"
+          >
+            ×
+          </button>
         </div>
       {/each}
     </div>
   {:else}
     <div class="empty-state">
       <p>Нет добавленного текста</p>
+    </div>
+  {/if}
+
+  {#if currentPanel && currentPanel.texts.length > 0 && currentPanel.backgroundImage}
+    <div class="preview-section">
+      <h3>Предпросмотр</h3>
+      {#each currentPanel.texts as textItem (textItem.id)}
+        <TextPreview
+          textItem={textItem}
+          height={currentPanel.height}
+        />
+      {/each}
     </div>
   {/if}
 </div>
@@ -414,24 +418,39 @@
   }
 
   .text-item {
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-
-  .text-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background: #f9f9f9;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+  }
+
+  .text-item:hover {
+    border-color: #007bff;
+    background: #f0f8ff;
   }
 
   .text-content {
     font-size: 1rem;
     color: #333;
     flex: 1;
+  }
+
+  .preview-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+  }
+
+  .preview-section h3 {
+    margin: 0 0 1.5rem 0;
+    color: #333;
+    font-size: 1.25rem;
   }
 
   .btn-icon {
