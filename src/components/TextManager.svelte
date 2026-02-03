@@ -9,9 +9,54 @@
   } = $props();
 
   let currentPanel = $state($panelStore);
-  let selectedTextId = $state<string | null>(null);
   let newText = $state("");
   let errorMessage = $state<string | null>(null);
+
+  // Общие настройки текста для всех текстов
+  let commonTextSettings = $state({
+    fontSize: 18,
+    fontFamily: "Arial",
+    color: "#ffffff",
+    textAlign: "center" as "left" | "center" | "right",
+    padding: {
+      top: 10,
+      right: 10,
+      bottom: 10,
+      left: 10,
+    },
+    verticalOffset: 0,
+  });
+
+  // Список доступных шрифтов
+  const availableFonts = [
+    "Arial",
+    "Verdana",
+    "Georgia",
+    "Times New Roman",
+    "Courier New",
+    "Impact",
+    "Comic Sans MS",
+    "Trebuchet MS",
+  ];
+
+  // Применить общие настройки ко всем текстам
+  function applyCommonSettingsToAll() {
+    if (!currentPanel) return;
+
+    const updatedTexts = currentPanel.texts.map(text => ({
+      ...text,
+      fontSize: commonTextSettings.fontSize,
+      fontFamily: commonTextSettings.fontFamily,
+      color: commonTextSettings.color,
+      textAlign: commonTextSettings.textAlign,
+      padding: { ...commonTextSettings.padding },
+      verticalOffset: commonTextSettings.verticalOffset,
+    }));
+
+    const updatedPanel = updatePanel(currentPanel, { texts: updatedTexts });
+    panelStore.set(updatedPanel);
+    onTextUpdate(updatedTexts);
+  }
 
   // Subscribe to panel store
   $effect(() => {
@@ -37,7 +82,6 @@
       panelStore.set(updatedPanel);
       onTextUpdate(updatedPanel.texts);
       newText = "";
-      selectedTextId = updatedPanel.texts[updatedPanel.texts.length - 1].id;
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : "Ошибка добавления текста";
     }
@@ -64,23 +108,192 @@
       const updatedPanel = removeTextFromPanel(currentPanel, textId);
       panelStore.set(updatedPanel);
       onTextUpdate(updatedPanel.texts);
-
-      if (selectedTextId === textId) {
-        selectedTextId = null;
-      }
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : "Ошибка удаления текста";
     }
-  }
-
-  function handleSelectText(textId: string) {
-    selectedTextId = textId;
   }
 </script>
 
 <div class="text-manager">
   <div class="text-manager-header">
     <h2>Управление текстом</h2>
+  </div>
+
+  <!-- Общие настройки текста -->
+  <div class="common-settings-section">
+    <h3>Общие настройки текста</h3>
+    
+    <div class="settings-grid">
+      <div class="control-group">
+        <label>
+          Размер шрифта:
+          <input
+            type="range"
+            min="10"
+            max="72"
+            step="1"
+            value={commonTextSettings.fontSize}
+            oninput={(e) => {
+              commonTextSettings.fontSize = parseInt(e.target.value);
+              applyCommonSettingsToAll();
+            }}
+          />
+          <span class="value-display">{commonTextSettings.fontSize}px</span>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>
+          Шрифт:
+          <select
+            value={commonTextSettings.fontFamily}
+            onchange={(e) => {
+              commonTextSettings.fontFamily = e.target.value;
+              applyCommonSettingsToAll();
+            }}
+          >
+            {#each availableFonts as font}
+              <option value={font}>{font}</option>
+            {/each}
+          </select>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>
+          Цвет:
+          <input
+            type="color"
+            value={commonTextSettings.color}
+            oninput={(e) => {
+              commonTextSettings.color = e.target.value;
+              applyCommonSettingsToAll();
+            }}
+          />
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>
+          Выравнивание:
+          <div class="alignment-buttons">
+            <button
+              class="btn-align {commonTextSettings.textAlign === 'left' ? 'active' : ''}"
+              onclick={() => {
+                commonTextSettings.textAlign = 'left';
+                applyCommonSettingsToAll();
+              }}
+            >
+              ←
+            </button>
+            <button
+              class="btn-align {commonTextSettings.textAlign === 'center' ? 'active' : ''}"
+              onclick={() => {
+                commonTextSettings.textAlign = 'center';
+                applyCommonSettingsToAll();
+              }}
+            >
+              ↔
+            </button>
+            <button
+              class="btn-align {commonTextSettings.textAlign === 'right' ? 'active' : ''}"
+              onclick={() => {
+                commonTextSettings.textAlign = 'right';
+                applyCommonSettingsToAll();
+              }}
+            >
+              →
+            </button>
+          </div>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>
+          Внутренние отступы:
+          <div class="padding-controls">
+            <div class="padding-input">
+              <span>Верх:</span>
+              <input
+                type="range"
+                min="0"
+                max="50"
+                step="1"
+                value={commonTextSettings.padding.top}
+                oninput={(e) => {
+                  commonTextSettings.padding.top = parseInt(e.target.value);
+                  applyCommonSettingsToAll();
+                }}
+              />
+              <span class="value-display">{commonTextSettings.padding.top}px</span>
+            </div>
+            <div class="padding-input">
+              <span>Низ:</span>
+              <input
+                type="range"
+                min="0"
+                max="50"
+                step="1"
+                value={commonTextSettings.padding.bottom}
+                oninput={(e) => {
+                  commonTextSettings.padding.bottom = parseInt(e.target.value);
+                  applyCommonSettingsToAll();
+                }}
+              />
+              <span class="value-display">{commonTextSettings.padding.bottom}px</span>
+            </div>
+            <div class="padding-input">
+              <span>Лево:</span>
+              <input
+                type="range"
+                min="0"
+                max="50"
+                step="1"
+                value={commonTextSettings.padding.left}
+                oninput={(e) => {
+                  commonTextSettings.padding.left = parseInt(e.target.value);
+                  applyCommonSettingsToAll();
+                }}
+              />
+              <span class="value-display">{commonTextSettings.padding.left}px</span>
+            </div>
+            <div class="padding-input">
+              <span>Право:</span>
+              <input
+                type="range"
+                min="0"
+                max="50"
+                step="1"
+                value={commonTextSettings.padding.right}
+                oninput={(e) => {
+                  commonTextSettings.padding.right = parseInt(e.target.value);
+                  applyCommonSettingsToAll();
+                }}
+              />
+              <span class="value-display">{commonTextSettings.padding.right}px</span>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>
+          Смещение от центра:
+          <input
+            type="range"
+            min="-50"
+            max="50"
+            step="1"
+            value={commonTextSettings.verticalOffset}
+            oninput={(e) => {
+              commonTextSettings.verticalOffset = parseInt(e.target.value);
+              applyCommonSettingsToAll();
+            }}
+          />
+          <span class="value-display">{commonTextSettings.verticalOffset > 0 ? '+' : ''}{commonTextSettings.verticalOffset}px</span>
+        </label>
+      </div>
+    </div>
   </div>
 
   <div class="add-text-section">
@@ -106,88 +319,17 @@
   {#if currentPanel && currentPanel.texts.length > 0}
     <div class="text-list">
       {#each currentPanel.texts as textItem (textItem.id)}
-        <div
-          class="text-item {selectedTextId === textItem.id ? 'selected' : ''}"
-          onclick={() => handleSelectText(textItem.id)}
-        >
+        <div class="text-item">
           <div class="text-preview">
             <span class="text-content">{textItem.text}</span>
             <button
               class="btn-icon btn-delete"
-              onclick={(e) => { e.stopPropagation(); handleRemoveText(textItem.id); }}
+              onclick={() => handleRemoveText(textItem.id)}
               aria-label="Удалить текст"
             >
               ×
             </button>
           </div>
-
-          {#if selectedTextId === textItem.id}
-            <div class="text-controls">
-              <div class="control-group">
-                <label>
-                  Размер шрифта:
-                  <input
-                    type="range"
-                    min="10"
-                    max="72"
-                    step="1"
-                    value={textItem.fontSize}
-                    oninput={(e) => handleUpdateText(textItem.id, {
-                      fontSize: parseInt(e.target.value)
-                    })}
-                  />
-                  <span class="value-display">{textItem.fontSize}px</span>
-                </label>
-              </div>
-
-              <div class="control-group">
-                <label>
-                  Цвет:
-                  <input
-                    type="color"
-                    value={textItem.color}
-                    oninput={(e) => handleUpdateText(textItem.id, {
-                      color: e.target.value
-                    })}
-                  />
-                </label>
-              </div>
-
-              <div class="control-group">
-                <label>
-                  Позиция X:
-                  <input
-                    type="range"
-                    min="0"
-                    max="320"
-                    step="1"
-                    value={textItem.x}
-                    oninput={(e) => handleUpdateText(textItem.id, {
-                      x: parseInt(e.target.value)
-                    })}
-                  />
-                  <span class="value-display">{textItem.x}px</span>
-                </label>
-              </div>
-
-              <div class="control-group">
-                <label>
-                  Позиция Y:
-                  <input
-                    type="range"
-                    min="0"
-                    max={currentPanel.height}
-                    step="1"
-                    value={textItem.y}
-                    oninput={(e) => handleUpdateText(textItem.id, {
-                      y: parseInt(e.target.value)
-                    })}
-                  />
-                  <span class="value-display">{textItem.y}px</span>
-                </label>
-              </div>
-            </div>
-          {/if}
         </div>
       {/each}
     </div>
@@ -212,6 +354,71 @@
     margin: 0;
     color: #333;
     font-size: 1.5rem;
+  }
+
+  .common-settings-section {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .common-settings-section h3 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.25rem;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .alignment-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-align {
+    flex: 1;
+    padding: 0.5rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-align:hover {
+    border-color: #007bff;
+    background: #f0f8ff;
+  }
+
+  .btn-align.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+
+  .padding-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .padding-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .padding-input span {
+    min-width: 40px;
+    font-size: 0.9rem;
+    color: #666;
   }
 
   .add-text-section {
@@ -279,18 +486,12 @@
     transition: all 0.3s ease;
   }
 
-  .text-item.selected {
-    border-color: #007bff;
-    background: #f0f8ff;
-  }
-
   .text-preview {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
     background: #f9f9f9;
-    cursor: pointer;
   }
 
   .text-content {

@@ -4,8 +4,17 @@ export interface TextItem {
   fontSize: number;
   fontFamily: string;
   color: string;
-  x: number;
-  y: number;
+  // Выравнивание текста: left, center, right
+  textAlign: "left" | "center" | "right";
+  // Внутренние отступы
+  padding: {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  };
+  // Смещение от центра по вертикали (для компенсации визуального центра разных шрифтов)
+  verticalOffset: number;
 }
 
 export interface Panel {
