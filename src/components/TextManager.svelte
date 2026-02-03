@@ -3,6 +3,7 @@
   import { panelStore, addTextToPanel, updateTextInPanel, removeTextFromPanel } from "../stores/panelStore";
   import type { TextItem } from "../lib/types/panel";
   import { v4 as uuidv4 } from "uuid";
+  import { Button, IconButton } from "../lib/components/ui";
 
   let { onTextUpdate }: {
     onTextUpdate: (texts: TextItem[]) => void;
@@ -172,33 +173,36 @@
         <label>
           Выравнивание:
           <div class="alignment-buttons">
-            <button
-              class="btn-align {commonTextSettings.textAlign === 'left' ? 'active' : ''}"
+            <IconButton
+              variant={commonTextSettings.textAlign === 'left' ? 'primary' : 'secondary'}
               onclick={() => {
                 commonTextSettings.textAlign = 'left';
                 applyCommonSettingsToAll();
               }}
+              ariaLabel="Выровнять по левому краю"
             >
               ←
-            </button>
-            <button
-              class="btn-align {commonTextSettings.textAlign === 'center' ? 'active' : ''}"
+            </IconButton>
+            <IconButton
+              variant={commonTextSettings.textAlign === 'center' ? 'primary' : 'secondary'}
               onclick={() => {
                 commonTextSettings.textAlign = 'center';
                 applyCommonSettingsToAll();
               }}
+              ariaLabel="Выровнять по центру"
             >
               ↔
-            </button>
-            <button
-              class="btn-align {commonTextSettings.textAlign === 'right' ? 'active' : ''}"
+            </IconButton>
+            <IconButton
+              variant={commonTextSettings.textAlign === 'right' ? 'primary' : 'secondary'}
               onclick={() => {
                 commonTextSettings.textAlign = 'right';
                 applyCommonSettingsToAll();
               }}
+              ariaLabel="Выровнять по правому краю"
             >
               →
-            </button>
+            </IconButton>
           </div>
         </label>
       </div>
@@ -250,9 +254,7 @@
         class="text-input"
         maxlength="100"
       />
-      <button class="btn btn-primary" onclick={handleAddText}>
-        Добавить
-      </button>
+      <Button variant="primary" onclick={handleAddText}>Добавить</Button>
     </div>
     {#if errorMessage}
       <div class="error-message">
@@ -266,13 +268,13 @@
       {#each currentPanel.texts as textItem (textItem.id)}
         <div class="text-item">
           <span class="text-content">{textItem.text}</span>
-          <button
-            class="btn-icon btn-delete"
+          <IconButton
+            variant="danger"
             onclick={() => handleRemoveText(textItem.id)}
-            aria-label="Удалить текст"
+            ariaLabel="Удалить текст"
           >
             ×
-          </button>
+          </IconButton>
         </div>
       {/each}
     </div>
@@ -323,28 +325,6 @@
     gap: 0.5rem;
   }
 
-  .btn-align {
-    flex: 1;
-    padding: 0.5rem;
-    border: 2px solid #ddd;
-    border-radius: 4px;
-    background: white;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: all 0.2s ease;
-  }
-
-  .btn-align:hover {
-    border-color: #007bff;
-    background: #f0f8ff;
-  }
-
-  .btn-align.active {
-    background: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-
   .add-text-section {
     display: flex;
     flex-direction: column;
@@ -367,25 +347,6 @@
   .text-input:focus {
     outline: none;
     border-color: #007bff;
-  }
-
-  .btn {
-    padding: 0.6rem 1.25rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-  }
-
-  .btn-primary {
-    background: #007bff;
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background: #0056b3;
   }
 
   .error-message {
@@ -423,21 +384,6 @@
     font-size: 0.95rem;
     color: #333;
     flex: 1;
-  }
-
-  .btn-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    font-size: 1.25rem;
-    color: #dc3545;
-    transition: all 0.2s ease;
-    line-height: 1;
-  }
-
-  .btn-icon:hover {
-    color: #a71d2a;
   }
 
   .text-controls {

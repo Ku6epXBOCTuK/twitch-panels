@@ -5,6 +5,7 @@
   import { ImageService } from "../lib/services/imageService";
   import { handleError } from "../lib/utils/errorHandler";
   import type { ImageUploadResult } from "../lib/types/panel";
+  import { Button } from "../lib/components/ui";
 
   let imageService = new ImageService();
 
@@ -155,7 +156,7 @@
     <div class="uploaded-image-preview">
       <img src={uploadedImage} alt="Uploaded preview" />
       <div class="preview-actions">
-        <button class="btn btn-secondary" onclick={resetUpload}> Загрузить другое </button>
+        <Button variant="secondary" onclick={resetUpload}>Загрузить другое</Button>
       </div>
     </div>
   {:else}
@@ -183,11 +184,11 @@
         <p>Перетащите файл сюда, нажмите для выбора, или вставьте через Ctrl+V</p>
 
         <div class="upload-methods">
-          <button class="btn btn-primary" onclick={(e) => { e.stopPropagation(); triggerFileInput(); }}> Выбрать файл </button>
+          <Button variant="primary" onclick={(e) => { e.stopPropagation(); triggerFileInput(); }}>Выбрать файл</Button>
 
-          <button class="btn btn-secondary" onclick={() => (showUrlInput = !showUrlInput)}>
+          <Button variant="secondary" onclick={() => (showUrlInput = !showUrlInput)}>
             {showUrlInput ? "Скрыть" : "По URL"}
-          </button>
+          </Button>
         </div>
 
         {#if showUrlInput}
@@ -199,7 +200,7 @@
               required
               class="url-input"
             />
-            <button type="submit" class="btn btn-primary" disabled={$uiStore.isLoading}> Загрузить </button>
+            <Button type="submit" variant="primary" disabled={$uiStore.isLoading} loading={$uiStore.isLoading}>Загрузить</Button>
           </form>
         {/if}
 
@@ -388,37 +389,5 @@
     100% {
       transform: rotate(360deg);
     }
-  }
-
-  .btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-  }
-
-  .btn-primary {
-    background: #007bff;
-    color: white;
-  }
-
-  .btn-primary:hover:not(:disabled) {
-    background: #0056b3;
-  }
-
-  .btn-secondary {
-    background: #6c757d;
-    color: white;
-  }
-
-  .btn-secondary:hover:not(:disabled) {
-    background: #545b62;
-  }
-
-  .btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
   }
 </style>

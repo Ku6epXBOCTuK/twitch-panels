@@ -4,6 +4,7 @@
   import { panelStore } from "../stores/panelStore";
   import { panelStorage } from "../lib/utils/panelStorage";
   import type { Panel } from "../lib/types/panel";
+  import { IconButton } from "../lib/components/ui";
 
   let { onPanelSelect, onPanelDelete }: {
     onPanelSelect: (panel: Panel) => void;
@@ -75,9 +76,9 @@
 <div class="panel-list">
   <div class="panel-list-header">
     <h2>Сохраненные панели</h2>
-    <button class="btn btn-refresh" onclick={loadPanels} aria-label="Обновить список">
+    <IconButton variant="secondary" onclick={loadPanels} ariaLabel="Обновить список">
       ↻
-    </button>
+    </IconButton>
   </div>
 
   {#if errorMessage}
@@ -118,13 +119,13 @@
             </div>
 
             <div class="panel-actions">
-              <button
-                class="btn-icon btn-delete"
+              <IconButton
+                variant="danger"
                 onclick={(e) => { e.stopPropagation(); handlePanelDelete(panel.id); }}
-                aria-label="Удалить панель"
+                ariaLabel="Удалить панель"
               >
                 🗑️
-              </button>
+              </IconButton>
             </div>
           </div>
         </div>
@@ -156,21 +157,6 @@
     margin: 0;
     color: #333;
     font-size: 1.5rem;
-  }
-
-  .btn-refresh {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    color: #666;
-    transition: all 0.2s ease;
-  }
-
-  .btn-refresh:hover {
-    color: #007bff;
-    transform: rotate(180deg);
   }
 
   .error-message {
@@ -270,18 +256,5 @@
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
-  }
-
-  .btn-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    font-size: 1.2rem;
-    transition: all 0.2s ease;
-  }
-
-  .btn-delete:hover {
-    transform: scale(1.1);
   }
 </style>

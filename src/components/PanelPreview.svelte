@@ -2,6 +2,7 @@
   import { panelStore } from "../stores/panelStore";
   import type { TextItem } from "../lib/types/panel";
   import { Stage, Layer, Image, Text } from "svelte-konva";
+  import { Button } from "../lib/components/ui";
 
   let {
     onDownload,
@@ -56,7 +57,7 @@
   <div class="preview-header">
     <h2>Предпросмотр панели</h2>
     {#if $panelStore}
-      <button class="btn btn-primary" onclick={handleDownload}> Скачать </button>
+      <Button variant="primary" onclick={handleDownload}>Скачать</Button>
     {/if}
   </div>
 
@@ -170,24 +171,5 @@
   .empty-state p {
     margin: 0;
     font-size: 0.95rem;
-  }
-
-  .btn {
-    padding: 0.6rem 1.25rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-  }
-
-  .btn-primary {
-    background: #007bff;
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background: #0056b3;
   }
 </style>

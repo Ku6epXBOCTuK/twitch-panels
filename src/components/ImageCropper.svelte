@@ -4,6 +4,7 @@
   import type { ImageCropResult } from "../lib/types/panel";
   import { ImageService } from "../lib/services/imageService";
   import { uiStore, setLoading } from "../stores/uiStore";
+  import { Button } from "../lib/components/ui";
 
   let {
     imageSrc,
@@ -107,10 +108,10 @@
   {/if}
 
   <div class="cropper-actions">
-    <button class="btn btn-secondary" onclick={handleCancel} disabled={isProcessing}> Отмена </button>
-    <button class="btn btn-primary" onclick={handleCrop} disabled={isProcessing}>
-      {isProcessing ? "Обработка..." : "Применить"}
-    </button>
+    <Button variant="secondary" onclick={handleCancel} disabled={isProcessing}>Отмена</Button>
+    <Button variant="primary" onclick={handleCrop} disabled={isProcessing} loading={isProcessing}>
+      Применить
+    </Button>
   </div>
 
   <div class="cropper-info">
@@ -165,39 +166,6 @@
     padding: 0.75rem;
     border-radius: 4px;
     border: 1px solid #ffcdd2;
-  }
-
-  .btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-  }
-
-  .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .btn-primary {
-    background: #007bff;
-    color: white;
-  }
-
-  .btn-primary:hover:not(:disabled) {
-    background: #0056b3;
-  }
-
-  .btn-secondary {
-    background: #6c757d;
-    color: white;
-  }
-
-  .btn-secondary:hover:not(:disabled) {
-    background: #545b62;
   }
 
   :global(.cropper-view-box),
