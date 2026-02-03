@@ -6,13 +6,8 @@ export interface TextItem {
   color: string;
   // Выравнивание текста: left, center, right
   textAlign: "left" | "center" | "right";
-  // Внутренние отступы
-  padding: {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
-  };
+  // Боковые отступы (лево/право)
+  paddingX: number;
   // Смещение от центра по вертикали (для компенсации визуального центра разных шрифтов)
   verticalOffset: number;
 }

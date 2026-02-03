@@ -18,12 +18,7 @@
     fontFamily: "Arial",
     color: "#ffffff",
     textAlign: "center" as "left" | "center" | "right",
-    padding: {
-      top: 10,
-      right: 10,
-      bottom: 10,
-      left: 10,
-    },
+    paddingX: 10,
     verticalOffset: 0,
   });
 
@@ -49,7 +44,7 @@
       fontFamily: commonTextSettings.fontFamily,
       color: commonTextSettings.color,
       textAlign: commonTextSettings.textAlign,
-      padding: { ...commonTextSettings.padding },
+      paddingX: commonTextSettings.paddingX,
       verticalOffset: commonTextSettings.verticalOffset,
     }));
 
@@ -210,69 +205,19 @@
 
       <div class="control-group">
         <label>
-          Внутренние отступы:
-          <div class="padding-controls">
-            <div class="padding-input">
-              <span>Верх:</span>
-              <input
-                type="range"
-                min="0"
-                max="50"
-                step="1"
-                value={commonTextSettings.padding.top}
-                oninput={(e) => {
-                  commonTextSettings.padding.top = parseInt(e.target.value);
-                  applyCommonSettingsToAll();
-                }}
-              />
-              <span class="value-display">{commonTextSettings.padding.top}px</span>
-            </div>
-            <div class="padding-input">
-              <span>Низ:</span>
-              <input
-                type="range"
-                min="0"
-                max="50"
-                step="1"
-                value={commonTextSettings.padding.bottom}
-                oninput={(e) => {
-                  commonTextSettings.padding.bottom = parseInt(e.target.value);
-                  applyCommonSettingsToAll();
-                }}
-              />
-              <span class="value-display">{commonTextSettings.padding.bottom}px</span>
-            </div>
-            <div class="padding-input">
-              <span>Лево:</span>
-              <input
-                type="range"
-                min="0"
-                max="50"
-                step="1"
-                value={commonTextSettings.padding.left}
-                oninput={(e) => {
-                  commonTextSettings.padding.left = parseInt(e.target.value);
-                  applyCommonSettingsToAll();
-                }}
-              />
-              <span class="value-display">{commonTextSettings.padding.left}px</span>
-            </div>
-            <div class="padding-input">
-              <span>Право:</span>
-              <input
-                type="range"
-                min="0"
-                max="50"
-                step="1"
-                value={commonTextSettings.padding.right}
-                oninput={(e) => {
-                  commonTextSettings.padding.right = parseInt(e.target.value);
-                  applyCommonSettingsToAll();
-                }}
-              />
-              <span class="value-display">{commonTextSettings.padding.right}px</span>
-            </div>
-          </div>
+          Боковые отступы:
+          <input
+            type="range"
+            min="0"
+            max="50"
+            step="1"
+            value={commonTextSettings.paddingX}
+            oninput={(e) => {
+              commonTextSettings.paddingX = parseInt(e.target.value);
+              applyCommonSettingsToAll();
+            }}
+          />
+          <span class="value-display">{commonTextSettings.paddingX}px</span>
         </label>
       </div>
 
@@ -401,24 +346,6 @@
     background: #007bff;
     color: white;
     border-color: #007bff;
-  }
-
-  .padding-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .padding-input {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .padding-input span {
-    min-width: 40px;
-    font-size: 0.9rem;
-    color: #666;
   }
 
   .add-text-section {

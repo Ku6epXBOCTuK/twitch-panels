@@ -31,12 +31,7 @@ export const addTextToPanel = (panel: Panel, text: string): Panel => {
     fontFamily: "Arial",
     color: "#ffffff",
     textAlign: "center" as const,
-    padding: {
-      top: 10,
-      right: 10,
-      bottom: 10,
-      left: 10,
-    },
+    paddingX: 10,
     verticalOffset: 0,
   };
 
