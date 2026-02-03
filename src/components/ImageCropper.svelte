@@ -4,7 +4,7 @@
   import { browser } from "$app/environment";
   import type { ImageCropResult } from "../lib/types/panel";
   import { ImageService } from "../lib/services/imageService";
-  import { uiStore } from "../stores/uiStore";
+  import { uiStore, setLoading } from "../stores/uiStore";
   
   let Cropper: any = $state(undefined);
 
@@ -14,7 +14,7 @@
       Cropper = cropperModule.default;
       
       // Импортируем стили только на клиенте
-      await import("cropperjs/dist/cropper.css");
+
       
       // Инициализируем cropper после загрузки
       initializeCropper();
@@ -70,7 +70,7 @@
     try {
       isProcessing = true;
       errorMessage = null;
-      uiStore.setLoading(true);
+      setLoading(true);
 
       const canvas = cropper.getCroppedCanvas({
         width: 320,
@@ -96,7 +96,7 @@
       console.error("Crop error:", error);
     } finally {
       isProcessing = false;
-      uiStore.setLoading(false);
+      setLoading(false);
     }
   }
 

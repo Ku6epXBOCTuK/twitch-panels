@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { uiStore } from "../stores/uiStore";
+  import { uiStore, setLoading, clearError, setCurrentStep } from "../stores/uiStore";
   import { panelStore } from "../stores/panelStore";
   import { ImageService } from "../lib/services/imageService";
   import { handleError } from "../lib/utils/errorHandler";
@@ -67,7 +67,7 @@
 
   async function handleFileUpload(file: File) {
     try {
-      uiStore.setLoading(true);
+      setLoading(true);
       uiStore.clearError();
 
       const result: ImageUploadResult = await imageService.handleFileUpload(file);
@@ -81,7 +81,7 @@
     } catch (error) {
       errorMessage = handleError(error);
     } finally {
-      uiStore.update((state) => ({ ...state, isLoading: false }));
+      setLoading(false);
     }
   }
 
@@ -89,7 +89,7 @@
     e.preventDefault();
 
     try {
-      uiStore.setLoading(true);
+      setLoading(true);
       uiStore.clearError();
 
       const result: ImageUploadResult = await imageService.handlePasteUpload(e);
@@ -103,7 +103,7 @@
     } catch (error) {
       errorMessage = handleError(error);
     } finally {
-      uiStore.update((state) => ({ ...state, isLoading: false }));
+      setLoading(false);
     }
   }
 
@@ -113,14 +113,14 @@
     if (!urlInput.value.trim()) return;
 
     try {
-      uiStore.update((state) => ({ ...state, isLoading: true }));
-      uiStore.update((state) => ({ ...state, error: null }));
+      setLoading(true);
+      uiStore.clearError();
 
       const result: ImageUploadResult = await imageService.handleUrlUpload(urlInput.value.trim());
 
       if (result.success && result.image) {
         uploadedImage = result.image;
-        uiStore.update((state) => ({ ...state, currentStep: "crop" }));
+        uiStore.setCurrentStep("crop");
         showUrlInput = false;
       } else {
         errorMessage = result.error || "Ошибка загрузки изображения";
@@ -128,7 +128,7 @@
     } catch (error) {
       errorMessage = handleError(error);
     } finally {
-      uiStore.update((state) => ({ ...state, isLoading: false }));
+      setLoading(false);
     }
   }
 
@@ -140,7 +140,7 @@
     uploadedImage = null;
     errorMessage = null;
     showUrlInput = false;
-    uiStore.update((state) => ({ ...state, currentStep: "upload" }));
+    uiStore.setCurrentStep("upload");
   }
 </script>
 

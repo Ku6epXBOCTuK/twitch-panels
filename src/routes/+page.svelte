@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
   import { panelStore, createEmptyPanel } from "../stores/panelStore";
-  import { uiStore } from "../stores/uiStore";
+  import { uiStore, setLoading } from "../stores/uiStore";
   import { panelStorage } from "../lib/utils/panelStorage";
   import { exportService } from "../lib/services/exportService";
   import type { Panel } from "../lib/types/panel";
@@ -103,7 +103,7 @@
     }
 
     try {
-      uiStore.setLoading(true);
+      setLoading(true);
       const result = await exportService.exportPanel(currentPanel);
 
       if (!result.success) {
@@ -112,7 +112,7 @@
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : "Ошибка экспорта панели";
     } finally {
-      uiStore.setLoading(false);
+      setLoading(false);
     }
   }
 
