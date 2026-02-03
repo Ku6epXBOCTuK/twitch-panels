@@ -1,40 +1,25 @@
-
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { browser } from "$app/environment";
   import { panelStore } from "../stores/panelStore";
+  import type { TextItem } from "../lib/types/panel";
+  import { Stage, Layer, Image, Text } from "svelte-konva";
 
-  let { onDownload }: {
+  let {
+    onDownload,
+  }: {
     onDownload?: () => void;
   } = $props();
-
-  let Stage = $state.raw<any>(undefined);
-  let Layer = $state.raw<any>(undefined);
-  let KonvaImage = $state.raw<any>(undefined);
-  let Text = $state.raw<any>(undefined);
 
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);
 
   $effect(() => {
-    if (!browser) return;
     const panel = $panelStore;
     if (panel?.backgroundImage && panel.backgroundImage !== backgroundImage?.src) {
       loadImage(panel.backgroundImage);
     }
   });
 
-  onMount(async () => {
-    if (browser) {
-      const svelteKonva = await import("svelte-konva");
-      Stage = svelteKonva.Stage;
-      Layer = svelteKonva.Layer;
-      KonvaImage = svelteKonva.Image;
-      Text = svelteKonva.Text;
-    }
-  });
-
   function loadImage(src: string) {
-    const img = new Image();
+    const img = document.createElement("img");
     img.onload = () => {
       backgroundImage = img;
     };
@@ -47,7 +32,7 @@
     }
   }
 
-  function getTextPosition(textItem: any) {
+  function getTextPosition(textItem: TextItem) {
     const panel = $panelStore;
     if (!panel) return { x: 0, y: 0 };
     const panelWidth = 320;
@@ -71,13 +56,11 @@
   <div class="preview-header">
     <h2>Предпросмотр панели</h2>
     {#if $panelStore}
-      <button class="btn btn-primary" onclick={handleDownload}>
-        Скачать
-      </button>
+      <button class="btn btn-primary" onclick={handleDownload}> Скачать </button>
     {/if}
   </div>
 
-  {#if $panelStore && Stage}
+  {#if $panelStore}
     <div class="preview-sections">
       <!-- Превью чистой картинки -->
       <div class="preview-section">
@@ -86,11 +69,7 @@
           <Stage width={320} height={$panelStore.height}>
             <Layer>
               {#if backgroundImage}
-                <KonvaImage
-                  image={backgroundImage}
-                  width={320}
-                  height={$panelStore.height}
-                />
+                <Image image={backgroundImage} width={320} height={$panelStore.height} />
               {/if}
             </Layer>
           </Stage>
@@ -102,29 +81,25 @@
         <h3>С текстом</h3>
         <div class="canvas-container">
           <Stage width={320} height={$panelStore.height}>
-        <Layer>
-          {#if backgroundImage}
-            <KonvaImage
-              image={backgroundImage}
-              width={320}
-              height={$panelStore.height}
-            />
-          {/if}
-          {#each $panelStore.texts || [] as textItem (textItem.id)}
-            {@const textPosition = getTextPosition(textItem)}
-            <Text
-              text={textItem.text}
-              fontSize={textItem.fontSize}
-              fill={textItem.color}
-              fontFamily={textItem.fontFamily}
-              x={textPosition.x}
-              y={textPosition.y}
-              align={textItem.textAlign}
-              width={320 - (textItem.paddingX * 2)}
-            />
-          {/each}
-        </Layer>
-      </Stage>
+            <Layer>
+              {#if backgroundImage}
+                <Image image={backgroundImage} width={320} height={$panelStore.height} />
+              {/if}
+              {#each $panelStore.texts || [] as textItem (textItem.id)}
+                {@const textPosition = getTextPosition(textItem)}
+                <Text
+                  text={textItem.text}
+                  fontSize={textItem.fontSize}
+                  fill={textItem.color}
+                  fontFamily={textItem.fontFamily}
+                  x={textPosition.x}
+                  y={textPosition.y}
+                  align={textItem.textAlign}
+                  width={320 - textItem.paddingX * 2}
+                />
+              {/each}
+            </Layer>
+          </Stage>
         </div>
       </div>
     </div>

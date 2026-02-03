@@ -74,7 +74,7 @@ export class ExportService {
    */
   private loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
-      const img = new Image();
+      const img = document.createElement("img");
       img.onload = () => resolve(img);
       img.onerror = () => reject(new ImageError("Не удалось загрузить изображение"));
       img.src = src;

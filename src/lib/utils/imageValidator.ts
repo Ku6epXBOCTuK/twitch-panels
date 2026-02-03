@@ -66,7 +66,7 @@ export function validateImageElement(img: HTMLImageElement): ValidationResult {
 
 export async function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
-    const img = new Image();
+    const img = document.createElement("img");
     img.crossOrigin = "anonymous";
 
     img.onload = () => resolve(img);

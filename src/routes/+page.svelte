@@ -1,28 +1,14 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { browser } from "$app/environment";
   import { panelStore, createEmptyPanel } from "../stores/panelStore";
   import { uiStore, setLoading, setCurrentStep } from "../stores/uiStore";
 
   import { exportService } from "../lib/services/exportService";
   import type { Panel } from "../lib/types/panel";
 
-  let ImageUpload: any = $state(undefined);
-  let ImageCropper: any = $state(undefined);
-  let TextManager: any = $state(undefined);
-  let PanelPreview: any = $state(undefined);
-
-
-  onMount(async () => {
-    if (browser) {
-      [ImageUpload, ImageCropper, TextManager, PanelPreview] = await Promise.all([
-        import("../components/ImageUpload.svelte"),
-        import("../components/ImageCropper.svelte"),
-        import("../components/TextManager.svelte"),
-        import("../components/PanelPreview.svelte")
-      ]);
-    }
-  });
+  import ImageUpload from "../components/ImageUpload.svelte";
+  import ImageCropper from "../components/ImageCropper.svelte";
+  import TextManager from "../components/TextManager.svelte";
+  import PanelPreview from "../components/PanelPreview.svelte";
 
   let uploadedImage = $state<string | null>(null);
   let croppedImage = $state<string | null>(null);
@@ -105,29 +91,17 @@
   <div class="app-content">
     <div class="main-section">
       {#if $uiStore.currentStep === "upload"}
-        {#if ImageUpload}
-          {@const Upload = ImageUpload.default}
-          <Upload onImageSelect={handleImageUpload} />
-        {/if}
+        <ImageUpload onImageSelect={handleImageUpload} />
       {:else if $uiStore.currentStep === "crop" && uploadedImage}
-        {#if ImageCropper}
-          {@const Cropper = ImageCropper.default}
-          <Cropper imageSrc={uploadedImage} onCropComplete={handleCropComplete} onCancel={handleCropCancel} />
-        {/if}
+        <ImageCropper imageSrc={uploadedImage} onCropComplete={handleCropComplete} onCancel={handleCropCancel} />
       {:else if $uiStore.currentStep === "text"}
-        {#if TextManager}
-          {@const Manager = TextManager.default}
-          <Manager onTextUpdate={handleTextUpdate} />
-        {/if}
+        <TextManager onTextUpdate={handleTextUpdate} />
       {/if}
     </div>
 
     <div class="sidebar">
-      {#if $uiStore.currentStep === "text" && PanelPreview?.default}
-        {@const Preview = PanelPreview.default}
-        <Preview onDownload={handleDownload} />
-      {:else if $uiStore.currentStep === "text"}
-        <div class="loading">Загрузка предпросмотра...</div>
+      {#if $uiStore.currentStep === "text"}
+        <PanelPreview onDownload={handleDownload} />
       {/if}
     </div>
   </div>

@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { browser } from "$app/environment";
   import type { TextItem } from "../lib/types/panel";
   import { panelStore } from "../stores/panelStore";
+  import { Stage, Layer, Image, Text } from "svelte-konva";
 
   let {
     textItem,
@@ -12,32 +11,17 @@
     height: number;
   } = $props();
 
-  let Stage = $state.raw<any>(undefined);
-  let Layer = $state.raw<any>(undefined);
-  let KonvaImage = $state.raw<any>(undefined);
-  let Text = $state.raw<any>(undefined);
   let bgImage: HTMLImageElement | undefined = $state(undefined);
   let currentPanel = $state($panelStore);
 
-  onMount(async () => {
-    if (browser) {
-      const svelteKonva = await import("svelte-konva");
-      Stage = svelteKonva.Stage;
-      Layer = svelteKonva.Layer;
-      KonvaImage = svelteKonva.Image;
-      Text = svelteKonva.Text;
-    }
-  });
-
   $effect(() => {
-    if (!browser) return;
     if (currentPanel?.backgroundImage && currentPanel.backgroundImage !== bgImage?.src) {
       loadImage(currentPanel.backgroundImage);
     }
   });
 
   function loadImage(src: string) {
-    const img = new Image();
+    const img = document.createElement("img");
     img.onload = () => {
       bgImage = img;
     };
@@ -66,11 +50,11 @@
 </script>
 
 <div class="text-preview">
-  {#if Stage && bgImage}
+  {#if bgImage}
     <div class="canvas-container">
       <Stage width={320} {height}>
         <Layer>
-          <KonvaImage image={bgImage} width={320} {height} />
+          <Image image={bgImage} width={320} {height} />
           <Text
             text={textItem.text}
             fontSize={textItem.fontSize}

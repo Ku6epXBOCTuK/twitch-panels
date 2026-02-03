@@ -1,34 +1,22 @@
-
 <script lang="ts">
   import { onMount } from "svelte";
-  import { browser } from "$app/environment";
+  import CropperJS from "cropperjs";
   import type { ImageCropResult } from "../lib/types/panel";
   import { ImageService } from "../lib/services/imageService";
   import { uiStore, setLoading } from "../stores/uiStore";
-  
-  let Cropper = $state.raw<any>(undefined);
 
-  onMount(async () => {
-    if (browser) {
-      const cropperModule = await import("cropperjs");
-      Cropper = cropperModule.default || cropperModule;
-      
-      // Импортируем стили только на клиенте
-
-      
-      // Инициализируем cropper после загрузки
-      initializeCropper();
-    }
-  });
-
-  let { imageSrc, onCropComplete, onCancel }: {
+  let {
+    imageSrc,
+    onCropComplete,
+    onCancel,
+  }: {
     imageSrc: string;
     onCropComplete: (croppedImage: string) => void;
     onCancel: () => void;
   } = $props();
 
   let imageElement: HTMLImageElement;
-  let cropper: Cropper | null = null;
+  let cropper: CropperJS | null = null;
   let isProcessing = $state(false);
   let errorMessage = $state<string | null>(null);
 
@@ -44,27 +32,12 @@
   });
 
   function initializeCropper() {
-    console.log("initializeCropper called, imageElement:", !!imageElement, "Cropper:", !!Cropper);
-    if (!imageElement || !Cropper) {
+    console.log("initializeCropper called, imageElement:", !!imageElement, "CropperJS:", !!CropperJS);
+    if (!imageElement || !CropperJS) {
       return;
     }
 
-    cropper = new Cropper(imageElement, {
-      aspectRatio: NaN, // Allow any aspect ratio
-      viewMode: 1,
-      dragMode: "move",
-      autoCropArea: 1,
-      restore: false,
-      guides: true,
-      center: true,
-      highlight: false,
-      cropBoxMovable: true,
-      cropBoxResizable: true,
-      toggleDragModeOnDblclick: false,
-      minCropBoxWidth: 320,
-      minCropBoxHeight: 50,
-      responsive: true,
-    });
+    cropper = new CropperJS(imageElement);
   }
 
   async function handleCrop() {
@@ -89,8 +62,6 @@
       // Используем метод $toCanvas для получения HTMLCanvasElement
       const canvas = await cropperCanvasElement.$toCanvas({
         width: 320,
-        imageSmoothingEnabled: true,
-        imageSmoothingQuality: "high",
       });
 
       if (!canvas) {
@@ -125,33 +96,19 @@
 
 <div class="cropper-container">
   <div class="cropper-wrapper">
-    <img
-      bind:this={imageElement}
-      src={imageSrc}
-      alt=""
-      class="cropper-image"
-    />
+    <img bind:this={imageElement} src={imageSrc} alt="" class="cropper-image" />
   </div>
 
   {#if errorMessage}
     <div class="error-message">
-      <strong>Ошибка:</strong> {errorMessage}
+      <strong>Ошибка:</strong>
+      {errorMessage}
     </div>
   {/if}
 
   <div class="cropper-actions">
-    <button
-      class="btn btn-secondary"
-      onclick={handleCancel}
-      disabled={isProcessing}
-    >
-      Отмена
-    </button>
-    <button
-      class="btn btn-primary"
-      onclick={handleCrop}
-      disabled={isProcessing}
-    >
+    <button class="btn btn-secondary" onclick={handleCancel} disabled={isProcessing}> Отмена </button>
+    <button class="btn btn-primary" onclick={handleCrop} disabled={isProcessing}>
       {isProcessing ? "Обработка..." : "Применить"}
     </button>
   </div>
@@ -254,5 +211,56 @@
 
   :global(.cropper-point) {
     background-color: #007bff;
+  }
+
+  /* Базовые стили для cropperjs */
+  :global(.cropper-container) {
+    direction: ltr;
+    font-size: 0;
+    line-height: 0;
+    position: relative;
+    touch-action: none;
+    user-select: none;
+  }
+
+  :global(.cropper-container img) {
+    display: block;
+    height: 100%;
+    image-orientation: 0deg;
+    max-height: none !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    width: 100%;
+  }
+
+  :global(.cropper-wrap-box,
+  .cropper-canvas,
+  .cropper-drag-box,
+  .cropper-crop-box,
+  .cropper-modal) {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  :global(.cropper-wrap-box,
+  .cropper-canvas) {
+    overflow: hidden;
+  }
+
+  :global(.cropper-drag-box) {
+    background-color: #fff;
+    opacity: 0;
+  }
+
+  :global(.cropper-modal) {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  :global(.cropper-crop-box) {
+    border-color: rgba(0, 123, 255, 0.5);
   }
 </style>
