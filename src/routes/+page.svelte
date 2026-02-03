@@ -1,126 +1,237 @@
+
 <script lang="ts">
-  //   import { Stage, Layer, Image, Text } from "svelte-konva";
-  import type { PageProps } from "./$types";
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
+  import { panelStore, createEmptyPanel } from "../stores/panelStore";
+  import { uiStore } from "../stores/uiStore";
+  import { panelStorage } from "../lib/utils/panelStorage";
+  import { exportService } from "../lib/services/exportService";
+  import ImageUpload from "../components/ImageUpload.svelte";
+  import ImageCropper from "../components/ImageCropper.svelte";
+  import TextManager from "../components/TextManager.svelte";
+  import PanelPreview from "../components/PanelPreview.svelte";
+  import PanelList from "../components/PanelList.svelte";
+  import type { Panel } from "../lib/types/panel";
 
-  let { data }: PageProps = $props();
-
-  let Stage: any = $state(undefined);
-  let Layer: any = $state(undefined);
-  let Image: any = $state(undefined);
-  let Text: any = $state(undefined);
-
-  // svelte-ignore state_referenced_locally
-  let images = data.images;
-  // svelte-ignore state_referenced_locally
-  let fonts = data.fonts;
-  console.log(images);
-  console.log(fonts);
-
-  let fontsStyle = fonts
-    .map(({ name, url, file, format }: { name: string; url: string; file: string; format: string }) => {
-      const result = `
-        @font-face {
-          font-family: '${name}';
-          src: url('${url}') format(${format});
-          
-        }
-      `;
-      return result;
-    })
-    .join("");
-
-  let selectedImage = $state(0);
-  let text = $state("текст");
-  let selectedFont = $state("");
-
-  let image: HTMLImageElement | undefined = $state(undefined);
+  let uploadedImage = $state<string | null>(null);
+  let croppedImage = $state<string | null>(null);
+  let currentPanel = $state<Panel | null>(null);
+  let errorMessage = $state<string | null>(null);
 
   $effect(() => {
-    const img = document.createElement("img");
-    img.src = `./backgrounds/${images[selectedImage]}`;
-    img.onload = () => (image = img);
+    currentPanel = $panelStore;
   });
 
-  onMount(async () => {
-    if (!browser) return;
-
-    const svelteKonva = await import("svelte-konva");
-    Stage = svelteKonva.Stage;
-    Layer = svelteKonva.Layer;
-    Image = svelteKonva.Image;
-    Text = svelteKonva.Text;
+  onMount(() => {
+    // Загружаем сохраненные панели
+    const savedPanels = panelStorage.getAllPanels();
+    if (savedPanels.length > 0) {
+      // Если есть сохраненные панели, можно загрузить последнюю
+      // panelStore.set(savedPanels[0]);
+    }
   });
 
-  function download() {}
+  function handleImageUpload(image: string) {
+    uploadedImage = image;
+    errorMessage = null;
+  }
+
+  function handleCropComplete(croppedImage: string) {
+    croppedImage = croppedImage;
+
+    // Создаем новую панель с обрезанным изображением
+    const newPanel = createEmptyPanel();
+    newPanel.backgroundImage = croppedImage;
+
+    panelStore.set(newPanel);
+    currentPanel = newPanel;
+
+    // Сохраняем панель
+    panelStorage.savePanel(newPanel);
+
+    uiStore.setCurrentStep("text");
+  }
+
+  function handleCropCancel() {
+    uploadedImage = null;
+    uiStore.setCurrentStep("upload");
+  }
+
+  function handleTextUpdate(texts: Panel["texts"]) {
+    if (currentPanel) {
+      const updatedPanel = {
+        ...currentPanel,
+        texts,
+        updatedAt: new Date(),
+      };
+      panelStore.set(updatedPanel);
+      panelStorage.savePanel(updatedPanel);
+    }
+  }
+
+  function handlePanelSelect(panel: Panel) {
+    panelStore.set(panel);
+    currentPanel = panel;
+    uiStore.setCurrentStep("preview");
+  }
+
+  function handlePanelDelete(panelId: string) {
+    if (currentPanel?.id === panelId) {
+      panelStore.set(null);
+      currentPanel = null;
+      uiStore.setCurrentStep("upload");
+    }
+  }
+
+  async function handleDownload() {
+    if (!currentPanel) {
+      errorMessage = "Нет панели для скачивания";
+      return;
+    }
+
+    try {
+      uiStore.setLoading(true);
+      const result = await exportService.exportPanel(currentPanel);
+
+      if (!result.success) {
+        errorMessage = result.error || "Ошибка экспорта панели";
+      }
+    } catch (error) {
+      errorMessage = error instanceof Error ? error.message : "Ошибка экспорта панели";
+    } finally {
+      uiStore.setLoading(false);
+    }
+  }
+
+  function handleNewPanel() {
+    panelStore.set(null);
+    currentPanel = null;
+    uploadedImage = null;
+    croppedImage = null;
+    uiStore.setCurrentStep("upload");
+  }
 </script>
 
-<svelte:head>
-  {@html `
-    <style>
-      ${fontsStyle}
-    </style>
-  `}
-</svelte:head>
+<div class="app-container">
+  <div class="app-header">
+    <h1>Twitch Panels Creator</h1>
+    <button class="btn btn-primary" on:click={handleNewPanel}>Новая панель</button>
+  </div>
 
-<div class="preview">
-  <h1>Preview</h1>
+  {#if errorMessage}
+    <div class="error-message">
+      {errorMessage}
+    </div>
+  {/if}
 
-  <Stage width={320} height={100}>
-    <Layer>
-      <Image
-        {image}
-        width="320"
-        height="100"
-        crop={{
-          x: 0,
-          y: 0,
-          width: 320,
-          height: 100,
-        }}
+  <div class="app-content">
+    <div class="main-section">
+      {#if $uiStore.currentStep === "upload"}
+        <ImageUpload onImageSelect={handleImageUpload} />
+      {:else if $uiStore.currentStep === "crop" && uploadedImage}
+        <ImageCropper
+          imageSrc={uploadedImage}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      {:else if $uiStore.currentStep === "text"}
+        <TextManager onTextUpdate={handleTextUpdate} />
+      {:else if $uiStore.currentStep === "preview"}
+        <PanelPreview onDownload={handleDownload} />
+      {/if}
+    </div>
+
+    <div class="sidebar">
+      <PanelList
+        onPanelSelect={handlePanelSelect}
+        onPanelDelete={handlePanelDelete}
       />
-      <Text
-        {text}
-        fontSize={18}
-        fill="white"
-        fontFamily={selectedFont}
-        align="center"
-        verticalAlign="middle"
-        width="320"
-        height="100"
-      />
-    </Layer>
-  </Stage>
-</div>
-
-<label>
-  Введите текст:
-  <input type="text" bind:value={text} />
-</label>
-<label>
-  Выберите шрифт:
-  <select bind:value={selectedFont}>
-    {#each fonts as font}
-      <option value={font.name}>{font.name}</option>
-    {/each}
-  </select>
-</label>
-
-<button onclick={download}>Скачать</button>
-
-<div class="img-selection">
-  {#each images as image, idx (image)}
-    <button class="img-select-button" onclick={() => (selectedImage = idx)}>
-      <img src={`./backgrounds/${image}`} alt="img selection" />
-    </button>
-  {/each}
+    </div>
+  </div>
 </div>
 
 <style>
-  .img-select-button {
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .app-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .app-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+  }
+
+  .main-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .error-message {
+    background: #ffebee;
+    color: #c62828;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ffcdd2;
+    font-weight: 500;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
     border: none;
-    padding: 0;
-    margin: 8px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .btn-primary {
+    background: white;
+    color: #667eea;
+  }
+
+  .btn-primary:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 1024px) {
+    .app-content {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      order: -1;
+    }
   }
 </style>
