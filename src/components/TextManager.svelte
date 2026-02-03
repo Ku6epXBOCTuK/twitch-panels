@@ -4,7 +4,9 @@
   import type { TextItem } from "../lib/types/panel";
   import { v4 as uuidv4 } from "uuid";
 
-  export let onTextUpdate: (texts: TextItem[]) => void;
+  let { onTextUpdate }: {
+    onTextUpdate: (texts: TextItem[]) => void;
+  } = $props();
 
   let currentPanel = $state($panelStore);
   let selectedTextId = $state<string | null>(null);

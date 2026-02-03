@@ -18,7 +18,7 @@
   let uploadedImage = $state<string | null>(null);
   let errorMessage = $state<string | null>(null);
 
-  $derived((uiError = $uiStore.error?.error));
+  const uiError = $derived($uiStore.error?.error);
 
   onMount(() => {
     setupPasteHandler();

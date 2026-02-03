@@ -7,9 +7,11 @@
   import { uiStore } from "../stores/uiStore";
   import "cropperjs/dist/cropper.css";
 
-  export let imageSrc: string;
-  export let onCropComplete: (croppedImage: string) => void;
-  export let onCancel: () => void;
+  let { imageSrc, onCropComplete, onCancel }: {
+    imageSrc: string;
+    onCropComplete: (croppedImage: string) => void;
+    onCancel: () => void;
+  } = $props();
 
   let imageElement: HTMLImageElement;
   let cropper: Cropper | null = null;

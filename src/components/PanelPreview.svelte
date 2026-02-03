@@ -5,7 +5,9 @@
   import type { Panel } from "../lib/types/panel";
   import type { PageProps } from "./$types";
 
-  export let onDownload?: () => void;
+  let { onDownload }: {
+    onDownload?: () => void;
+  } = $props();
 
   let Stage: any = $state(undefined);
   let Layer: any = $state(undefined);

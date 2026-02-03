@@ -13,6 +13,9 @@ const config = {
       bundleStrategy: "inline",
     },
   },
+  compilerOptions: {
+    runes: true,
+  },
 };
 
 export default config;

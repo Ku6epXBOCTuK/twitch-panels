@@ -5,8 +5,10 @@
   import { panelStorage } from "../lib/utils/panelStorage";
   import type { Panel } from "../lib/types/panel";
 
-  export let onPanelSelect: (panel: Panel) => void;
-  export let onPanelDelete: (panelId: string) => void;
+  let { onPanelSelect, onPanelDelete }: {
+    onPanelSelect: (panel: Panel) => void;
+    onPanelDelete: (panelId: string) => void;
+  } = $props();
 
   let panels = $state<Panel[]>([]);
   let selectedPanelId = $state<string | null>(null);
