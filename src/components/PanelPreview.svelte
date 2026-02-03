@@ -3,8 +3,6 @@
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
   import { panelStore } from "../stores/panelStore";
-  import type { Panel } from "../lib/types/panel";
-  import type { PageProps } from "./$types";
 
   let { onDownload }: {
     onDownload?: () => void;
@@ -12,16 +10,16 @@
 
   let Stage: any;
   let Layer: any;
-  let Image: any;
+  let KonvaImage: any;
   let Text: any;
 
-  let currentPanel = $state<Panel | null>(null);
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);
 
   $effect(() => {
-    currentPanel = $panelStore;
-    if (currentPanel?.backgroundImage) {
-      loadImage(currentPanel.backgroundImage);
+    if (!browser) return;
+    const panel = $panelStore;
+    if (panel?.backgroundImage && panel.backgroundImage !== backgroundImage?.src) {
+      loadImage(panel.backgroundImage);
     }
   });
 
@@ -30,7 +28,7 @@
       const svelteKonva = await import("svelte-konva");
       Stage = svelteKonva.Stage;
       Layer = svelteKonva.Layer;
-      Image = svelteKonva.Image;
+      KonvaImage = svelteKonva.Image;
       Text = svelteKonva.Text;
     }
   });
@@ -50,10 +48,12 @@
   }
 
   function getTextPosition(textItem: any) {
+    const panel = $panelStore;
+    if (!panel) return { x: 0, y: 0 };
     const panelWidth = 320;
     const paddingX = textItem.paddingX || 0;
     const verticalOffset = textItem.verticalOffset || 0;
-    const centerY = currentPanel!.height / 2 + verticalOffset;
+    const centerY = panel.height / 2 + verticalOffset;
 
     switch (textItem.textAlign) {
       case "left":
@@ -70,26 +70,26 @@
 <div class="panel-preview">
   <div class="preview-header">
     <h2>Предпросмотр панели</h2>
-    {#if currentPanel}
+    {#if $panelStore}
       <button class="btn btn-primary" onclick={handleDownload}>
         Скачать
       </button>
     {/if}
   </div>
 
-  {#if currentPanel && Stage}
+  {#if $panelStore && Stage}
     <div class="preview-sections">
       <!-- Превью чистой картинки -->
       <div class="preview-section">
         <h3>Чистая картинка</h3>
         <div class="canvas-container">
-          <Stage width={320} height={currentPanel.height}>
+          <Stage width={320} height={$panelStore.height}>
             <Layer>
               {#if backgroundImage}
-                <Image
+                <KonvaImage
                   image={backgroundImage}
                   width={320}
-                  height={currentPanel.height}
+                  height={$panelStore.height}
                 />
               {/if}
             </Layer>
@@ -101,16 +101,16 @@
       <div class="preview-section">
         <h3>С текстом</h3>
         <div class="canvas-container">
-          <Stage width={320} height={currentPanel.height}>
+          <Stage width={320} height={$panelStore.height}>
         <Layer>
           {#if backgroundImage}
-            <Image
+            <KonvaImage
               image={backgroundImage}
               width={320}
-              height={currentPanel.height}
+              height={$panelStore.height}
             />
           {/if}
-          {#each currentPanel.texts as textItem (textItem.id)}
+          {#each $panelStore.texts || [] as textItem (textItem.id)}
             {@const textPosition = getTextPosition(textItem)}
             <Text
               text={textItem.text}

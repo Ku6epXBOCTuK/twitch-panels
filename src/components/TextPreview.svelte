@@ -14,7 +14,7 @@
 
   let Stage: any;
   let Layer: any;
-  let Image: any;
+  let KonvaImage: any;
   let Text: any;
   let bgImage: HTMLImageElement | undefined = $state(undefined);
   let currentPanel = $state($panelStore);
@@ -24,13 +24,14 @@
       const svelteKonva = await import("svelte-konva");
       Stage = svelteKonva.Stage;
       Layer = svelteKonva.Layer;
-      Image = svelteKonva.Image;
+      KonvaImage = svelteKonva.Image;
       Text = svelteKonva.Text;
     }
   });
 
   $effect(() => {
-    if (currentPanel?.backgroundImage) {
+    if (!browser) return;
+    if (currentPanel?.backgroundImage && currentPanel.backgroundImage !== bgImage?.src) {
       loadImage(currentPanel.backgroundImage);
     }
   });
@@ -69,7 +70,7 @@
     <div class="canvas-container">
       <Stage width={320} {height}>
         <Layer>
-          <Image image={bgImage} width={320} {height} />
+          <KonvaImage image={bgImage} width={320} {height} />
           <Text
             text={textItem.text}
             fontSize={textItem.fontSize}

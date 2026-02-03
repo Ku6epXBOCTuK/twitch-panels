@@ -33,10 +33,6 @@
     currentPanel = $panelStore;
   });
 
-  onMount(() => {
-    // Инициализация
-  });
-
   function handleImageUpload(image: string) {
     uploadedImage = image;
     errorMessage = null;
@@ -127,9 +123,11 @@
     </div>
 
     <div class="sidebar">
-      {#if $uiStore.currentStep === "text" && PanelPreview}
+      {#if $uiStore.currentStep === "text" && PanelPreview?.default}
         {@const Preview = PanelPreview.default}
         <Preview onDownload={handleDownload} />
+      {:else if $uiStore.currentStep === "text"}
+        <div class="loading">Загрузка предпросмотра...</div>
       {/if}
     </div>
   </div>
@@ -187,6 +185,15 @@
     border-radius: 8px;
     border: 1px solid #ffcdd2;
     font-weight: 500;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
   }
 
   .btn {
