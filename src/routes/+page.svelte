@@ -6,12 +6,25 @@
   import { uiStore } from "../stores/uiStore";
   import { panelStorage } from "../lib/utils/panelStorage";
   import { exportService } from "../lib/services/exportService";
-  import ImageUpload from "../components/ImageUpload.svelte";
-  import ImageCropper from "../components/ImageCropper.svelte";
-  import TextManager from "../components/TextManager.svelte";
-  import PanelPreview from "../components/PanelPreview.svelte";
-  import PanelList from "../components/PanelList.svelte";
   import type { Panel } from "../lib/types/panel";
+
+  let ImageUpload: any = $state(undefined);
+  let ImageCropper: any = $state(undefined);
+  let TextManager: any = $state(undefined);
+  let PanelPreview: any = $state(undefined);
+  let PanelList: any = $state(undefined);
+
+  onMount(async () => {
+    if (browser) {
+      [ImageUpload, ImageCropper, TextManager, PanelPreview, PanelList] = await Promise.all([
+        import("../components/ImageUpload.svelte"),
+        import("../components/ImageCropper.svelte"),
+        import("../components/TextManager.svelte"),
+        import("../components/PanelPreview.svelte"),
+        import("../components/PanelList.svelte")
+      ]);
+    }
+  });
 
   let uploadedImage = $state<string | null>(null);
   let croppedImage = $state<string | null>(null);
@@ -115,7 +128,7 @@
 <div class="app-container">
   <div class="app-header">
     <h1>Twitch Panels Creator</h1>
-    <button class="btn btn-primary" on:click={handleNewPanel}>Новая панель</button>
+    <button class="btn btn-primary" onclick={handleNewPanel}>Новая панель</button>
   </div>
 
   {#if errorMessage}
@@ -127,25 +140,37 @@
   <div class="app-content">
     <div class="main-section">
       {#if $uiStore.currentStep === "upload"}
-        <ImageUpload onImageSelect={handleImageUpload} />
+        {#if ImageUpload}
+          <svelte:component this={ImageUpload.default} onImageSelect={handleImageUpload} />
+        {/if}
       {:else if $uiStore.currentStep === "crop" && uploadedImage}
-        <ImageCropper
-          imageSrc={uploadedImage}
-          onCropComplete={handleCropComplete}
-          onCancel={handleCropCancel}
-        />
+        {#if ImageCropper}
+          <svelte:component 
+            this={ImageCropper.default}
+            imageSrc={uploadedImage}
+            onCropComplete={handleCropComplete}
+            onCancel={handleCropCancel}
+          />
+        {/if}
       {:else if $uiStore.currentStep === "text"}
-        <TextManager onTextUpdate={handleTextUpdate} />
+        {#if TextManager}
+          <svelte:component this={TextManager.default} onTextUpdate={handleTextUpdate} />
+        {/if}
       {:else if $uiStore.currentStep === "preview"}
-        <PanelPreview onDownload={handleDownload} />
+        {#if PanelPreview}
+          <svelte:component this={PanelPreview.default} onDownload={handleDownload} />
+        {/if}
       {/if}
     </div>
 
     <div class="sidebar">
-      <PanelList
-        onPanelSelect={handlePanelSelect}
-        onPanelDelete={handlePanelDelete}
-      />
+      {#if PanelList}
+        <svelte:component 
+          this={PanelList.default}
+          onPanelSelect={handlePanelSelect}
+          onPanelDelete={handlePanelDelete}
+        />
+      {/if}
     </div>
   </div>
 </div>

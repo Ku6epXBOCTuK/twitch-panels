@@ -1,6 +1,7 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
+  import { browser } from "$app/environment";
   import { panelStore } from "../stores/panelStore";
   import type { Panel } from "../lib/types/panel";
   import type { PageProps } from "./$types";
@@ -25,11 +26,13 @@
   });
 
   onMount(async () => {
-    const svelteKonva = await import("svelte-konva");
-    Stage = svelteKonva.Stage;
-    Layer = svelteKonva.Layer;
-    Image = svelteKonva.Image;
-    Text = svelteKonva.Text;
+    if (browser) {
+      const svelteKonva = await import("svelte-konva");
+      Stage = svelteKonva.Stage;
+      Layer = svelteKonva.Layer;
+      Image = svelteKonva.Image;
+      Text = svelteKonva.Text;
+    }
   });
 
   function loadImage(src: string) {
@@ -51,7 +54,7 @@
   <div class="preview-header">
     <h2>Предпросмотр панели</h2>
     {#if currentPanel}
-      <button class="btn btn-primary" on:click={handleDownload}>
+      <button class="btn btn-primary" onclick={handleDownload}>
         Скачать
       </button>
     {/if}

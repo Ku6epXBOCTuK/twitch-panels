@@ -92,7 +92,7 @@
         class="text-input"
         maxlength="100"
       />
-      <button class="btn btn-primary" on:click={handleAddText}>
+      <button class="btn btn-primary" onclick={handleAddText}>
         Добавить
       </button>
     </div>
@@ -108,13 +108,13 @@
       {#each currentPanel.texts as textItem (textItem.id)}
         <div
           class="text-item {selectedTextId === textItem.id ? 'selected' : ''}"
-          on:click={() => handleSelectText(textItem.id)}
+          onclick={() => handleSelectText(textItem.id)}
         >
           <div class="text-preview">
             <span class="text-content">{textItem.text}</span>
             <button
               class="btn-icon btn-delete"
-              on:click|stopPropagation={() => handleRemoveText(textItem.id)}
+              onclick={(e) => { e.stopPropagation(); handleRemoveText(textItem.id); }}
               aria-label="Удалить текст"
             >
               ×
@@ -132,7 +132,7 @@
                     max="72"
                     step="1"
                     value={textItem.fontSize}
-                    on:input={(e) => handleUpdateText(textItem.id, {
+                    oninput={(e) => handleUpdateText(textItem.id, {
                       fontSize: parseInt(e.target.value)
                     })}
                   />
@@ -146,7 +146,7 @@
                   <input
                     type="color"
                     value={textItem.color}
-                    on:input={(e) => handleUpdateText(textItem.id, {
+                    oninput={(e) => handleUpdateText(textItem.id, {
                       color: e.target.value
                     })}
                   />
@@ -162,7 +162,7 @@
                     max="320"
                     step="1"
                     value={textItem.x}
-                    on:input={(e) => handleUpdateText(textItem.id, {
+                    oninput={(e) => handleUpdateText(textItem.id, {
                       x: parseInt(e.target.value)
                     })}
                   />
@@ -179,7 +179,7 @@
                     max={currentPanel.height}
                     step="1"
                     value={textItem.y}
-                    on:input={(e) => handleUpdateText(textItem.id, {
+                    oninput={(e) => handleUpdateText(textItem.id, {
                       y: parseInt(e.target.value)
                     })}
                   />

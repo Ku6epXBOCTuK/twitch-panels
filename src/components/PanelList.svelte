@@ -75,7 +75,7 @@
 <div class="panel-list">
   <div class="panel-list-header">
     <h2>Сохраненные панели</h2>
-    <button class="btn btn-refresh" on:click={loadPanels} aria-label="Обновить список">
+    <button class="btn btn-refresh" onclick={loadPanels} aria-label="Обновить список">
       ↻
     </button>
   </div>
@@ -95,7 +95,7 @@
       {#each panels as panel (panel.id)}
         <div
           class="panel-card {selectedPanelId === panel.id ? 'selected' : ''}"
-          on:click={() => handlePanelSelect(panel)}
+          onclick={() => handlePanelSelect(panel)}
           role="button"
           tabindex="0"
         >
@@ -120,7 +120,7 @@
             <div class="panel-actions">
               <button
                 class="btn-icon btn-delete"
-                on:click|stopPropagation={() => handlePanelDelete(panel.id)}
+                onclick={(e) => { e.stopPropagation(); handlePanelDelete(panel.id); }}
                 aria-label="Удалить панель"
               >
                 🗑️

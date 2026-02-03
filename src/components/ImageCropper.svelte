@@ -1,11 +1,25 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import Cropper from "cropperjs";
+  import { browser } from "$app/environment";
   import type { ImageCropResult } from "../lib/types/panel";
   import { ImageService } from "../lib/services/imageService";
   import { uiStore } from "../stores/uiStore";
-  import "cropperjs/dist/cropper.css";
+  
+  let Cropper: any = $state(undefined);
+
+  onMount(async () => {
+    if (browser) {
+      const cropperModule = await import("cropperjs");
+      Cropper = cropperModule.default;
+      
+      // Импортируем стили только на клиенте
+      await import("cropperjs/dist/cropper.css");
+      
+      // Инициализируем cropper после загрузки
+      initializeCropper();
+    }
+  });
 
   let { imageSrc, onCropComplete, onCancel }: {
     imageSrc: string;
@@ -30,7 +44,7 @@
   });
 
   function initializeCropper() {
-    if (!imageElement) return;
+    if (!imageElement || !Cropper) return;
 
     cropper = new Cropper(imageElement, {
       aspectRatio: NaN, // Allow any aspect ratio
@@ -113,14 +127,14 @@
   <div class="cropper-actions">
     <button
       class="btn btn-secondary"
-      on:click={handleCancel}
+      onclick={handleCancel}
       disabled={isProcessing}
     >
       Отмена
     </button>
     <button
       class="btn btn-primary"
-      on:click={handleCrop}
+      onclick={handleCrop}
       disabled={isProcessing}
     >
       {isProcessing ? "Обработка..." : "Применить"}

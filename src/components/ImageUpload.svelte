@@ -149,14 +149,14 @@
     <div class="uploaded-image-preview">
       <img src={uploadedImage} alt="Uploaded preview" />
       <div class="preview-actions">
-        <button class="btn btn-secondary" on:click={resetUpload}> Загрузить другое </button>
+        <button class="btn btn-secondary" onclick={resetUpload}> Загрузить другое </button>
       </div>
     </div>
   {:else}
     <div
       bind:this={dropZone}
       class="drop-zone {isDragOver ? 'drag-over' : ''} {uiError ? 'error' : ''}"
-      on:click={triggerFileInput}
+      onclick={triggerFileInput}
     >
       <div class="drop-zone-content">
         <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -169,15 +169,15 @@
         <p>Перетащите файл сюда, нажмите для выбора, или вставьте через Ctrl+V</p>
 
         <div class="upload-methods">
-          <button class="btn btn-primary" on:click={triggerFileInput}> Выбрать файл </button>
+          <button class="btn btn-primary" onclick={triggerFileInput}> Выбрать файл </button>
 
-          <button class="btn btn-secondary" on:click={() => (showUrlInput = !showUrlInput)}>
+          <button class="btn btn-secondary" onclick={() => (showUrlInput = !showUrlInput)}>
             {showUrlInput ? "Скрыть" : "По URL"}
           </button>
         </div>
 
         {#if showUrlInput}
-          <form bind:this={urlForm} on:submit={handleUrlSubmit} class="url-input-form">
+          <form bind:this={urlForm} onsubmit={handleUrlSubmit} class="url-input-form">
             <input
               bind:this={urlInput}
               type="url"
@@ -202,7 +202,7 @@
       type="file"
       accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
       style="display: none;"
-      on:change={(e) => {
+      onchange={(e) => {
         const file = e.target.files?.[0];
         if (file) handleFileUpload(file);
       }}
