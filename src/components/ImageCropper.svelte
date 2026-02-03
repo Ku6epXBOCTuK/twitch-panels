@@ -10,12 +10,8 @@
 
   onMount(async () => {
     if (browser) {
-      console.log("Loading cropperjs module");
       const cropperModule = await import("cropperjs");
-      console.log("cropperjs module loaded:", cropperModule);
       Cropper = cropperModule.default || cropperModule;
-      console.log("Cropper class:", Cropper);
-      console.log("Cropper.getCroppedCanvas:", typeof Cropper?.prototype?.getCroppedCanvas);
       
       // Импортируем стили только на клиенте
 
@@ -50,11 +46,9 @@
   function initializeCropper() {
     console.log("initializeCropper called, imageElement:", !!imageElement, "Cropper:", !!Cropper);
     if (!imageElement || !Cropper) {
-      console.error("Cannot initialize cropper: imageElement:", !!imageElement, "Cropper:", !!Cropper);
       return;
     }
 
-    console.log("Creating new Cropper instance");
     cropper = new Cropper(imageElement, {
       aspectRatio: NaN, // Allow any aspect ratio
       viewMode: 1,
@@ -71,15 +65,10 @@
       minCropBoxHeight: 50,
       responsive: true,
     });
-    console.log("Cropper instance created:", cropper);
-    console.log("cropper.getCroppedCanvas:", typeof cropper?.getCroppedCanvas);
-    console.log("cropper methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(cropper)));
   }
 
   async function handleCrop() {
-    console.log("handleCrop called, cropper:", cropper);
     if (!cropper) {
-      console.error("Cropper is not initialized");
       return;
     }
 
@@ -103,9 +92,6 @@
         imageSmoothingEnabled: true,
         imageSmoothingQuality: "high",
       });
-      console.log("Canvas result:", canvas);
-      console.log("Canvas type:", typeof canvas);
-      console.log("Canvas.toDataURL:", typeof canvas?.toDataURL);
 
       if (!canvas) {
         throw new Error("Не удалось получить canvas");
@@ -113,7 +99,6 @@
 
       // Теперь canvas - это обычный HTMLCanvasElement
       const croppedImage = canvas.toDataURL("image/png");
-      console.log("Cropped image:", croppedImage);
 
       // Validate cropped image
       const cropResult: ImageCropResult = {
@@ -124,7 +109,6 @@
       onCropComplete(croppedImage);
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : "Ошибка обрезки изображения";
-      console.error("Crop error:", error);
     } finally {
       isProcessing = false;
       setLoading(false);

@@ -3,6 +3,7 @@
   import { panelStore, addTextToPanel, updateTextInPanel, removeTextFromPanel } from "../stores/panelStore";
   import type { TextItem } from "../lib/types/panel";
   import { v4 as uuidv4 } from "uuid";
+  import TextPreview from "./TextPreview.svelte";
 
   let { onTextUpdate }: {
     onTextUpdate: (texts: TextItem[]) => void;
@@ -265,7 +266,7 @@
     <div class="text-list">
       {#each currentPanel.texts as textItem (textItem.id)}
         <div class="text-item">
-          <div class="text-preview">
+          <div class="text-info">
             <span class="text-content">{textItem.text}</span>
             <button
               class="btn-icon btn-delete"
@@ -275,6 +276,12 @@
               ×
             </button>
           </div>
+          {#if currentPanel?.backgroundImage}
+            <TextPreview
+              textItem={textItem}
+              height={currentPanel.height}
+            />
+          {/if}
         </div>
       {/each}
     </div>
@@ -413,7 +420,7 @@
     transition: all 0.3s ease;
   }
 
-  .text-preview {
+  .text-info {
     display: flex;
     justify-content: space-between;
     align-items: center;

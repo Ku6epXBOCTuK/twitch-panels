@@ -48,6 +48,23 @@
       onDownload();
     }
   }
+
+  function getTextPosition(textItem: any) {
+    const panelWidth = 320;
+    const paddingX = textItem.paddingX || 0;
+    const verticalOffset = textItem.verticalOffset || 0;
+    const centerY = currentPanel!.height / 2 + verticalOffset;
+
+    switch (textItem.textAlign) {
+      case "left":
+        return { x: paddingX, y: centerY };
+      case "right":
+        return { x: panelWidth - paddingX, y: centerY };
+      case "center":
+      default:
+        return { x: panelWidth / 2, y: centerY };
+    }
+  }
 </script>
 
 <div class="panel-preview">
@@ -61,8 +78,30 @@
   </div>
 
   {#if currentPanel && Stage}
-    <div class="canvas-container">
-      <Stage width={320} height={currentPanel.height}>
+    <div class="preview-sections">
+      <!-- Превью чистой картинки -->
+      <div class="preview-section">
+        <h3>Чистая картинка</h3>
+        <div class="canvas-container">
+          <Stage width={320} height={currentPanel.height}>
+            <Layer>
+              {#if backgroundImage}
+                <Image
+                  image={backgroundImage}
+                  width={320}
+                  height={currentPanel.height}
+                />
+              {/if}
+            </Layer>
+          </Stage>
+        </div>
+      </div>
+
+      <!-- Превью с текстом -->
+      <div class="preview-section">
+        <h3>С текстом</h3>
+        <div class="canvas-container">
+          <Stage width={320} height={currentPanel.height}>
         <Layer>
           {#if backgroundImage}
             <Image
@@ -72,19 +111,22 @@
             />
           {/if}
           {#each currentPanel.texts as textItem (textItem.id)}
+            {@const textPosition = getTextPosition(textItem)}
             <Text
               text={textItem.text}
               fontSize={textItem.fontSize}
               fill={textItem.color}
               fontFamily={textItem.fontFamily}
-              x={textItem.x}
-              y={textItem.y}
-              align="center"
-              width={320}
+              x={textPosition.x}
+              y={textPosition.y}
+              align={textItem.textAlign}
+              width={320 - (textItem.paddingX * 2)}
             />
           {/each}
         </Layer>
       </Stage>
+        </div>
+      </div>
     </div>
   {:else}
     <div class="empty-state">
@@ -116,6 +158,24 @@
     margin: 0;
     color: #333;
     font-size: 1.5rem;
+  }
+
+  .preview-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .preview-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .preview-section h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
   }
 
   .canvas-container {

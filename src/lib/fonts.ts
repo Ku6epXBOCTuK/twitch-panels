@@ -5,9 +5,7 @@ import { join } from "path";
 export function loadFonts() {
   try {
     const fontsDir = join(process.cwd(), "static", "fonts");
-    console.log(fontsDir);
     const files = readdirSync(fontsDir);
-    console.log(files);
 
     let fonts = files
       .filter((file) => /\.(woff2|woff|ttf|otf)$/i.test(file))
@@ -20,7 +18,6 @@ export function loadFonts() {
 
     return fonts;
   } catch (error) {
-    console.log("err");
     return [];
   }
 }

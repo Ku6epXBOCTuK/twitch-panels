@@ -44,12 +44,9 @@
   });
 
   function handleImageUpload(image: string) {
-    console.log("handleImageUpload called with image length:", image.length);
     uploadedImage = image;
     errorMessage = null;
-    console.log("Setting current step to crop");
     setCurrentStep("crop");
-    console.log("Current step after setting:", $uiStore.currentStep);
   }
 
   function handleCropComplete(croppedImage: string) {
