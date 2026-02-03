@@ -88,21 +88,32 @@
       errorMessage = null;
       setLoading(true);
 
-      console.log("Calling getCropperImage");
-      const image = cropper.getCropperImage();
-      console.log("Image result:", image);
-      console.log("Image type:", typeof image);
+      console.log("Calling getCropperCanvas");
+      const cropperCanvasElement = cropper.getCropperCanvas();
+      console.log("CropperCanvas result:", cropperCanvasElement);
+      console.log("CropperCanvas type:", typeof cropperCanvasElement);
 
-      if (!image) {
+      if (!cropperCanvasElement) {
         throw new Error("Не удалось получить обрезанное изображение");
       }
 
-      // Проверяем, есть ли у image метод toDataURL
-      if (typeof image.toDataURL === "function") {
-        const croppedImage = image.toDataURL("image/png");
-      } else {
-        throw new Error("Изображение не имеет метода toDataURL");
+      // Используем метод $toCanvas для получения HTMLCanvasElement
+      const canvas = await cropperCanvasElement.$toCanvas({
+        width: 320,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: "high",
+      });
+      console.log("Canvas result:", canvas);
+      console.log("Canvas type:", typeof canvas);
+      console.log("Canvas.toDataURL:", typeof canvas?.toDataURL);
+
+      if (!canvas) {
+        throw new Error("Не удалось получить canvas");
       }
+
+      // Теперь canvas - это обычный HTMLCanvasElement
+      const croppedImage = canvas.toDataURL("image/png");
+      console.log("Cropped image:", croppedImage);
 
       // Validate cropped image
       const cropResult: ImageCropResult = {
