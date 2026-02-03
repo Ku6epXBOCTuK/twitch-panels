@@ -10,10 +10,10 @@
     onDownload?: () => void;
   } = $props();
 
-  let Stage: any = $state(undefined);
-  let Layer: any = $state(undefined);
-  let Image: any = $state(undefined);
-  let Text: any = $state(undefined);
+  let Stage: any;
+  let Layer: any;
+  let Image: any;
+  let Text: any;
 
   let currentPanel = $state<Panel | null>(null);
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);

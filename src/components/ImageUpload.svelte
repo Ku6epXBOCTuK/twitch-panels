@@ -8,6 +8,8 @@
 
   let imageService = new ImageService();
 
+  let { onImageSelect }: { onImageSelect: (image: string) => void } = $props();
+
   let dropZone = $state<HTMLElement | null>(null);
   let fileInput = $state<HTMLInputElement | null>(null);
   let urlInput = $state<HTMLInputElement | null>(null);
@@ -66,14 +68,18 @@
   }
 
   async function handleFileUpload(file: File) {
+    console.log("handleFileUpload called with file:", file.name, "size:", file.size);
     try {
       setLoading(true);
       clearError();
-
+      console.log("Calling imageService.handleFileUpload");
       const result: ImageUploadResult = await imageService.handleFileUpload(file);
+      console.log("Image upload result - success:", result.success, "has image:", !!result.image);
 
       if (result.success && result.image) {
         uploadedImage = result.image;
+        console.log("Calling onImageSelect with image length:", result.image.length);
+        onImageSelect(result.image);
         setCurrentStep("crop");
       } else {
         errorMessage = result.error || "Ошибка загрузки файла";
@@ -96,6 +102,8 @@
 
       if (result.success && result.image) {
         uploadedImage = result.image;
+        console.log("Calling onImageSelect with image length:", result.image.length);
+        onImageSelect(result.image);
         setCurrentStep("crop");
       } else {
         errorMessage = result.error || "Ошибка вставки изображения";
@@ -120,6 +128,8 @@
 
       if (result.success && result.image) {
         uploadedImage = result.image;
+        console.log("Calling onImageSelect with image length:", result.image.length);
+        onImageSelect(result.image);
         setCurrentStep("crop");
         showUrlInput = false;
       } else {

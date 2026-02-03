@@ -1,4 +1,3 @@
-
 <script lang="ts">
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
@@ -45,9 +44,12 @@
   });
 
   function handleImageUpload(image: string) {
+    console.log("handleImageUpload called with image length:", image.length);
     uploadedImage = image;
     errorMessage = null;
-    uiStore.setCurrentStep("crop");
+    console.log("Setting current step to crop");
+    setCurrentStep("crop");
+    console.log("Current step after setting:", $uiStore.currentStep);
   }
 
   function handleCropComplete(croppedImage: string) {
@@ -143,27 +145,22 @@
       {#if $uiStore.currentStep === "upload"}
         {#if ImageUpload}
           {@const Upload = ImageUpload.default}
-          <svelte:component this={Upload} onImageSelect={handleImageUpload} />
+          <Upload onImageSelect={handleImageUpload} />
         {/if}
       {:else if $uiStore.currentStep === "crop" && uploadedImage}
         {#if ImageCropper}
           {@const Cropper = ImageCropper.default}
-          <svelte:component 
-            this={Cropper}
-            imageSrc={uploadedImage}
-            onCropComplete={handleCropComplete}
-            onCancel={handleCropCancel}
-          />
+          <Cropper imageSrc={uploadedImage} onCropComplete={handleCropComplete} onCancel={handleCropCancel} />
         {/if}
       {:else if $uiStore.currentStep === "text"}
         {#if TextManager}
           {@const Manager = TextManager.default}
-          <svelte:component this={Manager} onTextUpdate={handleTextUpdate} />
+          <Manager onTextUpdate={handleTextUpdate} />
         {/if}
       {:else if $uiStore.currentStep === "preview"}
         {#if PanelPreview}
           {@const Preview = PanelPreview.default}
-          <svelte:component this={Preview} onDownload={handleDownload} />
+          <Preview onDownload={handleDownload} />
         {/if}
       {/if}
     </div>
@@ -171,11 +168,7 @@
     <div class="sidebar">
       {#if PanelList}
         {@const List = PanelList.default}
-        <svelte:component 
-          this={List}
-          onPanelSelect={handlePanelSelect}
-          onPanelDelete={handlePanelDelete}
-        />
+        <List onPanelSelect={handlePanelSelect} onPanelDelete={handlePanelDelete} />
       {/if}
     </div>
   </div>

@@ -6,12 +6,16 @@
   import { ImageService } from "../lib/services/imageService";
   import { uiStore, setLoading } from "../stores/uiStore";
   
-  let Cropper: any = $state(undefined);
+  let Cropper: any;
 
   onMount(async () => {
     if (browser) {
+      console.log("Loading cropperjs module");
       const cropperModule = await import("cropperjs");
-      Cropper = cropperModule.default;
+      console.log("cropperjs module loaded:", cropperModule);
+      Cropper = cropperModule.default || cropperModule;
+      console.log("Cropper class:", Cropper);
+      console.log("Cropper.getCroppedCanvas:", typeof Cropper?.prototype?.getCroppedCanvas);
       
       // Импортируем стили только на клиенте
 
@@ -44,8 +48,13 @@
   });
 
   function initializeCropper() {
-    if (!imageElement || !Cropper) return;
+    console.log("initializeCropper called, imageElement:", !!imageElement, "Cropper:", !!Cropper);
+    if (!imageElement || !Cropper) {
+      console.error("Cannot initialize cropper: imageElement:", !!imageElement, "Cropper:", !!Cropper);
+      return;
+    }
 
+    console.log("Creating new Cropper instance");
     cropper = new Cropper(imageElement, {
       aspectRatio: NaN, // Allow any aspect ratio
       viewMode: 1,
@@ -62,27 +71,38 @@
       minCropBoxHeight: 50,
       responsive: true,
     });
+    console.log("Cropper instance created:", cropper);
+    console.log("cropper.getCroppedCanvas:", typeof cropper?.getCroppedCanvas);
+    console.log("cropper methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(cropper)));
   }
 
   async function handleCrop() {
-    if (!cropper) return;
+    console.log("handleCrop called, cropper:", cropper);
+    if (!cropper) {
+      console.error("Cropper is not initialized");
+      return;
+    }
 
     try {
       isProcessing = true;
       errorMessage = null;
       setLoading(true);
 
-      const canvas = cropper.getCroppedCanvas({
-        width: 320,
-        imageSmoothingEnabled: true,
-        imageSmoothingQuality: "high",
-      });
+      console.log("Calling getCropperImage");
+      const image = cropper.getCropperImage();
+      console.log("Image result:", image);
+      console.log("Image type:", typeof image);
 
-      if (!canvas) {
+      if (!image) {
         throw new Error("Не удалось получить обрезанное изображение");
       }
 
-      const croppedImage = canvas.toDataURL("image/png");
+      // Проверяем, есть ли у image метод toDataURL
+      if (typeof image.toDataURL === "function") {
+        const croppedImage = image.toDataURL("image/png");
+      } else {
+        throw new Error("Изображение не имеет метода toDataURL");
+      }
 
       // Validate cropped image
       const cropResult: ImageCropResult = {
