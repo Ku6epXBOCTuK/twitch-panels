@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
   import { panelStore, createEmptyPanel } from "../stores/panelStore";
-  import { uiStore, setLoading } from "../stores/uiStore";
+  import { uiStore, setLoading, setCurrentStep } from "../stores/uiStore";
   import { panelStorage } from "../lib/utils/panelStorage";
   import { exportService } from "../lib/services/exportService";
   import type { Panel } from "../lib/types/panel";
@@ -47,6 +47,7 @@
   function handleImageUpload(image: string) {
     uploadedImage = image;
     errorMessage = null;
+    uiStore.setCurrentStep("crop");
   }
 
   function handleCropComplete(croppedImage: string) {
@@ -62,12 +63,12 @@
     // Сохраняем панель
     panelStorage.savePanel(newPanel);
 
-    uiStore.setCurrentStep("text");
+    setCurrentStep("text");
   }
 
   function handleCropCancel() {
     uploadedImage = null;
-    uiStore.setCurrentStep("upload");
+    setCurrentStep("upload");
   }
 
   function handleTextUpdate(texts: Panel["texts"]) {
@@ -85,14 +86,14 @@
   function handlePanelSelect(panel: Panel) {
     panelStore.set(panel);
     currentPanel = panel;
-    uiStore.setCurrentStep("preview");
+    setCurrentStep("preview");
   }
 
   function handlePanelDelete(panelId: string) {
     if (currentPanel?.id === panelId) {
       panelStore.set(null);
       currentPanel = null;
-      uiStore.setCurrentStep("upload");
+      setCurrentStep("upload");
     }
   }
 
@@ -121,7 +122,7 @@
     currentPanel = null;
     uploadedImage = null;
     croppedImage = null;
-    uiStore.setCurrentStep("upload");
+    setCurrentStep("upload");
   }
 </script>
 
@@ -141,12 +142,14 @@
     <div class="main-section">
       {#if $uiStore.currentStep === "upload"}
         {#if ImageUpload}
-          <svelte:component this={ImageUpload.default} onImageSelect={handleImageUpload} />
+          {@const Upload = ImageUpload.default}
+          <svelte:component this={Upload} onImageSelect={handleImageUpload} />
         {/if}
       {:else if $uiStore.currentStep === "crop" && uploadedImage}
         {#if ImageCropper}
+          {@const Cropper = ImageCropper.default}
           <svelte:component 
-            this={ImageCropper.default}
+            this={Cropper}
             imageSrc={uploadedImage}
             onCropComplete={handleCropComplete}
             onCancel={handleCropCancel}
@@ -154,19 +157,22 @@
         {/if}
       {:else if $uiStore.currentStep === "text"}
         {#if TextManager}
-          <svelte:component this={TextManager.default} onTextUpdate={handleTextUpdate} />
+          {@const Manager = TextManager.default}
+          <svelte:component this={Manager} onTextUpdate={handleTextUpdate} />
         {/if}
       {:else if $uiStore.currentStep === "preview"}
         {#if PanelPreview}
-          <svelte:component this={PanelPreview.default} onDownload={handleDownload} />
+          {@const Preview = PanelPreview.default}
+          <svelte:component this={Preview} onDownload={handleDownload} />
         {/if}
       {/if}
     </div>
 
     <div class="sidebar">
       {#if PanelList}
+        {@const List = PanelList.default}
         <svelte:component 
-          this={PanelList.default}
+          this={List}
           onPanelSelect={handlePanelSelect}
           onPanelDelete={handlePanelDelete}
         />

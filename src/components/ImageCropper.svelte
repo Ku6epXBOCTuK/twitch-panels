@@ -113,7 +113,7 @@
     <img
       bind:this={imageElement}
       src={imageSrc}
-      alt="Image to crop"
+      alt=""
       class="cropper-image"
     />
   </div>

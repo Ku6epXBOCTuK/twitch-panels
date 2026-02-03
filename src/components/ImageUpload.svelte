@@ -8,10 +8,10 @@
 
   let imageService = new ImageService();
 
-  let dropZone: HTMLElement;
-  let fileInput: HTMLInputElement;
-  let urlInput: HTMLInputElement;
-  let urlForm: HTMLFormElement;
+  let dropZone = $state<HTMLElement | null>(null);
+  let fileInput = $state<HTMLInputElement | null>(null);
+  let urlInput = $state<HTMLInputElement | null>(null);
+  let urlForm = $state<HTMLFormElement | null>(null);
 
   let isDragOver = $state(false);
   let showUrlInput = $state(false);
@@ -68,13 +68,13 @@
   async function handleFileUpload(file: File) {
     try {
       setLoading(true);
-      uiStore.clearError();
+      clearError();
 
       const result: ImageUploadResult = await imageService.handleFileUpload(file);
 
       if (result.success && result.image) {
         uploadedImage = result.image;
-        uiStore.setCurrentStep("crop");
+        setCurrentStep("crop");
       } else {
         errorMessage = result.error || "Ошибка загрузки файла";
       }
@@ -90,13 +90,13 @@
 
     try {
       setLoading(true);
-      uiStore.clearError();
+      clearError();
 
       const result: ImageUploadResult = await imageService.handlePasteUpload(e);
 
       if (result.success && result.image) {
         uploadedImage = result.image;
-        uiStore.setCurrentStep("crop");
+        setCurrentStep("crop");
       } else {
         errorMessage = result.error || "Ошибка вставки изображения";
       }
@@ -114,13 +114,13 @@
 
     try {
       setLoading(true);
-      uiStore.clearError();
+      clearError();
 
       const result: ImageUploadResult = await imageService.handleUrlUpload(urlInput.value.trim());
 
       if (result.success && result.image) {
         uploadedImage = result.image;
-        uiStore.setCurrentStep("crop");
+        setCurrentStep("crop");
         showUrlInput = false;
       } else {
         errorMessage = result.error || "Ошибка загрузки изображения";
@@ -140,7 +140,7 @@
     uploadedImage = null;
     errorMessage = null;
     showUrlInput = false;
-    uiStore.setCurrentStep("upload");
+    setCurrentStep("upload");
   }
 </script>
 
@@ -156,7 +156,15 @@
     <div
       bind:this={dropZone}
       class="drop-zone {isDragOver ? 'drag-over' : ''} {uiError ? 'error' : ''}"
+      role="button"
+      tabindex="0"
       onclick={triggerFileInput}
+      onkeydown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerFileInput();
+        }
+      }}
     >
       <div class="drop-zone-content">
         <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -169,7 +177,7 @@
         <p>Перетащите файл сюда, нажмите для выбора, или вставьте через Ctrl+V</p>
 
         <div class="upload-methods">
-          <button class="btn btn-primary" onclick={triggerFileInput}> Выбрать файл </button>
+          <button class="btn btn-primary" onclick={(e) => { e.stopPropagation(); triggerFileInput(); }}> Выбрать файл </button>
 
           <button class="btn btn-secondary" onclick={() => (showUrlInput = !showUrlInput)}>
             {showUrlInput ? "Скрыть" : "По URL"}
