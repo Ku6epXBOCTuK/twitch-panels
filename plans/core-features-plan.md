@@ -1,0 +1,343 @@
+# Core Features Implementation Plan
+
+## 🎯 **Focus: Core Features First**
+
+This plan prioritizes the essential features needed for a functional Twitch panel creator, deferring advanced features like batch download for later implementation.
+
+### **Phase 1: Minimum Viable Product (MVP)**
+
+#### **1. Image Upload System**
+
+**Priority: HIGH**
+
+- **Drag & Drop Zone**: Visual feedback, file validation
+- **Ctrl+V Paste**: Clipboard API integration
+- **URL Input**: External image loading
+- **Image Preview**: Before cropping confirmation
+
+**Key Components:**
+
+```typescript
+interface ImageUploadProps {
+  onImageSelect: (image: string) => void;
+  onError: (error: string) => void;
+}
+
+// Features:
+- File type validation (jpg, png, webp)
+- Size limit (10MB max)
+- Drag over visual states
+- Paste detection
+- URL fetch with CORS handling
+```
+
+#### **2. Image Cropping Interface**
+
+**Priority: HIGH**
+
+- **Cropper Integration**: Fixed 320px width constraint
+- **Crop Confirmation**: Accept/Cancel options
+- **Error Handling**: Invalid crop areas
+
+**Key Components:**
+
+```typescript
+interface ImageCropperProps {
+  image: string;
+  onCropComplete: (croppedImage: string) => void;
+  onCancel: () => void;
+}
+
+// Features:
+- Fixed width (320px), variable height
+- Aspect ratio locking
+- Crop area validation
+- Base64 output
+- Mobile responsive
+```
+
+#### **3. Text Management System**
+
+**Priority: HIGH**
+
+- **Dynamic Text List**: Add, edit, delete
+- **Text Styling**: Font, size, color, positioning
+- **Real-time Updates**: Live preview sync
+
+**Key Components:**
+
+```typescript
+interface TextItem {
+  id: string;
+  text: string;
+  fontSize: number;
+  fontFamily: string;
+  color: string;
+  x: number;
+  y: number;
+}
+
+interface TextManagerProps {
+  texts: TextItem[];
+  onTextChange: (texts: TextItem[]) => void;
+}
+
+// Features:
+- Add new text item
+- Edit existing text
+- Delete text item
+- Font selection from available fonts
+- Font size adjustment
+- Color picker
+- Position controls (x, y)
+- Text validation (length limits)
+```
+
+#### **4. Canvas Rendering Engine**
+
+**Priority: HIGH**
+
+- **SvelteKonva Integration**: Enhanced implementation
+- **Dynamic Height**: Configurable panel height
+- **Real-time Preview**: Live updates
+
+**Key Components:**
+
+```typescript
+interface PanelCanvasProps {
+  backgroundImage: string;
+  texts: TextItem[];
+  width: number; // 320px fixed
+  height: number; // configurable
+}
+
+// Features:
+- Background image layer
+- Text layers with proper positioning
+- Dynamic height support
+- Real-time rendering
+- Performance optimization
+```
+
+#### **5. Basic Panel Management**
+
+**Priority: MEDIUM**
+
+- **Panel Storage**: Local storage for current panel
+- **Panel Navigation**: Basic next/prev (single panel for MVP)
+- **Panel Validation**: Basic validation
+
+**Key Components:**
+
+```typescript
+interface Panel {
+  id: string;
+  backgroundImage: string;
+  texts: TextItem[];
+  height: number;
+  createdAt: Date;
+}
+
+interface PanelManagerProps {
+  currentPanel: Panel | null;
+  onPanelUpdate: (panel: Panel) => void;
+}
+
+// Features:
+- Save current panel state
+- Load panel from storage
+- Basic validation
+- Single panel focus for MVP
+```
+
+### **Phase 2: Enhanced Core Features**
+
+#### **6. User Interface Enhancements**
+
+**Priority: MEDIUM**
+
+- **Responsive Layout**: Mobile-friendly design
+- **Loading States**: Visual feedback
+- **Error Messages**: User-friendly error handling
+- **Keyboard Shortcuts**: Ctrl+V, navigation
+
+#### **7. Error Handling & Validation**
+
+**Priority: MEDIUM**
+
+- **Input Validation**: Form validation
+- **Error Boundaries**: Component error handling
+- **User Guidance**: Clear error messages
+- **Retry Mechanisms**: Failed operations
+
+### **Implementation Order**
+
+```
+Week 1: Foundation
+├── Setup dependencies (cropperjs, file-saver)
+├── TypeScript types and interfaces
+├── Error handling structure
+└── Basic project structure
+
+Week 2: Image System
+├── Image upload component
+├── Image cropping component
+├── Image validation utilities
+└── Image service layer
+
+Week 3: Text System
+├── Text management component
+├── Text styling controls
+├── Text validation
+└── Text service layer
+
+Week 4: Canvas & Integration
+├── Enhanced SvelteKonva implementation
+├── Dynamic height support
+├── Real-time preview
+└── Panel storage system
+
+Week 5: UI & Polish
+├── Responsive layout
+├── Loading states
+├── Error handling improvements
+└── User experience polish
+```
+
+## 🔧 **Technical Specifications**
+
+### **Dependencies to Install**
+
+```bash
+npm install cropperjs file-saver @types/cropperjs
+```
+
+### **TypeScript Interfaces**
+
+```typescript
+// Core types
+interface TextItem {
+  id: string;
+  text: string;
+  fontSize: number;
+  fontFamily: string;
+  color: string;
+  x: number;
+  y: number;
+}
+
+interface Panel {
+  id: string;
+  backgroundImage: string;
+  texts: TextItem[];
+  height: number;
+  createdAt: Date;
+}
+
+interface ImageUploadResult {
+  success: boolean;
+  image?: string;
+  error?: string;
+}
+```
+
+### **State Management**
+
+```typescript
+// Core stores
+export const panelStore = writable<Panel | null>(null);
+export const uiStore = writable({
+  isLoading: false,
+  error: null as string | null,
+  currentStep: "upload" as "upload" | "crop" | "text" | "preview",
+});
+```
+
+### **Error Handling Strategy**
+
+```typescript
+// Error types
+export class AppError extends Error {
+  constructor(
+    message: string,
+    public code: string,
+    public recoverable: boolean = true,
+  ) {
+    super(message);
+  }
+}
+
+// Error handling utilities
+export const handleImageError = (error: unknown): string => {
+  if (error instanceof AppError) {
+    return error.recoverable ? `Ошибка: ${error.message}. Попробуйте снова.` : `Критическая ошибка: ${error.message}`;
+  }
+  return "Произошла неизвестная ошибка";
+};
+```
+
+## 🚨 **Common Issues & Solutions**
+
+### **Image Upload Issues**
+
+1. **CORS Errors**
+   - Solution: Use proxy for external images or allow CORS in development
+   - Fallback: Show error message with alternative upload methods
+
+2. **Large Files**
+   - Solution: Implement client-side compression
+   - Limit: 10MB per file with clear user feedback
+
+3. **Invalid Formats**
+   - Solution: Validate before upload, show supported formats
+   - Fallback: Convert to webp if possible
+
+### **Canvas Rendering Issues**
+
+1. **Memory Limits**
+   - Solution: Implement lazy rendering and cleanup
+   - Monitor: Canvas size and memory usage
+
+2. **Font Loading**
+   - Solution: Fallback to web-safe fonts
+   - Preload: Load fonts during initialization
+
+3. **Performance**
+   - Solution: Debounce rapid updates
+   - Optimize: Use requestAnimationFrame for smooth rendering
+
+### **User Experience Issues**
+
+1. **Slow Operations**
+   - Solution: Loading states and progress indicators
+   - Optimize: Async operations with proper error handling
+
+2. **Complex Interface**
+   - Solution: Step-by-step wizard approach
+   - Guide: Tooltips and help text
+
+## 📱 **UI/UX Considerations**
+
+### **Mobile First Design**
+
+- Touch-friendly controls
+- Responsive layout for all screen sizes
+- Swipe gestures for navigation
+
+### **Accessibility**
+
+- Screen reader compatibility
+- Keyboard navigation
+- High contrast mode support
+
+### **Performance**
+
+- Lazy loading of components
+- Optimized bundle size
+- Efficient state management
+
+---
+
+_Created: 2026-02-03_
+_Focus: Core Features Implementation_
+_Estimated Duration: 5 weeks_
