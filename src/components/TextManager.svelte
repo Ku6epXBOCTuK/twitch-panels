@@ -3,7 +3,6 @@
   import { panelStore, addTextToPanel, updateTextInPanel, removeTextFromPanel } from "../stores/panelStore";
   import type { TextItem } from "../lib/types/panel";
   import { v4 as uuidv4 } from "uuid";
-  import TextPreview from "./TextPreview.svelte";
 
   let { onTextUpdate }: {
     onTextUpdate: (texts: TextItem[]) => void;
@@ -282,48 +281,35 @@
       <p>Нет добавленного текста</p>
     </div>
   {/if}
-
-  {#if currentPanel && currentPanel.texts.length > 0 && currentPanel.backgroundImage}
-    <div class="preview-section">
-      <h3>Предпросмотр</h3>
-      {#each currentPanel.texts as textItem (textItem.id)}
-        <TextPreview
-          textItem={textItem}
-          height={currentPanel.height}
-        />
-      {/each}
-    </div>
-  {/if}
 </div>
 
 <style>
   .text-manager {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
   }
 
   .text-manager-header h2 {
     margin: 0;
     color: #333;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   .common-settings-section {
     background: #f8f9fa;
     border: 2px solid #e9ecef;
     border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
 
   .common-settings-section h3 {
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.75rem 0;
     color: #333;
-    font-size: 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
   }
 
   .settings-grid {
@@ -372,10 +358,10 @@
 
   .text-input {
     flex: 1;
-    padding: 0.75rem;
+    padding: 0.6rem 0.75rem;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
   }
 
   .text-input:focus {
@@ -384,12 +370,12 @@
   }
 
   .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1.25rem;
     border: none;
-    border-radius: 4px;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     font-weight: 500;
   }
 
@@ -405,8 +391,8 @@
   .error-message {
     background: #ffebee;
     color: #c62828;
-    padding: 0.75rem;
-    border-radius: 4px;
+    padding: 0.6rem 0.75rem;
+    border-radius: 6px;
     border: 1px solid #ffcdd2;
     font-size: 0.9rem;
   }
@@ -414,18 +400,18 @@
   .text-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .text-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.75rem;
     border: 2px solid #e9ecef;
-    border-radius: 8px;
+    border-radius: 6px;
     background: white;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
   }
 
   .text-item:hover {
@@ -434,23 +420,9 @@
   }
 
   .text-content {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #333;
     flex: 1;
-  }
-
-  .preview-section {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-  }
-
-  .preview-section h3 {
-    margin: 0 0 1.5rem 0;
-    color: #333;
-    font-size: 1.25rem;
   }
 
   .btn-icon {
@@ -458,9 +430,10 @@
     border: none;
     cursor: pointer;
     padding: 0.25rem 0.5rem;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: #dc3545;
     transition: all 0.2s ease;
+    line-height: 1;
   }
 
   .btn-icon:hover {
@@ -511,13 +484,14 @@
 
   .empty-state {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
     color: #666;
     background: #f9f9f9;
-    border-radius: 8px;
+    border-radius: 6px;
   }
 
   .empty-state p {
     margin: 0;
+    font-size: 0.95rem;
   }
 </style>

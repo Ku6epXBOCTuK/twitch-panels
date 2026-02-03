@@ -123,15 +123,14 @@
           {@const Manager = TextManager.default}
           <Manager onTextUpdate={handleTextUpdate} />
         {/if}
-      {:else if $uiStore.currentStep === "preview"}
-        {#if PanelPreview}
-          {@const Preview = PanelPreview.default}
-          <Preview onDownload={handleDownload} />
-        {/if}
       {/if}
     </div>
 
     <div class="sidebar">
+      {#if $uiStore.currentStep === "text" && PanelPreview}
+        {@const Preview = PanelPreview.default}
+        <Preview onDownload={handleDownload} />
+      {/if}
     </div>
   </div>
 </div>
@@ -165,7 +164,7 @@
 
   .app-content {
     display: grid;
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
   }
 

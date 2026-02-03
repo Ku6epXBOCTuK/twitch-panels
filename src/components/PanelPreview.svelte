@@ -139,73 +139,71 @@
   .panel-preview {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
   }
 
   .preview-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .preview-header h2 {
     margin: 0;
     color: #333;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   .preview-sections {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .preview-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .preview-section h3 {
     margin: 0;
     color: #333;
-    font-size: 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
   }
 
   .canvas-container {
     display: flex;
     justify-content: center;
-    padding: 2rem;
+    padding: 1rem;
     background: #f5f5f5;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .empty-state {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
     color: #666;
     background: #f9f9f9;
-    border-radius: 8px;
+    border-radius: 6px;
   }
 
   .empty-state p {
     margin: 0;
+    font-size: 0.95rem;
   }
 
   .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1.25rem;
     border: none;
-    border-radius: 4px;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     font-weight: 500;
   }
 
