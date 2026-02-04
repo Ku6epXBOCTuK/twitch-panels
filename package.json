@@ -27,6 +27,7 @@
 		"@types/uuid": "^10.0.0",
 		"cropperjs": "^2.1.0",
 		"file-saver": "^2.0.5",
+		"jszip": "^3.10.1",
 		"svelte-konva": "^1.0.1",
 		"uuid": "^13.0.0"
 	}
