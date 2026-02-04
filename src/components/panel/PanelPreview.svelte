@@ -116,32 +116,6 @@
     font-size: 1.1rem;
   }
 
-  .panel-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .edit-controls {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex: 1;
-  }
-
-  .edit-input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-
-  .edit-input:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-
   .preview-sections {
     display: flex;
     flex-direction: column;
@@ -154,31 +128,11 @@
     gap: 0.5rem;
   }
 
-  .preview-section h3 {
-    margin: 0;
-    color: #333;
-    font-size: 1rem;
-    font-weight: 500;
-  }
-
   .canvas-container {
     display: flex;
     justify-content: center;
     padding: 1rem;
     background: #f5f5f5;
     border-radius: 8px;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 1.5rem;
-    color: #666;
-    background: #f9f9f9;
-    border-radius: 6px;
-  }
-
-  .empty-state p {
-    margin: 0;
-    font-size: 0.95rem;
   }
 </style>

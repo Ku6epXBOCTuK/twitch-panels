@@ -1,4 +1,3 @@
-
 import pkg from "file-saver";
 const { saveAs } = pkg;
 import type { Panel } from "../types/panel";
@@ -44,7 +43,12 @@ export class ExportService {
         ctx.fillStyle = textItem.color;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(textItem.text, textItem.x, textItem.y);
+
+        // Calculate position based on existing system
+        const x = 160; // Center of 320px panel
+        const y = panel.height / 2 + textItem.verticalOffset;
+
+        ctx.fillText(textItem.text, x, y);
       });
 
       // Конвертируем в blob и сохраняем

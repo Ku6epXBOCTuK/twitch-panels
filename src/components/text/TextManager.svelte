@@ -378,12 +378,6 @@
     font-size: 0.9rem;
   }
 
-  .text-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
   .text-item {
     display: flex;
     justify-content: space-between;
@@ -398,19 +392,6 @@
   .text-item:hover {
     border-color: #007bff;
     background: #f0f8ff;
-  }
-
-  .text-content {
-    font-size: 0.95rem;
-    color: #333;
-    flex: 1;
-  }
-
-  .text-controls {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
   }
 
   .control-group {
@@ -446,18 +427,5 @@
     text-align: right;
     font-weight: 500;
     color: #333;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 1.5rem;
-    color: #666;
-    background: #f9f9f9;
-    border-radius: 6px;
-  }
-
-  .empty-state p {
-    margin: 0;
-    font-size: 0.95rem;
   }
 </style>
