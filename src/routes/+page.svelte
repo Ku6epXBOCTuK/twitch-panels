@@ -6,11 +6,7 @@
   import { exportService } from "../services/exportService";
   import type { Panel } from "../lib/types/panel";
 
-  import AppHeader from "../components/AppHeader.svelte";
-  import ImageManager from "../components/ImageManager.svelte";
-  import TextSection from "../components/TextSection.svelte";
-  import BackgroundPreview from "../components/BackgroundPreview.svelte";
-  import PanelsList from "../components/PanelsList.svelte";
+  import AppContainer from "../components/AppContainer.svelte";
 
   let uploadedImage = $state<string | null>(null);
   let panels = $state<Panel[]>([]);
@@ -71,94 +67,19 @@
   }
 </script>
 
-<div class="app-container">
-  <AppHeader onUploadNewImage={handleUploadNewImage} />
-
-  {#if exportService.getErrorMessage()}
-    <div class="error-message">
-      {exportService.getErrorMessage()}
-    </div>
-  {/if}
-
-  <div class="app-content">
-    <div class="main-section">
-      <ImageManager
-        currentStep={$uiStore.currentStep}
-        uploadedImage={uploadedImage}
-        onImageUpload={handleImageUpload}
-        onCropComplete={handleCropComplete}
-        onCropCancel={handleCropCancel}
-      />
-      {#if $uiStore.currentStep === "text"}
-        <TextSection
-          texts={texts}
-          onTextAdd={handleAddText}
-          onTextUpdate={handleUpdateText}
-          onTextDelete={handleDeleteText}
-        />
-      {/if}
-    </div>
-
-    <div class="sidebar">
-      {#if $uiStore.currentStep === "text"}
-        <BackgroundPreview
-          backgroundImage={backgroundImage}
-          onUploadNewImage={handleUploadNewImage}
-        />
-        <PanelsList
-          panels={panels}
-          onDownload={handleDownload}
-          onDownloadAll={handleDownloadAll}
-        />
-      {/if}
-    </div>
-  </div>
-</div>
-
-<style>
-  .app-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-
-  .app-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-
-  .main-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .error-message {
-    background: #ffebee;
-    color: #c62828;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ffcdd2;
-    font-weight: 500;
-  }
-
-  @media (max-width: 1024px) {
-    .app-content {
-      grid-template-columns: 1fr;
-    }
-
-    .sidebar {
-      order: -1;
-    }
-  }
-</style>
+<AppContainer
+  errorMessage={exportService.getErrorMessage()}
+  {uploadedImage}
+  {texts}
+  {backgroundImage}
+  {panels}
+  onUploadNewImage={handleUploadNewImage}
+  onImageUpload={handleImageUpload}
+  onCropComplete={handleCropComplete}
+  onCropCancel={handleCropCancel}
+  onTextAdd={handleAddText}
+  onTextUpdate={handleUpdateText}
+  onTextDelete={handleDeleteText}
+  onDownload={handleDownload}
+  onDownloadAll={handleDownloadAll}
+/>
