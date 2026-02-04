@@ -48,35 +48,74 @@
   }
 
   function handleAddText(text: string) {
-    texts = panelService.addText(texts, text);
-    panels = panelService.updatePanelsFromTexts(texts, panels, backgroundImage!);
+    // Проверяем, что текст не пустой и не дублируется
+    if (!text.trim()) return;
+    if (texts.some(t => t.text === text)) return;
+    
+    texts = [...texts, { id: crypto.randomUUID(), text }];
+    updatePanelsFromTexts();
   }
 
   function handleUpdateText(id: string, newText: string) {
-    texts = panelService.updateText(texts, id, newText);
-    panels = panelService.updatePanelsFromTexts(texts, panels, backgroundImage!);
+    // Проверяем, что текст не пустой и не дублируется
+    if (!newText.trim()) return;
+    if (texts.some(t => t.id !== id && t.text === newText)) return;
+    
+    texts = texts.map(t => t.id === id ? { ...t, text: newText } : t);
+    updatePanelsFromTexts();
   }
 
   function handleDeleteText(id: string) {
-    texts = panelService.deleteText(texts, id);
-    panels = panelService.updatePanelsFromTexts(texts, panels, backgroundImage!);
+    texts = texts.filter(t => t.id !== id);
+    updatePanelsFromTexts();
+  }
+
+  function updatePanelsFromTexts() {
+    if (!backgroundImage) return;
+    panels = texts.map(textItem => {
+      const existingPanel = panels.find(p => p.texts[0]?.text === textItem.text);
+      if (existingPanel) {
+        return updatePanelText(existingPanel, textItem.text);
+      }
+      return createPanelFromText(backgroundImage!, textItem.text);
+    });
   }
 
   async function handleDownload(panel: Panel) {
-    await exportService.handleDownload(panel);
+    try {
+      setLoading(true);
+      const result = await exportService.exportPanel(panel);
+
+      if (!result.success) {
+        errorMessage = result.error || "Ошибка экспорта панели";
+      }
+    } catch (error) {
+      errorMessage = error instanceof Error ? error.message : "Ошибка экспорта панели";
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleDownloadAll() {
-    await exportService.handleDownloadAll(panels);
+    try {
+      setLoading(true);
+      for (const panel of panels) {
+        await exportService.exportPanel(panel);
+      }
+    } catch (error) {
+      errorMessage = error instanceof Error ? error.message : "Ошибка экспорта панелей";
+    } finally {
+      setLoading(false);
+    }
   }
 </script>
 
 <div class="app-container">
   <AppHeader onUploadNewImage={handleUploadNewImage} />
 
-  {#if exportService.getErrorMessage()}
+  {#if errorMessage}
     <div class="error-message">
-      {exportService.getErrorMessage()}
+      {errorMessage}
     </div>
   {/if}
 
