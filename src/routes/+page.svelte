@@ -6,11 +6,11 @@
   import { exportService } from "../lib/services/exportService";
   import type { Panel } from "../lib/types/panel";
 
-  import ImageUpload from "../components/ImageUpload.svelte";
-  import ImageCropper from "../components/ImageCropper.svelte";
-  import TextManager from "../components/TextManager.svelte";
-  import PanelPreview from "../components/PanelPreview.svelte";
-  import { Button } from "../lib/components/ui";
+  import AppHeader from "../components/AppHeader.svelte";
+  import ImageManager from "../components/ImageManager.svelte";
+  import TextSection from "../components/TextSection.svelte";
+  import BackgroundPreview from "../components/BackgroundPreview.svelte";
+  import PanelsList from "../components/PanelsList.svelte";
 
   let uploadedImage = $state<string | null>(null);
   let panels = $state<Panel[]>([]);
@@ -84,11 +84,9 @@
       if (existingPanel) {
         return updatePanelText(existingPanel, textItem.text);
       }
-      return createPanelFromText(backgroundImage, textItem.text);
+      return createPanelFromText(backgroundImage!, textItem.text);
     });
   }
-
-
 
   async function handleDownload(panel: Panel) {
     try {
@@ -117,14 +115,10 @@
       setLoading(false);
     }
   }
-
-
 </script>
 
 <div class="app-container">
-  <div class="app-header">
-    <h1>Twitch Panels Creator</h1>
-  </div>
+  <AppHeader onUploadNewImage={handleUploadNewImage} />
 
   {#if errorMessage}
     <div class="error-message">
@@ -134,50 +128,34 @@
 
   <div class="app-content">
     <div class="main-section">
-      {#if $uiStore.currentStep === "upload"}
-        <ImageUpload onImageSelect={handleImageUpload} />
-      {:else if $uiStore.currentStep === "crop" && uploadedImage}
-        <ImageCropper imageSrc={uploadedImage} onCropComplete={handleCropComplete} onCancel={handleCropCancel} />
-      {:else if $uiStore.currentStep === "text"}
-        <div class="text-section">
-          <h2>Добавьте тексты для панелей</h2>
-          <TextManager 
-            onTextAdd={handleAddText}
-            onTextUpdate={handleUpdateText}
-            onTextDelete={handleDeleteText}
-            texts={texts}
-          />
-        </div>
+      <ImageManager
+        currentStep={$uiStore.currentStep}
+        uploadedImage={uploadedImage}
+        onImageUpload={handleImageUpload}
+        onCropComplete={handleCropComplete}
+        onCropCancel={handleCropCancel}
+      />
+      {#if $uiStore.currentStep === "text"}
+        <TextSection
+          texts={texts}
+          onTextAdd={handleAddText}
+          onTextUpdate={handleUpdateText}
+          onTextDelete={handleDeleteText}
+        />
       {/if}
     </div>
 
     <div class="sidebar">
-      {#if $uiStore.currentStep === "text" && backgroundImage}
-        <div class="background-preview">
-          <div class="background-header">
-            <h3>Фоновое изображение</h3>
-            <Button variant="secondary" size="sm" onclick={handleUploadNewImage}>Загрузить</Button>
-          </div>
-          <img src={backgroundImage} alt="Фон" />
-        </div>
-      {/if}
-      {#if $uiStore.currentStep === "text" && panels.length > 0}
-        <div class="panels-container">
-          <div class="panels-header">
-            <h2>Созданные панели ({panels.length})</h2>
-            <Button variant="primary" onclick={handleDownloadAll}>Скачать все</Button>
-          </div>
-          <div class="panels-list">
-            {#each panels as panel (panel.id)}
-              <div class="panel-item">
-                <PanelPreview 
-                  panel={panel} 
-                  onDownload={() => handleDownload(panel)}
-                />
-              </div>
-            {/each}
-          </div>
-        </div>
+      {#if $uiStore.currentStep === "text"}
+        <BackgroundPreview
+          backgroundImage={backgroundImage}
+          onUploadNewImage={handleUploadNewImage}
+        />
+        <PanelsList
+          panels={panels}
+          onDownload={handleDownload}
+          onDownloadAll={handleDownloadAll}
+        />
       {/if}
     </div>
   </div>
@@ -193,23 +171,6 @@
     padding: 2rem;
   }
 
-  .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
-    color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .app-header h1 {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 600;
-  }
-
   .app-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -222,89 +183,10 @@
     gap: 1.5rem;
   }
 
-  .text-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .text-section h2 {
-    margin: 0;
-    color: #333;
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-
   .sidebar {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-  }
-
-  .background-preview {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .background-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .background-preview h3 {
-    margin: 0;
-    color: #333;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  .background-preview img {
-    width: 100%;
-    max-width: 320px;
-    height: auto;
-    border-radius: 4px;
-  }
-
-  .panels-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .panels-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
-    color: white;
-  }
-
-  .panels-header h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  .panels-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .panel-item {
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    overflow: hidden;
-    background: white;
   }
 
   .error-message {
@@ -314,36 +196,6 @@
     border-radius: 8px;
     border: 1px solid #ffcdd2;
     font-weight: 500;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border: 2px solid #e9ecef;
-  }
-
-  .btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-  }
-
-  .btn-primary {
-    background: white;
-    color: #667eea;
-  }
-
-  .btn-primary:hover {
-    background: #f0f0f0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
   @media (max-width: 1024px) {
