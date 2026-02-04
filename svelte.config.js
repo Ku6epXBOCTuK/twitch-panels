@@ -12,6 +12,11 @@ const config = {
     output: {
       bundleStrategy: "inline",
     },
+    alias: {
+      $components: "src/components",
+      $stores: "src/stores",
+      $services: "src/services",
+    },
   },
   compilerOptions: {
     runes: true,
