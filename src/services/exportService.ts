@@ -4,7 +4,7 @@ import { setLoading } from "../stores/uiStore";
 
 export class ExportService {
   private static instance: ExportService;
-  private errorMessage: string | null = null;
+  private errorMessage: string | undefined = undefined;
 
   private constructor() {}
 
@@ -15,11 +15,11 @@ export class ExportService {
     return ExportService.instance;
   }
 
-  getErrorMessage(): string | null {
+  getErrorMessage(): string | undefined {
     return this.errorMessage;
   }
 
-  setErrorMessage(message: string | null): void {
+  setErrorMessage(message: string | undefined): void {
     this.errorMessage = message;
   }
 

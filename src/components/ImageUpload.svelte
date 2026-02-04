@@ -15,15 +15,15 @@
 
   let { onImageSelect }: Props = $props();
 
-  let dropZone = $state<HTMLElement | null>(null);
-  let fileInput = $state<HTMLInputElement | null>(null);
-  let urlInput = $state<HTMLInputElement | null>(null);
-  let urlForm = $state<HTMLFormElement | null>(null);
+  let dropZone = $state<HTMLElement | undefined>(undefined);
+  let fileInput = $state<HTMLInputElement | undefined>(undefined);
+  let urlInput = $state<HTMLInputElement | undefined>(undefined);
+  let urlForm = $state<HTMLFormElement | undefined>(undefined);
 
   let isDragOver = $state(false);
   let showUrlInput = $state(false);
-  let uploadedImage = $state<string | null>(null);
-  let errorMessage = $state<string | null>(null);
+  let uploadedImage = $state<string | undefined>(undefined);
+  let errorMessage = $state<string | undefined>(undefined);
 
   const uiError = $derived($uiStore.error?.error);
 
@@ -148,8 +148,8 @@
   }
 
   function resetUpload() {
-    uploadedImage = null;
-    errorMessage = null;
+    uploadedImage = undefined;
+    errorMessage = undefined;
     showUrlInput = false;
     setCurrentStep("upload");
   }

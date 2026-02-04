@@ -4,10 +4,10 @@
   import AppContent from "./AppContent.svelte";
 
   interface Props {
-    errorMessage: string | null;
-    uploadedImage: string | null;
+    errorMessage: string | undefined;
+    uploadedImage: string | undefined;
     texts: Array<{ id: string; text: string }>;
-    backgroundImage: string | null;
+    backgroundImage: string | undefined;
     panels: any[];
     onUploadNewImage: () => void;
     onImageUpload: (image: string) => void;
@@ -34,12 +34,12 @@
     onTextUpdate,
     onTextDelete,
     onDownload,
-    onDownloadAll
+    onDownloadAll,
   }: Props = $props();
 </script>
 
 <div class="app-container">
-  <AppHeader onUploadNewImage={onUploadNewImage} />
+  <AppHeader {onUploadNewImage} />
 
   <ErrorMessage {errorMessage} />
 
@@ -48,15 +48,15 @@
     {texts}
     {backgroundImage}
     {panels}
-    onImageUpload={onImageUpload}
-    onCropComplete={onCropComplete}
-    onCropCancel={onCropCancel}
-    onTextAdd={onTextAdd}
-    onTextUpdate={onTextUpdate}
-    onTextDelete={onTextDelete}
-    onUploadNewImage={onUploadNewImage}
-    onDownload={onDownload}
-    onDownloadAll={onDownloadAll}
+    {onImageUpload}
+    {onCropComplete}
+    {onCropCancel}
+    {onTextAdd}
+    {onTextUpdate}
+    {onTextDelete}
+    {onUploadNewImage}
+    {onDownload}
+    {onDownloadAll}
   />
 </div>
 

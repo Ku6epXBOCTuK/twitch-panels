@@ -42,7 +42,7 @@ export interface ImageCropResult {
 
 export interface UIState {
   isLoading: boolean;
-  error: string | null;
+  error: string | undefined;
   currentStep: "upload" | "crop" | "text" | "preview";
   showCropModal: boolean;
   showTextManager: boolean;

@@ -19,6 +19,7 @@ export class ImageService {
     const blob = await response.blob();
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
+      // TODO: look for a better handle non string
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = reject;
       reader.readAsDataURL(blob);

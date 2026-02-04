@@ -3,7 +3,7 @@ import { type UIState } from "../lib/types/panel";
 
 export const uiStore: Writable<UIState> = writable({
   isLoading: false,
-  error: null,
+  error: undefined,
   currentStep: "text",
   showCropModal: false,
   showTextManager: false,
@@ -13,12 +13,12 @@ export const setLoading = (loading: boolean): void => {
   uiStore.update((state) => ({ ...state, isLoading: loading }));
 };
 
-export const setError = (error: string | null): void => {
+export const setError = (error: string | undefined): void => {
   uiStore.update((state) => ({ ...state, error }));
 };
 
 export const clearError = (): void => {
-  setError(null);
+  setError(undefined);
 };
 
 export const setCurrentStep = (step: UIState["currentStep"]): void => {
@@ -36,7 +36,7 @@ export const showTextManager = (show: boolean): void => {
 export const resetUI = (): void => {
   uiStore.set({
     isLoading: false,
-    error: null,
+    error: undefined,
     currentStep: "text",
     showCropModal: false,
     showTextManager: false,

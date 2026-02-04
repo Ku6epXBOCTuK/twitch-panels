@@ -2,7 +2,7 @@ import { writable, type Writable } from "svelte/store";
 import { type Panel } from "../lib/types/panel";
 import { v4 as uuidv4 } from "uuid";
 
-export const panelStore: Writable<Panel | null> = writable(null);
+export const panelStore: Writable<Panel | undefined> = writable(undefined);
 
 export const createEmptyPanel = (height: number = 100): Panel => {
   return {
@@ -30,7 +30,7 @@ export const addTextToPanel = (panel: Panel, text: string): Panel => {
     fontSize: 18,
     fontFamily: "Arial",
     color: "#ffffff",
-    textAlign: "center" as const,
+    textAlign: "center",
     paddingX: 10,
     verticalOffset: 0,
   };
@@ -58,7 +58,7 @@ export const createPanelFromText = (backgroundImage: string, text: string, heigh
     fontSize: 18,
     fontFamily: "Arial",
     color: "#ffffff",
-    textAlign: "center" as const,
+    textAlign: "center",
     paddingX: 10,
     verticalOffset: 0,
   };

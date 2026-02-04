@@ -4,33 +4,20 @@
   import PanelsList from "./PanelsList.svelte";
 
   interface Props {
-    backgroundImage: string | null;
+    backgroundImage: string | undefined;
     panels: any[];
     onUploadNewImage: () => void;
     onDownload: (panel: any) => Promise<void>;
     onDownloadAll: () => Promise<void>;
   }
 
-  let {
-    backgroundImage,
-    panels,
-    onUploadNewImage,
-    onDownload,
-    onDownloadAll
-  }: Props = $props();
+  let { backgroundImage, panels, onUploadNewImage, onDownload, onDownloadAll }: Props = $props();
 </script>
 
 <div class="sidebar">
   {#if $uiStore.currentStep === "text"}
-    <BackgroundPreview
-      {backgroundImage}
-      onUploadNewImage={onUploadNewImage}
-    />
-    <PanelsList
-      {panels}
-      onDownload={onDownload}
-      onDownloadAll={onDownloadAll}
-    />
+    <BackgroundPreview {backgroundImage} {onUploadNewImage} />
+    <PanelsList {panels} {onDownload} {onDownloadAll} />
   {/if}
 </div>
 

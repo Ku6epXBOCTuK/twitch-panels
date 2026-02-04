@@ -11,14 +11,14 @@
   let { onTextAdd, onTextUpdate, onTextDelete, texts }: Props = $props();
 
   let newText = $state("");
-  let errorMessage = $state<string | null>(null);
+  let errorMessage = $state<string | undefined>(undefined);
 
   // Общие настройки текста для всех панелей
   let commonTextSettings = $state({
     fontSize: 18,
     fontFamily: "Arial",
     color: "#ffffff",
-    textAlign: "center" as "left" | "center" | "right",
+    textAlign: "left" | "center" | "right",
     paddingX: 10,
     verticalOffset: 0,
   });
@@ -47,7 +47,7 @@
     }
 
     try {
-      errorMessage = null;
+      errorMessage = undefined;
       onTextAdd(newText.trim());
       newText = "";
     } catch (error) {

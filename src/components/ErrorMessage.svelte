@@ -1,14 +1,14 @@
 <script lang="ts">
   interface Props {
-    message: string | null;
+    errorMessage: string | undefined;
   }
 
-  let { message }: Props = $props();
+  let { errorMessage }: Props = $props();
 </script>
 
-{#if message}
+{#if errorMessage}
   <div class="error-message">
-    {message}
+    {errorMessage}
   </div>
 {/if}
 

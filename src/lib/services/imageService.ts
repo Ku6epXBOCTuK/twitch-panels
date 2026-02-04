@@ -87,7 +87,7 @@ export class ImageService {
       }
 
       // Find image item
-      let imageItem: DataTransferItem | null = null;
+      let imageItem: DataTransferItem | undefined = undefined;
       for (let i = 0; i < items.length; i++) {
         if (items[i].type.indexOf("image") !== -1) {
           imageItem = items[i];
@@ -184,6 +184,7 @@ export class ImageService {
   private fileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
+      // TODO: look for a better way to handle errors non strings
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = () => reject(new ImageError("Ошибка чтения файла"));
       reader.readAsDataURL(file);

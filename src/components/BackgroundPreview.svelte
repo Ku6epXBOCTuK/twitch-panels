@@ -2,7 +2,7 @@
   import { Button } from "../lib/components/ui";
 
   interface Props {
-    backgroundImage?: string | null;
+    backgroundImage?: string | undefined;
     onUploadNewImage: () => void;
   }
 

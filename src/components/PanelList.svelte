@@ -12,8 +12,8 @@
   let { onPanelSelect, onPanelDelete }: Props = $props();
 
   let panels = $state<Panel[]>([]);
-  let selectedPanelId = $state<string | null>(null);
-  let errorMessage = $state<string | null>(null);
+  let selectedPanelId = $state<string | undefined>(undefined);
+  let errorMessage = $state<string | undefined>(undefined);
 
   onMount(() => {
     loadPanels();
@@ -21,7 +21,7 @@
 
   function loadPanels() {
     try {
-      errorMessage = null;
+      errorMessage = undefined;
       panels = panelStorage.getAllPanels();
 
       // Если есть текущая панель в store, отмечаем её как выбранную
@@ -41,7 +41,7 @@
 
   function handlePanelDelete(panelId: string) {
     try {
-      errorMessage = null;
+      errorMessage = undefined;
       const result = panelStorage.deletePanel(panelId);
 
       if (result.success) {
@@ -49,7 +49,7 @@
 
         // Если удалили выбранную панель, сбрасываем выбор
         if (selectedPanelId === panelId) {
-          selectedPanelId = null;
+          selectedPanelId = undefined;
         }
 
         // Уведомляем родительский компонент

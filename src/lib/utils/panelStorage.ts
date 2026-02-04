@@ -1,4 +1,3 @@
-
 import type { Panel } from "../types/panel";
 import { ImageError } from "../types/errors";
 import { handleError, logError } from "./errorHandler";
@@ -72,13 +71,13 @@ export class PanelStorage {
   /**
    * Загружает панель по ID
    */
-  getPanelById(id: string): Panel | null {
+  getPanelById(id: string): Panel | undefined {
     try {
       const panels = this.getAllPanels();
-      return panels.find((p) => p.id === id) || null;
+      return panels.find((p) => p.id === id) || undefined;
     } catch (error) {
       logError(error, "Failed to get panel by id");
-      return null;
+      return undefined;
     }
   }
 

@@ -4,7 +4,7 @@
   import TextSection from "./TextSection.svelte";
 
   interface Props {
-    uploadedImage: string | null;
+    uploadedImage: string | undefined;
     texts: Array<{ id: string; text: string }>;
     onImageUpload: (image: string) => void;
     onCropComplete: (croppedImage: string) => void;
@@ -22,25 +22,14 @@
     onCropCancel,
     onTextAdd,
     onTextUpdate,
-    onTextDelete
+    onTextDelete,
   }: Props = $props();
 </script>
 
 <div class="main-section">
-  <ImageManager
-    currentStep={$uiStore.currentStep}
-    {uploadedImage}
-    onImageUpload={onImageUpload}
-    onCropComplete={onCropComplete}
-    onCropCancel={onCropCancel}
-  />
+  <ImageManager currentStep={$uiStore.currentStep} {uploadedImage} {onImageUpload} {onCropComplete} {onCropCancel} />
   {#if $uiStore.currentStep === "text"}
-    <TextSection
-      {texts}
-      onTextAdd={onTextAdd}
-      onTextUpdate={onTextUpdate}
-      onTextDelete={onTextDelete}
-    />
+    <TextSection {texts} {onTextAdd} {onTextUpdate} {onTextDelete} />
   {/if}
 </div>
 

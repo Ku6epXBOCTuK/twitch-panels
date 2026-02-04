@@ -8,10 +8,10 @@
 
   import AppContainer from "../components/AppContainer.svelte";
 
-  let uploadedImage = $state<string | null>(null);
+  let uploadedImage = $state<string | undefined>(undefined);
   let panels = $state<Panel[]>([]);
   let texts = $state<Array<{ id: string; text: string }>>([]);
-  let backgroundImage = $state<string | null>(null);
+  let backgroundImage = $state<string | undefined>(undefined);
 
   onMount(async () => {
     try {
@@ -32,14 +32,14 @@
 
   function handleCropComplete(croppedImage: string) {
     backgroundImage = croppedImage;
-    uploadedImage = null;
+    uploadedImage = undefined;
     imageService.handleCropComplete(croppedImage);
     panels = panelService.updatePanelsBackground(panels, croppedImage);
     panels = panelService.updatePanelsFromTexts(texts, panels, croppedImage);
   }
 
   function handleCropCancel() {
-    uploadedImage = null;
+    uploadedImage = undefined;
     imageService.handleCropCancel();
   }
 

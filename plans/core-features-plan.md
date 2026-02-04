@@ -40,6 +40,7 @@ interface ImageUploadProps {
 - **Error Handling**: Invalid crop areas ✅
 
 **Implementation Details:**
+
 - Integrated cropperjs v2.1.0 with Web Components
 - Used `$toCanvas()` method to get HTMLCanvasElement
 - Implemented proper error handling with user-friendly messages
@@ -147,7 +148,7 @@ interface Panel {
 }
 
 interface PanelManagerProps {
-  currentPanel: Panel | null;
+  currentPanel: Panel | undefined;
   onPanelUpdate: (panel: Panel) => void;
 }
 
@@ -255,11 +256,11 @@ interface ImageUploadResult {
 
 ```typescript
 // Core stores
-export const panelStore = writable<Panel | null>(null);
+export const panelStore = writable<Panel | undefined>(undefined);
 export const uiStore = writable({
   isLoading: false,
-  error: null as string | null,
-  currentStep: "upload" as "upload" | "crop" | "text" | "preview",
+  error: string | undefined,
+  currentStep: "upload" | "crop" | "text" | "preview",
 });
 ```
 
@@ -359,11 +360,13 @@ _Estimated Duration: 5 weeks_
 **Challenge:** cropperjs v2.x uses Web Components API which differs significantly from v1.x
 
 **Solution:**
+
 1. Used `getCropperCanvas()` to get `<cropper-canvas>` Web Component
 2. Called `$toCanvas()` method to convert to HTMLCanvasElement
 3. Applied `toDataURL()` on the resulting canvas to get base64 image
 
 **Code Example:**
+
 ```typescript
 const cropperCanvasElement = cropper.getCropperCanvas();
 const canvas = await cropperCanvasElement.$toCanvas({
@@ -375,6 +378,7 @@ const croppedImage = canvas.toDataURL("image/png");
 ```
 
 **Key Points:**
+
 - cropperjs v2.x methods return Web Components, not standard DOM elements
 - `$toCanvas()` is an async method that returns HTMLCanvasElement
 - Proper error handling is essential for user experience

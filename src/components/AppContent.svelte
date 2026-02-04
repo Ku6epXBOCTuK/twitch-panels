@@ -3,9 +3,9 @@
   import Sidebar from "./Sidebar.svelte";
 
   interface Props {
-    uploadedImage: string | null;
+    uploadedImage: string | undefined;
     texts: Array<{ id: string; text: string }>;
-    backgroundImage: string | null;
+    backgroundImage: string | undefined;
     panels: any[];
     onImageUpload: (image: string) => void;
     onCropComplete: (croppedImage: string) => void;
@@ -31,7 +31,7 @@
     onTextDelete,
     onUploadNewImage,
     onDownload,
-    onDownloadAll
+    onDownloadAll,
   }: Props = $props();
 </script>
 
@@ -39,20 +39,14 @@
   <MainSection
     {uploadedImage}
     {texts}
-    onImageUpload={onImageUpload}
-    onCropComplete={onCropComplete}
-    onCropCancel={onCropCancel}
-    onTextAdd={onTextAdd}
-    onTextUpdate={onTextUpdate}
-    onTextDelete={onTextDelete}
+    {onImageUpload}
+    {onCropComplete}
+    {onCropCancel}
+    {onTextAdd}
+    {onTextUpdate}
+    {onTextDelete}
   />
-  <Sidebar
-    {backgroundImage}
-    {panels}
-    onUploadNewImage={onUploadNewImage}
-    onDownload={onDownload}
-    onDownloadAll={onDownloadAll}
-  />
+  <Sidebar {backgroundImage} {panels} {onUploadNewImage} {onDownload} {onDownloadAll} />
 </div>
 
 <style>

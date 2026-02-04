@@ -4,7 +4,7 @@
 
   interface Props {
     currentStep: string;
-    uploadedImage: string | null;
+    uploadedImage: string | undefined;
     onImageUpload: (image: string) => void;
     onCropComplete: (croppedImage: string) => void;
     onCropCancel: () => void;

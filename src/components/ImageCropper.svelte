@@ -15,9 +15,9 @@
   let { imageSrc, onCropComplete, onCancel }: Props = $props();
 
   let imageElement: HTMLImageElement;
-  let cropper: CropperJS | null = null;
+  let cropper: CropperJS | undefined = undefined;
   let isProcessing = $state(false);
-  let errorMessage = $state<string | null>(null);
+  let errorMessage = $state<string | undefined>(undefined);
 
   let imageService = new ImageService();
 
@@ -46,7 +46,7 @@
 
     try {
       isProcessing = true;
-      errorMessage = null;
+      errorMessage = undefined;
       setLoading(true);
 
       console.log("Calling getCropperCanvas");
