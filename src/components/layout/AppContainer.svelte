@@ -39,7 +39,7 @@
 </script>
 
 <div class="app-container">
-  <AppHeader {onUploadNewImage} />
+  <AppHeader />
 
   <ErrorMessage {errorMessage} />
 

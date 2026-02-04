@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Button from "../ui/Button.svelte";
-
   interface Props {
     onUploadNewImage?: () => void;
   }
@@ -10,9 +8,6 @@
 
 <div class="app-header">
   <h1>Twitch Panels Creator</h1>
-  {#if onUploadNewImage}
-    <Button variant="primary" onclick={onUploadNewImage}>Загрузить изображение</Button>
-  {/if}
 </div>
 
 <style>

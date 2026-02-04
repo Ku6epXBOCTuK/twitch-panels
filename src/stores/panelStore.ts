@@ -1,6 +1,6 @@
 import { writable, type Writable } from "svelte/store";
-import { type Panel, type TextAlign, type TextItem } from "../lib/types/panel";
 import { v4 as uuidv4 } from "uuid";
+import { type Panel, type TextItem } from "../lib/types/panel";
 
 export const panelStore: Writable<Panel | undefined> = writable(undefined);
 

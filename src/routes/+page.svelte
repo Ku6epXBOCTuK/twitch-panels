@@ -1,10 +1,9 @@
 <script lang="ts">
+  import type { Panel } from "$lib/types/panel";
   import { onMount } from "svelte";
-  import { uiStore } from "../stores/uiStore";
+  import { exportService } from "../services/exportService";
   import { imageService } from "../services/imageService";
   import { panelService } from "../services/panelService";
-  import { exportService } from "../services/exportService";
-  import type { Panel } from "$lib/types/panel";
 
   import AppContainer from "../components/layout/AppContainer.svelte";
 

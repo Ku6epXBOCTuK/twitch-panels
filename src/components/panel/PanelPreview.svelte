@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { uiStore, setCurrentStep } from "../../stores/uiStore";
   import type { Panel } from "$lib/types/panel";
-
-  type TextItem = Panel["texts"][0];
-  import { Stage, Layer, Image, Text } from "svelte-konva";
+  import { Image, Layer, Stage, Text } from "svelte-konva";
+  import { setCurrentStep } from "../../stores/uiStore";
   import Button from "../ui/Button.svelte";
 
   interface Props {

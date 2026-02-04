@@ -1,8 +1,8 @@
 import pkg from "file-saver";
-const { saveAs } = pkg;
-import type { Panel } from "../types/panel";
 import { ImageError } from "../types/errors";
+import type { Panel } from "../types/panel";
 import { handleError, logError } from "../utils/errorHandler";
+const { saveAs } = pkg;
 
 export interface ExportResult {
   success: boolean;
