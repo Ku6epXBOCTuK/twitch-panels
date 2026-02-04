@@ -65,8 +65,8 @@
 
   function getTextPosition(textItem: TextItem) {
     const panelWidth = PANEL_SETTINGS.PANEL_WIDTH;
-    const paddingX = textItem.paddingX || 20;
-    const verticalOffset = textItem.verticalOffset || 0;
+    const paddingX = textItem.paddingX ?? 20;
+    const verticalOffset = textItem.verticalOffset ?? 0;
     const centerY = panel.height / 2 + verticalOffset;
     const textWidth = 300;
 
@@ -115,7 +115,8 @@
                 x={textPosition.x}
                 y={textPosition.y}
                 align={panel.text.textAlign || TYPOGRAPHY.TEXT_ALIGN_CENTER}
-                width={300}
+                width={PANEL_SETTINGS.PANEL_WIDTH - textPosition.x * 2}
+                offsetX={0}
               />
             {/if}
           </Layer>
