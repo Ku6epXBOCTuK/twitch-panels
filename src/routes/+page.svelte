@@ -63,11 +63,19 @@
   }
 
   function handleAddText(text: string) {
+    // Проверяем, что текст не пустой и не дублируется
+    if (!text.trim()) return;
+    if (texts.some(t => t.text === text)) return;
+    
     texts = [...texts, { id: crypto.randomUUID(), text }];
     updatePanelsFromTexts();
   }
 
   function handleUpdateText(id: string, newText: string) {
+    // Проверяем, что текст не пустой и не дублируется
+    if (!newText.trim()) return;
+    if (texts.some(t => t.id !== id && t.text === newText)) return;
+    
     texts = texts.map(t => t.id === id ? { ...t, text: newText } : t);
     updatePanelsFromTexts();
   }
