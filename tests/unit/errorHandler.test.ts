@@ -1,20 +1,19 @@
-// Use global test functions with globals enabled in config
-
 import { AppError } from "$lib/types/errors";
 import { createError, handleError, isRecoverableError, logError, retryOperation } from "$lib/utils/errorHandler";
-
-let consoleErrorSpy: any;
-
-beforeEach(() => {
-  consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-});
-
-afterEach(() => {
-  consoleErrorSpy.mockClear();
-  vi.restoreAllMocks();
-});
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("errorHandler", () => {
+  let consoleErrorSpy: any;
+
+  beforeEach(() => {
+    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockClear();
+    vi.restoreAllMocks();
+  });
+
   describe("handleError", () => {
     it("should handle AppError with recoverable flag", () => {
       const error = new AppError("Test error", "TEST_ERROR", true);

@@ -1,6 +1,5 @@
-// Use global test functions with globals enabled in config
-
 import { PanelStorage } from "$lib/utils/panelStorage";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 let storage: any;
 
