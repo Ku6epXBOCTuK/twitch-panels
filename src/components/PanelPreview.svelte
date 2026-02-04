@@ -7,38 +7,15 @@
   let {
     panel,
     onDownload,
-    onUpdate,
-    onDelete,
   }: {
     panel: Panel;
     onDownload?: () => void;
-    onUpdate?: (text: string) => void;
-    onDelete?: () => void;
   } = $props();
 
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);
-  let editingText = $state(false);
-  let editText = $state("");
 
   function handleUploadNewImage() {
     setCurrentStep("upload");
-  }
-
-  function handleEdit() {
-    editText = panel.texts[0]?.text || "";
-    editingText = true;
-  }
-
-  function handleSaveEdit() {
-    if (onUpdate && editText.trim()) {
-      onUpdate(editText.trim());
-    }
-    editingText = false;
-  }
-
-  function handleCancelEdit() {
-    editingText = false;
-    editText = "";
   }
 
   $effect(() => {
@@ -81,27 +58,8 @@
 
 <div class="panel-preview">
   <div class="preview-header">
-    {#if editingText}
-      <div class="edit-controls">
-        <input
-          type="text"
-          bind:value={editText}
-          class="edit-input"
-          onkeypress={(e) => e.key === "Enter" && handleSaveEdit()}
-        />
-        <Button variant="primary" size="sm" onclick={handleSaveEdit}>✓</Button>
-        <Button variant="secondary" size="sm" onclick={handleCancelEdit}>✕</Button>
-      </div>
-    {:else}
-      <div class="panel-title">{panel.texts[0]?.text || "Без названия"}</div>
-      <div class="panel-actions">
-        <IconButton variant="secondary" onclick={handleEdit} ariaLabel="Редактировать">✎</IconButton>
-        <Button variant="primary" size="sm" onclick={onDownload}>Скачать</Button>
-        {#if onDelete}
-          <IconButton variant="danger" onclick={onDelete} ariaLabel="Удалить">🗑</IconButton>
-        {/if}
-      </div>
-    {/if}
+    <div class="panel-title">{panel.texts[0]?.text || "Без названия"}</div>
+    <Button variant="primary" size="sm" onclick={onDownload}>Скачать</Button>
   </div>
     <div class="preview-sections">
       <!-- Превью чистой картинки -->

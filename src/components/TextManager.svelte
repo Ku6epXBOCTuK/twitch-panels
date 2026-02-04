@@ -2,8 +2,11 @@
 <script lang="ts">
   import { Button } from "../lib/components/ui";
 
-  let { onTextAdd }: {
+  let { onTextAdd, onTextUpdate, onTextDelete, texts }: {
     onTextAdd: (text: string) => void;
+    onTextUpdate: (id: string, text: string) => void;
+    onTextDelete: (id: string) => void;
+    texts: Array<{ id: string; text: string }>;
   } = $props();
 
   let newText = $state("");
@@ -56,6 +59,18 @@
       handleAddText();
     }
   }
+
+  function handleUpdateText(id: string, newText: string) {
+    if (onTextUpdate && newText.trim()) {
+      onTextUpdate(id, newText.trim());
+    }
+  }
+
+  function handleDeleteText(id: string) {
+    if (onTextDelete) {
+      onTextDelete(id);
+    }
+  }
 </script>
 
 <div class="text-manager">
@@ -77,6 +92,34 @@
       </div>
     {/if}
   </div>
+
+  <!-- Список текстов -->
+  {#if texts.length > 0}
+    <div class="texts-list">
+      <h3>Созданные тексты ({texts.length})</h3>
+      <div class="texts-container">
+        {#each texts as textItem (textItem.id)}
+          <div class="text-item">
+            <input
+              type="text"
+              value={textItem.text}
+              oninput={(e) => handleUpdateText(textItem.id, e.target.value)}
+              class="text-edit-input"
+              maxlength="100"
+            />
+            <Button
+              variant="danger"
+              size="sm"
+              onclick={() => handleDeleteText(textItem.id)}
+              aria-label="Удалить текст"
+            >
+              ×
+            </Button>
+          </div>
+        {/each}
+      </div>
+    </div>
+  {/if}
 
   <!-- Общие настройки текста -->
   <div class="common-settings-section">
@@ -270,6 +313,45 @@
     flex-direction: column;
     gap: 0.5rem;
     margin-bottom: 1rem;
+  }
+
+  .texts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .texts-list h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .texts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .text-item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .text-edit-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+  }
+
+  .text-edit-input:focus {
+    outline: none;
+    border-color: #007bff;
   }
 
   .input-group {

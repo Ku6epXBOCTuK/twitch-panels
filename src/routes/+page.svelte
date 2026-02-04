@@ -14,6 +14,7 @@
 
   let uploadedImage = $state<string | null>(null);
   let panels = $state<Panel[]>([]);
+  let texts = $state<Array<{ id: string; text: string }>>([]);
   let errorMessage = $state<string | null>(null);
   let backgroundImage = $state<string | null>(null);
 
@@ -62,20 +63,32 @@
   }
 
   function handleAddText(text: string) {
+    texts = [...texts, { id: crypto.randomUUID(), text }];
+    updatePanelsFromTexts();
+  }
+
+  function handleUpdateText(id: string, newText: string) {
+    texts = texts.map(t => t.id === id ? { ...t, text: newText } : t);
+    updatePanelsFromTexts();
+  }
+
+  function handleDeleteText(id: string) {
+    texts = texts.filter(t => t.id !== id);
+    updatePanelsFromTexts();
+  }
+
+  function updatePanelsFromTexts() {
     if (!backgroundImage) return;
-    const newPanel = createPanelFromText(backgroundImage, text);
-    panels = [...panels, newPanel];
+    panels = texts.map(textItem => {
+      const existingPanel = panels.find(p => p.texts[0]?.text === textItem.text);
+      if (existingPanel) {
+        return updatePanelText(existingPanel, textItem.text);
+      }
+      return createPanelFromText(backgroundImage, textItem.text);
+    });
   }
 
-  function handleUpdateText(panelId: string, text: string) {
-    panels = panels.map(panel => 
-      panel.id === panelId ? updatePanelText(panel, text) : panel
-    );
-  }
 
-  function handleDeletePanel(panelId: string) {
-    panels = panels.filter(panel => panel.id !== panelId);
-  }
 
   async function handleDownload(panel: Panel) {
     try {
@@ -128,7 +141,12 @@
       {:else if $uiStore.currentStep === "text"}
         <div class="text-section">
           <h2>Добавьте тексты для панелей</h2>
-          <TextManager onTextAdd={handleAddText} />
+          <TextManager 
+            onTextAdd={handleAddText}
+            onTextUpdate={handleUpdateText}
+            onTextDelete={handleDeleteText}
+            texts={texts}
+          />
         </div>
       {/if}
     </div>
@@ -146,8 +164,6 @@
                 <PanelPreview 
                   panel={panel} 
                   onDownload={() => handleDownload(panel)}
-                  onUpdate={(text) => handleUpdateText(panel.id, text)}
-                  onDelete={() => handleDeletePanel(panel.id)}
                 />
               </div>
             {/each}
