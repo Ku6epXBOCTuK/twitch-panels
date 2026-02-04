@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Button from "../ui/Button.svelte";
+  import Button from "$components/ui/Button.svelte";
 
   interface Props {
     onTextAdd: (text: string) => void;

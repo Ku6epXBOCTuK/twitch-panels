@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import CropperJS from "cropperjs";
-  import type { ImageCropResult } from "$lib/types/panel";
+  import Button from "$components/ui/Button.svelte";
   import { ImageService } from "$lib/services/imageService";
-  import { uiStore, setLoading } from "../../stores/uiStore";
-  import Button from "../ui/Button.svelte";
+  import type { ImageCropResult } from "$lib/types/panel";
+  import { setLoading } from "$stores/uiStore";
+  import CropperJS from "cropperjs";
+  import { onMount } from "svelte";
 
   interface Props {
     imageSrc: string;

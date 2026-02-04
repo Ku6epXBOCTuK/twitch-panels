@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { uiStore, setLoading, clearError, setCurrentStep } from "../../stores/uiStore";
-  import { panelStore } from "../../stores/panelStore";
+  import Button from "$components/ui/Button.svelte";
   import { ImageService } from "$lib/services/imageService";
-  import { handleError } from "$lib/utils/errorHandler";
   import type { ImageUploadResult } from "$lib/types/panel";
-  import Button from "../ui/Button.svelte";
+  import { handleError } from "$lib/utils/errorHandler";
+  import { clearError, setCurrentStep, setLoading, uiStore } from "$stores/uiStore";
+  import { onMount } from "svelte";
 
   let imageService = new ImageService();
 

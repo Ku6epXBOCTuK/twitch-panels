@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { panelStore } from "../../stores/panelStore";
-  import { panelStorage } from "$lib/utils/panelStorage";
+  import IconButton from "$components/ui/IconButton.svelte";
   import type { Panel } from "$lib/types/panel";
-  import IconButton from "../ui/IconButton.svelte";
+  import { panelStorage } from "$lib/utils/panelStorage";
+  import { panelStore } from "$stores/panelStore";
+  import { onMount } from "svelte";
 
   interface Props {
     onPanelSelect: (panel: Panel) => void;

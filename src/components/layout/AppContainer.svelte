@@ -1,7 +1,7 @@
 <script lang="ts">
-  import AppHeader from "./AppHeader.svelte";
-  import ErrorMessage from "../feedback/ErrorMessage.svelte";
-  import AppContent from "./AppContent.svelte";
+  import ErrorMessage from "$components/feedback/ErrorMessage.svelte";
+  import AppContent from "$components/layout/AppContent.svelte";
+  import AppHeader from "$components/layout/AppHeader.svelte";
 
   interface Props {
     errorMessage: string | undefined;

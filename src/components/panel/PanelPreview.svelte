@@ -1,8 +1,8 @@
 <script lang="ts">
+  import Button from "$components/ui/Button.svelte";
   import type { Panel, TextItem } from "$lib/types/panel";
+  import { setCurrentStep } from "$stores/uiStore";
   import { Image, Layer, Stage, Text } from "svelte-konva";
-  import { setCurrentStep } from "../../stores/uiStore";
-  import Button from "../ui/Button.svelte";
 
   interface Props {
     panel: Panel;

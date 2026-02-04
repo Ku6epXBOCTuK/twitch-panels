@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { uiStore } from "../../stores/uiStore";
-  import BackgroundPreview from "../image/BackgroundPreview.svelte";
-  import PanelsList from "../panel/PanelsList.svelte";
+  import BackgroundPreview from "$components/image/BackgroundPreview.svelte";
+  import PanelsList from "$components/panel/PanelsList.svelte";
+  import { uiStore } from "$stores/uiStore";
 
   interface Props {
     backgroundImage: string | undefined;

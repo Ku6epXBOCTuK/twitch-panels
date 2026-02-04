@@ -1,6 +1,6 @@
 <script lang="ts">
-  import MainSection from "./MainSection.svelte";
-  import Sidebar from "./Sidebar.svelte";
+  import MainSection from "$components/layout/MainSection.svelte";
+  import Sidebar from "$components/layout/Sidebar.svelte";
 
   interface Props {
     uploadedImage: string | undefined;
