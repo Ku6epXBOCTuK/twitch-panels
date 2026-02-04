@@ -60,7 +60,7 @@
 <div class="panel-preview">
   <div class="preview-header">
     <div class="panel-title">{panel.texts[0]?.text || "Без названия"}</div>
-    <Button variant="primary" size="sm" onclick={onDownload}>Скачать</Button>
+    <Button variant="primary" size="sm" onclick={handleDownload}>Скачать</Button>
   </div>
   <div class="preview-sections">
     <!-- Превью с текстом -->

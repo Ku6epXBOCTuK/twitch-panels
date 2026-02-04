@@ -9,6 +9,7 @@
     ariaLabel?: string;
     class?: string;
     children?: any;
+    onclick?: (event: MouseEvent) => void;
     [key: string]: any;
   }
 

@@ -1,5 +1,5 @@
 import { writable, type Writable } from "svelte/store";
-import { type Panel } from "../lib/types/panel";
+import { type Panel, type TextAlign, type TextItem } from "../lib/types/panel";
 import { v4 as uuidv4 } from "uuid";
 
 export const panelStore: Writable<Panel | undefined> = writable(undefined);
@@ -24,7 +24,7 @@ export const updatePanel = (panel: Panel, updates: Partial<Panel>): Panel => {
 };
 
 export const addTextToPanel = (panel: Panel, text: string): Panel => {
-  const newText = {
+  const newText: TextItem = {
     id: uuidv4(),
     text,
     fontSize: 18,
@@ -52,7 +52,7 @@ export const removeTextFromPanel = (panel: Panel, textId: string): Panel => {
 };
 
 export const createPanelFromText = (backgroundImage: string, text: string, height: number = 100): Panel => {
-  const newText = {
+  const newText: TextItem = {
     id: uuidv4(),
     text,
     fontSize: 18,

@@ -1,14 +1,13 @@
+export type TextAlign = "left" | "center" | "right";
+
 export interface TextItem {
   id: string;
   text: string;
   fontSize: number;
   fontFamily: string;
   color: string;
-  // Выравнивание текста: left, center, right
-  textAlign: "left" | "center" | "right";
-  // Боковые отступы (лево/право)
+  textAlign: TextAlign;
   paddingX: number;
-  // Смещение от центра по вертикали (для компенсации визуального центра разных шрифтов)
   verticalOffset: number;
 }
 

@@ -25,7 +25,7 @@
   let uploadedImage = $state<string | undefined>(undefined);
   let errorMessage = $state<string | undefined>(undefined);
 
-  const uiError = $derived($uiStore.error?.error);
+  const uiError = $derived($uiStore.error);
 
   onMount(() => {
     setupPasteHandler();
@@ -40,14 +40,14 @@
   function setupDragAndDrop() {
     if (!dropZone) return;
 
-    dropZone.addEventListener("dragover", handleDragOver);
-    dropZone.addEventListener("dragleave", handleDragLeave);
-    dropZone.addEventListener("drop", handleDrop);
+    dropZone!.addEventListener("dragover", handleDragOver);
+    dropZone!.addEventListener("dragleave", handleDragLeave);
+    dropZone!.addEventListener("drop", handleDrop);
 
     return () => {
-      dropZone.removeEventListener("dragover", handleDragOver);
-      dropZone.removeEventListener("dragleave", handleDragLeave);
-      dropZone.removeEventListener("drop", handleDrop);
+      dropZone!.removeEventListener("dragover", handleDragOver);
+      dropZone!.removeEventListener("dragleave", handleDragLeave);
+      dropZone!.removeEventListener("drop", handleDrop);
     };
   }
 
@@ -119,7 +119,7 @@
   async function handleUrlSubmit(e: Event) {
     e.preventDefault();
 
-    if (!urlInput.value.trim()) return;
+    if (!urlInput?.value.trim()) return;
 
     try {
       setLoading(true);
@@ -230,12 +230,11 @@
       accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
       style="display: none;"
       onchange={(e) => {
-        const file = e.target.files?.[0];
+        const file = (e.target as HTMLInputElement).files?.[0];
         if (file) handleFileUpload(file);
       }}
     />
   {/if}
-
   {#if errorMessage}
     <div class="error-message">
       <strong>Ошибка:</strong>

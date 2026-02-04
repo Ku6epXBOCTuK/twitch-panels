@@ -3,10 +3,14 @@ import { ImageError } from "../types/errors";
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 export const SUPPORTED_FORMATS = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
-export interface ValidationResult {
-  isValid: boolean;
-  error?: string;
-}
+export type ValidationResult =
+  | {
+      isValid: true;
+    }
+  | {
+      isValid: false;
+      error: string;
+    };
 
 export function validateFileSize(file: File): ValidationResult {
   if (file.size > MAX_FILE_SIZE) {

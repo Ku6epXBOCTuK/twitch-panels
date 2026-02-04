@@ -92,10 +92,9 @@
   {:else}
     <div class="panels-grid">
       {#each panels as panel (panel.id)}
-        <div
+        <button
           class="panel-card {selectedPanelId === panel.id ? 'selected' : ''}"
           onclick={() => handlePanelSelect(panel)}
-          role="button"
           tabindex="0"
         >
           <div class="panel-preview">
@@ -125,7 +124,7 @@
               </IconButton>
             </div>
           </div>
-        </div>
+        </button>
       {/each}
     </div>
   {/if}

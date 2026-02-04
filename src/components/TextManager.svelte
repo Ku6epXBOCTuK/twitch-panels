@@ -18,7 +18,7 @@
     fontSize: 18,
     fontFamily: "Arial",
     color: "#ffffff",
-    textAlign: "left" | "center" | "right",
+    textAlign: "left",
     paddingX: 10,
     verticalOffset: 0,
   });
@@ -104,7 +104,7 @@
             <input
               type="text"
               value={textItem.text}
-              oninput={(e) => handleUpdateText(textItem.id, e.target.value)}
+              oninput={(e) => handleUpdateText(textItem.id, e.currentTarget.value)}
               class="text-edit-input"
               maxlength="100"
             />
@@ -132,8 +132,8 @@
             max="72"
             step="1"
             value={commonTextSettings.fontSize}
-            oninput={(e) => {
-              commonTextSettings.fontSize = parseInt(e.target.value);
+            oninput={(e: Event) => {
+              commonTextSettings.fontSize = parseInt((e.target as HTMLInputElement).value);
             }}
           />
           <span class="value-display">{commonTextSettings.fontSize}px</span>
@@ -146,7 +146,7 @@
           <select
             value={commonTextSettings.fontFamily}
             onchange={(e) => {
-              commonTextSettings.fontFamily = e.target.value;
+              commonTextSettings.fontFamily = (e.target as HTMLSelectElement).value;
             }}
           >
             {#each availableFonts as font}
@@ -163,7 +163,7 @@
             type="color"
             value={commonTextSettings.color}
             oninput={(e) => {
-              commonTextSettings.color = e.target.value;
+              commonTextSettings.color = (e.target as HTMLInputElement).value;
             }}
           />
         </label>
@@ -214,7 +214,7 @@
             step="1"
             value={commonTextSettings.paddingX}
             oninput={(e) => {
-              commonTextSettings.paddingX = parseInt(e.target.value);
+              commonTextSettings.paddingX = parseInt((e.target as HTMLInputElement).value);
             }}
           />
           <span class="value-display">{commonTextSettings.paddingX}px</span>
@@ -231,7 +231,7 @@
             step="1"
             value={commonTextSettings.verticalOffset}
             oninput={(e) => {
-              commonTextSettings.verticalOffset = parseInt(e.target.value);
+              commonTextSettings.verticalOffset = parseInt((e.target as HTMLInputElement).value);
             }}
           />
           <span class="value-display"
