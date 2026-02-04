@@ -4,7 +4,7 @@ import { type UIState } from "../lib/types/panel";
 export const uiStore: Writable<UIState> = writable({
   isLoading: false,
   error: null,
-  currentStep: "upload",
+  currentStep: "text",
   showCropModal: false,
   showTextManager: false,
 });
@@ -37,7 +37,7 @@ export const resetUI = (): void => {
   uiStore.set({
     isLoading: false,
     error: null,
-    currentStep: "upload",
+    currentStep: "text",
     showCropModal: false,
     showTextManager: false,
   });

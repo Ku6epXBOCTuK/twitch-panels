@@ -54,18 +54,14 @@
 </script>
 
 <div class="panel-preview">
-  <div class="preview-header">
-    <h2>Предпросмотр панели</h2>
-    {#if $panelStore}
-      <Button variant="primary" onclick={handleDownload}>Скачать</Button>
-    {/if}
-  </div>
-
   {#if $panelStore}
+    <div class="preview-header">
+      <Button variant="primary" onclick={handleDownload}>Скачать панель</Button>
+    </div>
     <div class="preview-sections">
       <!-- Превью чистой картинки -->
       <div class="preview-section">
-        <h3>Чистая картинка</h3>
+        <h3>Фон</h3>
         <div class="canvas-container">
           <Stage width={320} height={$panelStore.height}>
             <Layer>
@@ -79,7 +75,7 @@
 
       <!-- Превью с текстом -->
       <div class="preview-section">
-        <h3>С текстом</h3>
+        <h3>Финальный результат</h3>
         <div class="canvas-container">
           <Stage width={320} height={$panelStore.height}>
             <Layer>
@@ -121,16 +117,10 @@
 
   .preview-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .preview-header h2 {
-    margin: 0;
-    color: #333;
-    font-size: 1.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
 
   .preview-sections {

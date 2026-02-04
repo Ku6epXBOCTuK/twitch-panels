@@ -111,10 +111,6 @@
 </script>
 
 <div class="text-manager">
-  <div class="text-manager-header">
-    <h2>Управление текстом</h2>
-  </div>
-
   <!-- Общие настройки текста -->
   <div class="common-settings-section">
     <h3>Общие настройки текста</h3>
@@ -291,12 +287,6 @@
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-  }
-
-  .text-manager-header h2 {
-    margin: 0;
-    color: #333;
-    font-size: 1.25rem;
   }
 
   .common-settings-section {

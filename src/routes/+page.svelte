@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { panelStore, createEmptyPanel } from "../stores/panelStore";
   import { uiStore, setLoading, setCurrentStep } from "../stores/uiStore";
 
@@ -15,6 +16,32 @@
   let currentPanel = $state<Panel | null>(null);
   let errorMessage = $state<string | null>(null);
 
+  onMount(async () => {
+    // Загружаем фоновое изображение по умолчанию
+    try {
+      const defaultBackground = "/backgrounds/b1.jpg";
+      const response = await fetch(defaultBackground);
+      if (!response.ok) throw new Error("Не удалось загрузить фоновое изображение");
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        initializePanel(base64);
+      };
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error("Ошибка загрузки фонового изображения:", error);
+      errorMessage = "Не удалось загрузить фоновое изображение по умолчанию";
+    }
+  });
+
+  function initializePanel(backgroundImage: string) {
+    const newPanel = createEmptyPanel();
+    newPanel.backgroundImage = backgroundImage;
+    panelStore.set(newPanel);
+    currentPanel = newPanel;
+  }
+
   $effect(() => {
     currentPanel = $panelStore;
   });
@@ -25,22 +52,30 @@
     setCurrentStep("crop");
   }
 
+  function handleUploadNewImage() {
+    setCurrentStep("upload");
+  }
+
   function handleCropComplete(croppedImage: string) {
     croppedImage = croppedImage;
 
-    // Создаем новую панель с обрезанным изображением
-    const newPanel = createEmptyPanel();
-    newPanel.backgroundImage = croppedImage;
-
-    panelStore.set(newPanel);
-    currentPanel = newPanel;
+    // Обновляем текущую панель с обрезанным изображением
+    if (currentPanel) {
+      const updatedPanel = {
+        ...currentPanel,
+        backgroundImage: croppedImage,
+        updatedAt: new Date(),
+      };
+      panelStore.set(updatedPanel);
+      currentPanel = updatedPanel;
+    }
 
     setCurrentStep("text");
   }
 
   function handleCropCancel() {
     uploadedImage = null;
-    setCurrentStep("upload");
+    setCurrentStep("text");
   }
 
   function handleTextUpdate(texts: Panel["texts"]) {
@@ -95,7 +130,13 @@
       {:else if $uiStore.currentStep === "crop" && uploadedImage}
         <ImageCropper imageSrc={uploadedImage} onCropComplete={handleCropComplete} onCancel={handleCropCancel} />
       {:else if $uiStore.currentStep === "text"}
-        <TextManager onTextUpdate={handleTextUpdate} />
+        <div class="text-section">
+          <div class="section-header">
+            <h2>Управление текстом</h2>
+            <button class="btn btn-primary" onclick={handleUploadNewImage}>Загрузить другое изображение</button>
+          </div>
+          <TextManager onTextUpdate={handleTextUpdate} />
+        </div>
       {/if}
     </div>
 
@@ -144,6 +185,28 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+  }
+
+  .text-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    color: white;
+  }
+
+  .section-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
   }
 
   .sidebar {
