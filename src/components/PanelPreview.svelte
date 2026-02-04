@@ -1,8 +1,10 @@
 <script lang="ts">
   import { uiStore, setCurrentStep } from "../stores/uiStore";
   import type { Panel } from "../lib/types/panel";
+
+  type TextItem = Panel["texts"][0];
   import { Stage, Layer, Image, Text } from "svelte-konva";
-  import { Button, IconButton } from "../lib/components/ui";
+  import { Button } from "../lib/components/ui";
 
   let {
     panel,
@@ -88,7 +90,7 @@
               {#each panel.texts || [] as textItem (textItem.id)}
                 {@const textPosition = getTextPosition(textItem)}
                 <Text
-                  text={editingText ? editText : textItem.text}
+                  text={textItem.text}
                   fontSize={textItem.fontSize}
                   fill={textItem.color}
                   fontFamily={textItem.fontFamily}
