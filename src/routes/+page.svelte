@@ -131,10 +131,7 @@
         <ImageCropper imageSrc={uploadedImage} onCropComplete={handleCropComplete} onCancel={handleCropCancel} />
       {:else if $uiStore.currentStep === "text"}
         <div class="text-section">
-          <div class="section-header">
-            <h2>Управление текстом</h2>
-            <button class="btn btn-primary" onclick={handleUploadNewImage}>Загрузить другое изображение</button>
-          </div>
+          <h2>Управление текстом</h2>
           <TextManager onTextUpdate={handleTextUpdate} />
         </div>
       {/if}
@@ -193,18 +190,9 @@
     gap: 1rem;
   }
 
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
-    color: white;
-  }
-
-  .section-header h2 {
+  .text-section h2 {
     margin: 0;
+    color: #333;
     font-size: 1.5rem;
     font-weight: 600;
   }

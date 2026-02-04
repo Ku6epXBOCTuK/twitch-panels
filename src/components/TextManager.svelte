@@ -289,6 +289,13 @@
     width: 100%;
   }
 
+  .text-manager h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
   .common-settings-section {
     background: #f8f9fa;
     border: 2px solid #e9ecef;

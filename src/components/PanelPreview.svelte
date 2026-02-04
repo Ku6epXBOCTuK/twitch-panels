@@ -1,5 +1,6 @@
 <script lang="ts">
   import { panelStore } from "../stores/panelStore";
+  import { uiStore, setCurrentStep } from "../stores/uiStore";
   import type { TextItem } from "../lib/types/panel";
   import { Stage, Layer, Image, Text } from "svelte-konva";
   import { Button } from "../lib/components/ui";
@@ -9,6 +10,10 @@
   }: {
     onDownload?: () => void;
   } = $props();
+
+  function handleUploadNewImage() {
+    setCurrentStep("upload");
+  }
 
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);
 
@@ -57,6 +62,7 @@
   {#if $panelStore}
     <div class="preview-header">
       <Button variant="primary" onclick={handleDownload}>Скачать панель</Button>
+      <Button variant="secondary" onclick={handleUploadNewImage}>Загрузить</Button>
     </div>
     <div class="preview-sections">
       <!-- Превью чистой картинки -->
@@ -119,6 +125,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
     padding: 1rem;
     margin-bottom: 1rem;
   }
