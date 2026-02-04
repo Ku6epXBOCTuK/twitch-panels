@@ -4,7 +4,7 @@
 
   type TextItem = Panel["texts"][0];
   import { Stage, Layer, Image, Text } from "svelte-konva";
-  import { Button } from "$lib/components/ui";
+  import Button from "../ui/Button.svelte";
 
   interface Props {
     panel: Panel;

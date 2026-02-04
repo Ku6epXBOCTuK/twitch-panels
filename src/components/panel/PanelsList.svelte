@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Panel } from "$lib/types/panel";
   import PanelPreview from "./PanelPreview.svelte";
-  import { Button } from "$lib/components/ui";
+  import Button from "../ui/Button.svelte";
 
   interface Props {
     panels: Panel[];

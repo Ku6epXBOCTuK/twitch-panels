@@ -4,7 +4,7 @@
   import type { ImageCropResult } from "$lib/types/panel";
   import { ImageService } from "$lib/services/imageService";
   import { uiStore, setLoading } from "../../stores/uiStore";
-  import { Button } from "$lib/components/ui";
+  import Button from "../ui/Button.svelte";
 
   interface Props {
     imageSrc: string;

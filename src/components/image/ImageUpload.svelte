@@ -5,7 +5,7 @@
   import { ImageService } from "$lib/services/imageService";
   import { handleError } from "$lib/utils/errorHandler";
   import type { ImageUploadResult } from "$lib/types/panel";
-  import { Button } from "$lib/components/ui";
+  import Button from "../ui/Button.svelte";
 
   let imageService = new ImageService();
 

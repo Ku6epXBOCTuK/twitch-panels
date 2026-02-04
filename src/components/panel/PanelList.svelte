@@ -3,7 +3,7 @@
   import { panelStore } from "../../stores/panelStore";
   import { panelStorage } from "$lib/utils/panelStorage";
   import type { Panel } from "$lib/types/panel";
-  import { IconButton } from "$lib/components/ui";
+  import IconButton from "../ui/IconButton.svelte";
 
   interface Props {
     onPanelSelect: (panel: Panel) => void;
