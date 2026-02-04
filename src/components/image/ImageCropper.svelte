@@ -28,7 +28,6 @@
   });
 
   function initializeCropper() {
-    // Remove verbose debug logging
     if (!imageElement || !CropperJS) {
       return;
     }
@@ -52,7 +51,6 @@
         throw new Error("Не удалось получить обрезанное изображение");
       }
 
-      // Используем метод $toCanvas для получения HTMLCanvasElement
       const canvas = await cropperCanvasElement.$toCanvas({
         width: 320,
       });
@@ -61,10 +59,8 @@
         throw new Error("Не удалось получить canvas");
       }
 
-      // Теперь canvas - это обычный HTMLCanvasElement
       const croppedImage = canvas.toDataURL("image/png");
 
-      // Validate cropped image
       const cropResult: ImageCropResult = {
         success: true,
         croppedImage,
@@ -171,7 +167,6 @@
     background-color: #007bff;
   }
 
-  /* Базовые стили для cropperjs */
   :global(.cropper-container) {
     direction: ltr;
     font-size: 0;

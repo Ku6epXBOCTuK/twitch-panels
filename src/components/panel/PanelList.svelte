@@ -24,7 +24,6 @@
       errorMessage = undefined;
       panels = panelStorage.getAllPanels();
 
-      // Если есть текущая панель в store, отмечаем её как выбранную
       const currentPanel = $panelStore;
       if (currentPanel) {
         selectedPanelId = currentPanel.id;
@@ -47,12 +46,10 @@
       if (result.success) {
         panels = panels.filter((p) => p.id !== panelId);
 
-        // Если удалили выбранную панель, сбрасываем выбор
         if (selectedPanelId === panelId) {
           selectedPanelId = undefined;
         }
 
-        // Уведомляем родительский компонент
         onPanelDelete(panelId);
       } else {
         errorMessage = result.error || "Ошибка удаления панели";

@@ -1,9 +1,8 @@
 import type { Panel } from "../types/panel";
-import { ImageError } from "../types/errors";
 import { handleError, logError } from "./errorHandler";
 
 const STORAGE_KEY = "twitch-panels";
-const MAX_PANELS = 50; // Максимальное количество сохраненных панелей
+const MAX_PANELS = 50;
 
 export interface StorageResult {
   success: boolean;
@@ -11,24 +10,17 @@ export interface StorageResult {
 }
 
 export class PanelStorage {
-  /**
-   * Сохраняет панель в localStorage
-   */
   savePanel(panel: Panel): StorageResult {
     try {
       const panels = this.getAllPanels();
 
-      // Проверяем, существует ли панель с таким ID
       const existingIndex = panels.findIndex((p) => p.id === panel.id);
 
       if (existingIndex >= 0) {
-        // Обновляем существующую панель
         panels[existingIndex] = panel;
       } else {
-        // Добавляем новую панель в начало списка
         panels.unshift(panel);
 
-        // Проверяем лимит количества панелей
         if (panels.length > MAX_PANELS) {
           panels.length = MAX_PANELS;
         }
@@ -48,9 +40,6 @@ export class PanelStorage {
     }
   }
 
-  /**
-   * Загружает все панели из localStorage
-   */
   getAllPanels(): Panel[] {
     try {
       const data = localStorage.getItem(STORAGE_KEY);
@@ -60,7 +49,6 @@ export class PanelStorage {
 
       const panels: Panel[] = JSON.parse(data);
 
-      // Валидация загруженных панелей
       return panels.filter((panel) => this.validatePanel(panel));
     } catch (error) {
       logError(error, "Failed to load panels");
@@ -68,9 +56,6 @@ export class PanelStorage {
     }
   }
 
-  /**
-   * Загружает панель по ID
-   */
   getPanelById(id: string): Panel | undefined {
     try {
       const panels = this.getAllPanels();
@@ -81,9 +66,6 @@ export class PanelStorage {
     }
   }
 
-  /**
-   * Удаляет панель по ID
-   */
   deletePanel(id: string): StorageResult {
     try {
       const panels = this.getAllPanels();
@@ -103,9 +85,6 @@ export class PanelStorage {
     }
   }
 
-  /**
-   * Очищает все сохраненные панели
-   */
   clearAll(): StorageResult {
     try {
       localStorage.removeItem(STORAGE_KEY);
@@ -122,9 +101,6 @@ export class PanelStorage {
     }
   }
 
-  /**
-   * Валидирует панель
-   */
   private validatePanel(panel: any): panel is Panel {
     return (
       typeof panel === "object" &&
@@ -139,16 +115,10 @@ export class PanelStorage {
     );
   }
 
-  /**
-   * Получает количество сохраненных панелей
-   */
   getPanelCount(): number {
     return this.getAllPanels().length;
   }
 
-  /**
-   * Проверяет, есть ли место для новой панели
-   */
   hasSpaceForNewPanel(): boolean {
     return this.getPanelCount() < MAX_PANELS;
   }

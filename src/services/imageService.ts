@@ -19,7 +19,6 @@ export class ImageService {
     const blob = await response.blob();
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      // TODO: look for a better handle non string
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = reject;
       reader.readAsDataURL(blob);
@@ -43,7 +42,6 @@ export class ImageService {
   }
 
   async handleFileUpload(file: File): Promise<any> {
-    // Convert file to base64
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () =>
@@ -69,7 +67,6 @@ export class ImageService {
       };
     }
 
-    // Find image item
     let imageItem: DataTransferItem | undefined = undefined;
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.indexOf("image") !== -1) {
@@ -85,7 +82,6 @@ export class ImageService {
       };
     }
 
-    // Get file from clipboard item
     const file = imageItem.getAsFile();
     if (!file) {
       return {

@@ -27,7 +27,6 @@
     img.src = src;
   }
 
-  // Вычисляем позицию текста на основе выравнивания и отступов
   function getTextPosition() {
     const panelWidth = 320;
     const paddingX = textItem.paddingX || 0;

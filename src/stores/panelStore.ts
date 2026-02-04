@@ -4,7 +4,6 @@ import { type Panel, type TextItem } from "../lib/types/panel";
 
 export const panelStore: Writable<Panel | undefined> = writable(undefined);
 
-// Store for common text settings that should apply to all texts
 export const textSettingsStore = writable<Partial<TextItem>>({
   fontSize: 18,
   fontFamily: "Arial",
@@ -18,8 +17,6 @@ export const updateAllTextSettings = (settings: Partial<TextItem>) => {
   textSettingsStore.update((current) => ({ ...current, ...settings }));
 };
 
-// Panel creation should go through panelService.updatePanelsFromTexts()
-// These functions are kept for backward compatibility but should be avoided
 export const createEmptyPanel = (height: number = 100): Panel => {
   const defaultText: TextItem = {
     id: uuidv4(),

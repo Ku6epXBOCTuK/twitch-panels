@@ -11,16 +11,12 @@ export interface ExportResult {
 }
 
 export class ExportService {
-  /**
-   * Экспортирует панель в изображение и сохраняет её
-   */
   async exportPanel(panel: Panel, konvaStage: Stage, filename?: string): Promise<ExportResult> {
     try {
       if (!konvaStage) {
         throw new ImageError("Konva Stage не передан для экспорта");
       }
 
-      // Используем toBlob метод Konva Stage напрямую
       const blob = await this.exportKonvaStageToBlob(konvaStage);
 
       if (!blob) {
@@ -42,9 +38,6 @@ export class ExportService {
     }
   }
 
-  /**
-   * Экспортирует Konva Stage в Blob используя встроенный метод toBlob
-   */
   private async exportKonvaStageToBlob(konvaStage: Stage): Promise<Blob | null> {
     if (!konvaStage || typeof konvaStage.toBlob !== "function") {
       throw new ImageError("Konva Stage не найден или не поддерживает toBlob");
@@ -65,10 +58,8 @@ export class ExportService {
 
   /**
    * Экспортирует несколько панелей в ZIP архив
-   * (будет реализовано позже для batch download)
    */
   async exportPanels(panels: Panel[]): Promise<ExportResult> {
-    // TODO: Реализовать пакетный экспорт с использованием JSZip
     return {
       success: false,
       error: "Пакетный экспорт еще не реализован",
@@ -77,7 +68,6 @@ export class ExportService {
 
   /**
    * Обработчик для скачивания одной панели
-   * Этот метод должен быть вызван из компонента PanelPreview с передачей konvaStage
    */
   async handleDownload(panel: Panel, konvaStage: Stage): Promise<void> {
     const result = await this.exportPanel(panel, konvaStage);
@@ -96,18 +86,11 @@ export class ExportService {
     }
   }
 
-  /**
-   * Получить сообщение об ошибке
-   */
   getErrorMessage(): string | null {
-    return null; // Реализовать при необходимости
+    return null;
   }
 
-  /**
-   * Установить сообщение об ошибке
-   */
   setErrorMessage(message: string): void {
-    // Реализовать при необходимости
     console.error("ExportService error:", message);
   }
 }

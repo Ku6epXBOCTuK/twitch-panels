@@ -1,6 +1,6 @@
 import { ImageError } from "../types/errors";
 
-export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+export const MAX_FILE_SIZE = 10 * 1024 * 1024;
 export const SUPPORTED_FORMATS = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
 export type ValidationResult =

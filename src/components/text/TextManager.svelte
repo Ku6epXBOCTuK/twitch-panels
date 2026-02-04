@@ -15,10 +15,8 @@
   let newText = $state("");
   let errorMessage = $state<string | undefined>(undefined);
 
-  // Use reactive store for text settings
   let commonTextSettings = $derived($textSettingsStore);
 
-  // Список доступных шрифтов
   const availableFonts = [
     "Arial",
     "Verdana",
@@ -89,7 +87,6 @@
     {/if}
   </div>
 
-  <!-- Список текстов -->
   {#if texts.length > 0}
     <div class="texts-list">
       <h3>Созданные тексты ({texts.length})</h3>
@@ -112,7 +109,6 @@
     </div>
   {/if}
 
-  <!-- Общие настройки текста -->
   <div class="common-settings-section">
     <h3>Общие настройки текста</h3>
     <p class="settings-note">Настройки применятся ко всем создаваемым панелям</p>
