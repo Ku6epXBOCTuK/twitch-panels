@@ -18,27 +18,20 @@
   }
 
   $effect(() => {
-    console.log(
-      "[PanelPreview] Effect triggered. Panel background:",
-      panel?.backgroundImage,
-      "Current image src:",
-      backgroundImage?.src,
-    );
     if (panel?.backgroundImage && panel.backgroundImage !== backgroundImage?.src) {
-      console.log("[PanelPreview] Loading new background image:", panel.backgroundImage);
       loadImage(panel.backgroundImage);
     }
   });
 
   function loadImage(src: string) {
-    console.log("[PanelPreview] Starting to load image:", src);
+    // Remove verbose logging - image data is too large for console
+    console.log("[PanelPreview] Loading background image");
     const img = document.createElement("img");
     img.onload = () => {
-      console.log("[PanelPreview] Image loaded successfully:", src);
       backgroundImage = img;
     };
     img.onerror = (error) => {
-      console.error("[PanelPreview] Failed to load image:", src, error);
+      console.error("[PanelPreview] Failed to load background image");
     };
     img.src = src;
   }

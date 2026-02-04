@@ -26,8 +26,6 @@
 
     // Only update if settings actually changed
     if (settingsString !== previousSettings) {
-      console.log("[SETTINGS] Applying text settings to all panels:", currentSettings);
-
       // Update panels with new settings
       const updatedPanels = panels.map((panel) => ({
         ...panel,
@@ -47,29 +45,23 @@
 
   onMount(async () => {
     // Initialize with default texts for common Twitch panels
-    console.log("[INIT] Creating default texts...");
     const defaultTexts = [
       { id: crypto.randomUUID(), text: "About" },
       { id: crypto.randomUUID(), text: "Links" },
     ];
     texts = defaultTexts;
-    console.log("[INIT] Default texts created:", texts);
 
     // Load background image
     try {
-      console.log("[INIT] Loading default background...");
       const loadedBackground = await imageService.loadDefaultBackground();
-      console.log("[INIT] Background loaded:", loadedBackground);
       backgroundImage = loadedBackground;
     } catch (error) {
-      console.error("[INIT] Error loading background:", error);
+      console.error("Failed to load default background");
       exportService.setErrorMessage("Не удалось загрузить фоновое изображение по умолчанию");
     }
 
     // Create panels from texts (with or without background)
-    console.log("[INIT] Creating panels from texts...");
     const initialPanels = panelService.updatePanelsFromTexts(texts, [], backgroundImage || "");
-    console.log("[INIT] Panels created:", initialPanels);
     panels = initialPanels;
   });
 

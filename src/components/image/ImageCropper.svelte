@@ -31,7 +31,7 @@
   });
 
   function initializeCropper() {
-    console.log("initializeCropper called, imageElement:", !!imageElement, "CropperJS:", !!CropperJS);
+    // Remove verbose debug logging
     if (!imageElement || !CropperJS) {
       return;
     }
@@ -49,10 +49,7 @@
       errorMessage = undefined;
       setLoading(true);
 
-      console.log("Calling getCropperCanvas");
       const cropperCanvasElement = cropper.getCropperCanvas();
-      console.log("CropperCanvas result:", cropperCanvasElement);
-      console.log("CropperCanvas type:", typeof cropperCanvasElement);
 
       if (!cropperCanvasElement) {
         throw new Error("Не удалось получить обрезанное изображение");
