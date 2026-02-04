@@ -1,7 +1,8 @@
+import { IMAGE_SETTINGS } from "../constants";
 import { ImageError } from "../types/errors";
 
-export const MAX_FILE_SIZE = 10 * 1024 * 1024;
-export const SUPPORTED_FORMATS = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+export const MAX_FILE_SIZE = IMAGE_SETTINGS.MAX_FILE_SIZE;
+export const SUPPORTED_FORMATS = IMAGE_SETTINGS.SUPPORTED_FORMATS;
 
 export type ValidationResult =
   | {
@@ -23,7 +24,7 @@ export function validateFileSize(file: File): ValidationResult {
 }
 
 export function validateFileType(file: File): ValidationResult {
-  if (!SUPPORTED_FORMATS.includes(file.type)) {
+  if (!SUPPORTED_FORMATS.includes(file.type as any)) {
     return {
       isValid: false,
       error: `Неподдерживаемый формат. Допустимые форматы: ${SUPPORTED_FORMATS.join(", ")}`,

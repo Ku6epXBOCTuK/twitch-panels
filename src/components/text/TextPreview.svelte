@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PANEL_SETTINGS, TYPOGRAPHY } from "$lib/constants";
   import type { TextItem } from "$lib/types/panel";
   import { panelStore } from "$stores/panelStore";
   import { Image, Layer, Stage, Text } from "svelte-konva";
@@ -28,17 +29,17 @@
   }
 
   function getTextPosition() {
-    const panelWidth = 320;
+    const panelWidth = PANEL_SETTINGS.PANEL_WIDTH;
     const paddingX = textItem.paddingX || 0;
     const verticalOffset = textItem.verticalOffset || 0;
     const centerY = height / 2 + verticalOffset;
 
     switch (textItem.textAlign) {
-      case "left":
+      case TYPOGRAPHY.TEXT_ALIGN_LEFT:
         return { x: paddingX, y: centerY };
-      case "right":
+      case TYPOGRAPHY.TEXT_ALIGN_RIGHT:
         return { x: panelWidth - paddingX, y: centerY };
-      case "center":
+      case TYPOGRAPHY.TEXT_ALIGN_CENTER:
       default:
         return { x: panelWidth / 2, y: centerY };
     }
@@ -50,9 +51,9 @@
 <div class="text-preview">
   {#if bgImage}
     <div class="canvas-container">
-      <Stage width={320} {height}>
+      <Stage width={PANEL_SETTINGS.PANEL_WIDTH} {height}>
         <Layer>
-          <Image image={bgImage} width={320} {height} />
+          <Image image={bgImage} width={PANEL_SETTINGS.PANEL_WIDTH} {height} />
           <Text
             text={textItem.text}
             fontSize={textItem.fontSize}
@@ -62,7 +63,11 @@
             y={textPosition.y}
             align={textItem.textAlign}
             width={320 - textItem.paddingX * 2}
-            offsetX={textItem.textAlign === "center" ? 0 : textItem.textAlign === "right" ? 0 : 0}
+            offsetX={textItem.textAlign === TYPOGRAPHY.TEXT_ALIGN_CENTER
+              ? 0
+              : textItem.textAlign === TYPOGRAPHY.TEXT_ALIGN_RIGHT
+                ? 0
+                : 0}
           />
         </Layer>
       </Stage>

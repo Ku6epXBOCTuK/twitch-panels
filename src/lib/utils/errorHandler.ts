@@ -1,4 +1,5 @@
-import { AppError, type ErrorType } from "../types/errors";
+import { ERROR_HANDLING } from "../constants";
+import { AppError } from "../types/errors";
 
 export function handleError(error: unknown, defaultMessage: string = "Произошла ошибка"): string {
   if (error instanceof AppError) {
@@ -38,8 +39,8 @@ export function logError(error: unknown, context?: string): void {
 
 export function retryOperation<T>(
   operation: () => Promise<T>,
-  maxRetries: number = 3,
-  delayMs: number = 1000,
+  maxRetries: number = ERROR_HANDLING.MAX_RETRIES,
+  delayMs: number = ERROR_HANDLING.RETRY_DELAY_MS,
 ): Promise<T> {
   return new Promise((resolve, reject) => {
     let attempt = 0;

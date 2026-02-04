@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
+  import { TYPOGRAPHY } from "$lib/constants";
   import type { TextAlign, TextItem } from "$lib/types/panel";
   import { textSettingsStore, updateAllTextSettings } from "$stores/panelStore";
 
@@ -17,16 +18,7 @@
 
   let commonTextSettings = $derived($textSettingsStore);
 
-  const availableFonts = [
-    "Arial",
-    "Verdana",
-    "Georgia",
-    "Times New Roman",
-    "Courier New",
-    "Impact",
-    "Comic Sans MS",
-    "Trebuchet MS",
-  ];
+  const availableFonts = TYPOGRAPHY.FONT_FAMILIES;
 
   function handleAddText() {
     if (!newText.trim()) {
@@ -34,8 +26,8 @@
       return;
     }
 
-    if (newText.length > 100) {
-      errorMessage = "Текст не должен превышать 100 символов";
+    if (newText.length > TYPOGRAPHY.MAX_TEXT_LENGTH) {
+      errorMessage = `Текст не должен превышать ${TYPOGRAPHY.MAX_TEXT_LENGTH} символов`;
       return;
     }
 
@@ -75,7 +67,7 @@
         bind:value={newText}
         placeholder="Введите текст для панели (например: links, about me, projects...)"
         class="text-input"
-        maxlength="100"
+        maxlength={TYPOGRAPHY.MAX_TEXT_LENGTH}
         onkeypress={handleKeyPress}
       />
       <Button variant="primary" onclick={handleAddText}>Добавить</Button>
@@ -98,7 +90,7 @@
               value={textItem.text}
               oninput={(e) => handleUpdateText(textItem.id, e.currentTarget.value)}
               class="text-edit-input"
-              maxlength="100"
+              maxlength={TYPOGRAPHY.MAX_TEXT_LENGTH}
             />
             <Button variant="danger" size="sm" onclick={() => handleDeleteText(textItem.id)} aria-label="Удалить текст">
               ×
@@ -119,8 +111,8 @@
           Размер шрифта:
           <input
             type="range"
-            min="10"
-            max="72"
+            min={TYPOGRAPHY.FONT_SIZE_MIN}
+            max={TYPOGRAPHY.FONT_SIZE_MAX}
             step="1"
             value={commonTextSettings.fontSize}
             oninput={(e: Event) => {
@@ -201,7 +193,7 @@
           <input
             type="range"
             min="0"
-            max="50"
+            max={TYPOGRAPHY.PADDING_X_MAX}
             step="1"
             value={commonTextSettings.paddingX}
             oninput={(e) => {
@@ -217,8 +209,8 @@
           Смещение от центра:
           <input
             type="range"
-            min="-50"
-            max="50"
+            min={TYPOGRAPHY.VERTICAL_OFFSET_MIN}
+            max={TYPOGRAPHY.VERTICAL_OFFSET_MAX}
             step="1"
             value={commonTextSettings.verticalOffset}
             oninput={(e) => {

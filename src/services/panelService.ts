@@ -1,3 +1,4 @@
+import { PANEL_SETTINGS } from "../lib/constants";
 import type { Panel, TextItem } from "../lib/types/panel";
 import { createPanelFromText, updatePanelText } from "../stores/panelStore";
 
@@ -54,7 +55,7 @@ export class PanelService {
       if (existingPanel) {
         return updatePanelText(existingPanel, textItem.text);
       }
-      return createPanelFromText(backgroundImage, textItem.text, 100, textSettings);
+      return createPanelFromText(backgroundImage, textItem.text, PANEL_SETTINGS.PANEL_HEIGHT_DEFAULT, textSettings);
     });
   }
 

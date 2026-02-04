@@ -1,8 +1,9 @@
+import { PANEL_SETTINGS } from "../constants";
 import type { Panel } from "../types/panel";
 import { handleError, logError } from "./errorHandler";
 
-const STORAGE_KEY = "twitch-panels";
-const MAX_PANELS = 50;
+const STORAGE_KEY = PANEL_SETTINGS.STORAGE_KEY;
+const MAX_PANELS = PANEL_SETTINGS.MAX_PANELS_COUNT;
 
 export interface StorageResult {
   success: boolean;
@@ -109,7 +110,7 @@ export class PanelStorage {
       Array.isArray(panel.texts) &&
       typeof panel.height === "number" &&
       panel.height > 0 &&
-      panel.height <= 1000 &&
+      panel.height <= PANEL_SETTINGS.PANEL_HEIGHT_MAX &&
       panel.createdAt instanceof Date &&
       panel.updatedAt instanceof Date
     );

@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
+  import { PANEL_SETTINGS, TYPOGRAPHY, UI_SETTINGS } from "$lib/constants";
   import type { Panel, TextItem } from "$lib/types/panel";
   import { setCurrentStep } from "$stores/uiStore";
   import type { Stage as KonvaStage } from "konva/lib/Stage";
@@ -23,7 +24,7 @@
   });
 
   function handleUploadNewImage() {
-    setCurrentStep("upload");
+    setCurrentStep(UI_SETTINGS.STEPS.UPLOAD);
   }
 
   $effect(() => {
@@ -63,7 +64,7 @@
   }
 
   function getTextPosition(textItem: TextItem) {
-    const panelWidth = 320;
+    const panelWidth = PANEL_SETTINGS.PANEL_WIDTH;
     const paddingX = textItem.paddingX || 20;
     const verticalOffset = textItem.verticalOffset || 0;
     const centerY = panel.height / 2 + verticalOffset;
@@ -95,10 +96,10 @@
   <div class="preview-sections">
     <div class="preview-section">
       <div class="canvas-container">
-        <Stage width={320} height={panel.height} bind:this={stageComponent}>
+        <Stage width={PANEL_SETTINGS.PANEL_WIDTH} height={panel.height} bind:this={stageComponent}>
           <Layer>
             {#if backgroundImage}
-              <Image image={backgroundImage} width={320} height={panel.height} />
+              <Image image={backgroundImage} width={PANEL_SETTINGS.PANEL_WIDTH} height={panel.height} />
             {/if}
           </Layer>
 
@@ -108,12 +109,12 @@
 
               <Text
                 text={panel.text.text}
-                fontSize={panel.text.fontSize || 24}
-                fill={panel.text.color || "#ffffff"}
+                fontSize={panel.text.fontSize || TYPOGRAPHY.FONT_SIZE_DEFAULT}
+                fill={panel.text.color || TYPOGRAPHY.TEXT_COLOR_DEFAULT}
                 fontFamily={panel.text.fontFamily || "Arial"}
                 x={textPosition.x}
                 y={textPosition.y}
-                align={panel.text.textAlign || "center"}
+                align={panel.text.textAlign || TYPOGRAPHY.TEXT_ALIGN_CENTER}
                 width={300}
               />
             {/if}
