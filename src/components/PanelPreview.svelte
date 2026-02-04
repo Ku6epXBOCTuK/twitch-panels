@@ -1,24 +1,47 @@
 <script lang="ts">
-  import { panelStore } from "../stores/panelStore";
   import { uiStore, setCurrentStep } from "../stores/uiStore";
-  import type { TextItem } from "../lib/types/panel";
+  import type { Panel } from "../lib/types/panel";
   import { Stage, Layer, Image, Text } from "svelte-konva";
-  import { Button } from "../lib/components/ui";
+  import { Button, IconButton } from "../lib/components/ui";
 
   let {
+    panel,
     onDownload,
+    onUpdate,
+    onDelete,
   }: {
+    panel: Panel;
     onDownload?: () => void;
+    onUpdate?: (text: string) => void;
+    onDelete?: () => void;
   } = $props();
+
+  let backgroundImage: HTMLImageElement | undefined = $state(undefined);
+  let editingText = $state(false);
+  let editText = $state("");
 
   function handleUploadNewImage() {
     setCurrentStep("upload");
   }
 
-  let backgroundImage: HTMLImageElement | undefined = $state(undefined);
+  function handleEdit() {
+    editText = panel.texts[0]?.text || "";
+    editingText = true;
+  }
+
+  function handleSaveEdit() {
+    if (onUpdate && editText.trim()) {
+      onUpdate(editText.trim());
+    }
+    editingText = false;
+  }
+
+  function handleCancelEdit() {
+    editingText = false;
+    editText = "";
+  }
 
   $effect(() => {
-    const panel = $panelStore;
     if (panel?.backgroundImage && panel.backgroundImage !== backgroundImage?.src) {
       loadImage(panel.backgroundImage);
     }
@@ -39,8 +62,6 @@
   }
 
   function getTextPosition(textItem: TextItem) {
-    const panel = $panelStore;
-    if (!panel) return { x: 0, y: 0 };
     const panelWidth = 320;
     const paddingX = textItem.paddingX || 0;
     const verticalOffset = textItem.verticalOffset || 0;
@@ -59,20 +80,38 @@
 </script>
 
 <div class="panel-preview">
-  {#if $panelStore}
-    <div class="preview-header">
-      <Button variant="primary" onclick={handleDownload}>Скачать панель</Button>
-      <Button variant="secondary" onclick={handleUploadNewImage}>Загрузить</Button>
-    </div>
+  <div class="preview-header">
+    {#if editingText}
+      <div class="edit-controls">
+        <input
+          type="text"
+          bind:value={editText}
+          class="edit-input"
+          onkeypress={(e) => e.key === "Enter" && handleSaveEdit()}
+        />
+        <Button variant="primary" size="sm" onclick={handleSaveEdit}>✓</Button>
+        <Button variant="secondary" size="sm" onclick={handleCancelEdit}>✕</Button>
+      </div>
+    {:else}
+      <div class="panel-title">{panel.texts[0]?.text || "Без названия"}</div>
+      <div class="panel-actions">
+        <IconButton variant="secondary" onclick={handleEdit} ariaLabel="Редактировать">✎</IconButton>
+        <Button variant="primary" size="sm" onclick={onDownload}>Скачать</Button>
+        {#if onDelete}
+          <IconButton variant="danger" onclick={onDelete} ariaLabel="Удалить">🗑</IconButton>
+        {/if}
+      </div>
+    {/if}
+  </div>
     <div class="preview-sections">
       <!-- Превью чистой картинки -->
       <div class="preview-section">
         <h3>Фон</h3>
         <div class="canvas-container">
-          <Stage width={320} height={$panelStore.height}>
+          <Stage width={320} height={panel.height}>
             <Layer>
               {#if backgroundImage}
-                <Image image={backgroundImage} width={320} height={$panelStore.height} />
+                <Image image={backgroundImage} width={320} height={panel.height} />
               {/if}
             </Layer>
           </Stage>
@@ -83,15 +122,15 @@
       <div class="preview-section">
         <h3>Финальный результат</h3>
         <div class="canvas-container">
-          <Stage width={320} height={$panelStore.height}>
+          <Stage width={320} height={panel.height}>
             <Layer>
               {#if backgroundImage}
-                <Image image={backgroundImage} width={320} height={$panelStore.height} />
+                <Image image={backgroundImage} width={320} height={panel.height} />
               {/if}
-              {#each $panelStore.texts || [] as textItem (textItem.id)}
+              {#each panel.texts || [] as textItem (textItem.id)}
                 {@const textPosition = getTextPosition(textItem)}
                 <Text
-                  text={textItem.text}
+                  text={editingText ? editText : textItem.text}
                   fontSize={textItem.fontSize}
                   fill={textItem.color}
                   fontFamily={textItem.fontFamily}
@@ -106,11 +145,6 @@
         </div>
       </div>
     </div>
-  {:else}
-    <div class="empty-state">
-      <p>Нет данных для предпросмотра</p>
-    </div>
-  {/if}
 </div>
 
 <style>
@@ -123,11 +157,45 @@
 
   .preview-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
     padding: 1rem;
     margin-bottom: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+
+  .panel-title {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+  }
+
+  .panel-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .edit-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex: 1;
+  }
+
+  .edit-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .edit-input:focus {
+    outline: none;
+    border-color: #007bff;
   }
 
   .preview-sections {

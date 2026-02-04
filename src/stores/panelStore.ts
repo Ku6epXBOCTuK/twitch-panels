@@ -50,3 +50,30 @@ export const removeTextFromPanel = (panel: Panel, textId: string): Panel => {
   const updatedTexts = panel.texts.filter((text) => text.id !== textId);
   return updatePanel(panel, { texts: updatedTexts });
 };
+
+export const createPanelFromText = (backgroundImage: string, text: string, height: number = 100): Panel => {
+  const newText = {
+    id: uuidv4(),
+    text,
+    fontSize: 18,
+    fontFamily: "Arial",
+    color: "#ffffff",
+    textAlign: "center" as const,
+    paddingX: 10,
+    verticalOffset: 0,
+  };
+
+  return {
+    id: uuidv4(),
+    backgroundImage,
+    texts: [newText],
+    height,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+};
+
+export const updatePanelText = (panel: Panel, text: string): Panel => {
+  const updatedTexts = panel.texts.map((t) => ({ ...t, text }));
+  return updatePanel(panel, { texts: updatedTexts });
+};

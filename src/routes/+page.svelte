@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { panelStore, createEmptyPanel } from "../stores/panelStore";
+  import { createPanelFromText, updatePanelText } from "../stores/panelStore";
   import { uiStore, setLoading, setCurrentStep } from "../stores/uiStore";
 
   import { exportService } from "../lib/services/exportService";
@@ -10,11 +10,12 @@
   import ImageCropper from "../components/ImageCropper.svelte";
   import TextManager from "../components/TextManager.svelte";
   import PanelPreview from "../components/PanelPreview.svelte";
+  import { Button } from "../lib/components/ui";
 
   let uploadedImage = $state<string | null>(null);
-  let croppedImage = $state<string | null>(null);
-  let currentPanel = $state<Panel | null>(null);
+  let panels = $state<Panel[]>([]);
   let errorMessage = $state<string | null>(null);
+  let backgroundImage = $state<string | null>(null);
 
   onMount(async () => {
     // Загружаем фоновое изображение по умолчанию
@@ -25,25 +26,13 @@
       const blob = await response.blob();
       const reader = new FileReader();
       reader.onload = () => {
-        const base64 = reader.result as string;
-        initializePanel(base64);
+        backgroundImage = reader.result as string;
       };
       reader.readAsDataURL(blob);
     } catch (error) {
       console.error("Ошибка загрузки фонового изображения:", error);
       errorMessage = "Не удалось загрузить фоновое изображение по умолчанию";
     }
-  });
-
-  function initializePanel(backgroundImage: string) {
-    const newPanel = createEmptyPanel();
-    newPanel.backgroundImage = backgroundImage;
-    panelStore.set(newPanel);
-    currentPanel = newPanel;
-  }
-
-  $effect(() => {
-    currentPanel = $panelStore;
   });
 
   function handleImageUpload(image: string) {
@@ -57,19 +46,13 @@
   }
 
   function handleCropComplete(croppedImage: string) {
-    croppedImage = croppedImage;
-
-    // Обновляем текущую панель с обрезанным изображением
-    if (currentPanel) {
-      const updatedPanel = {
-        ...currentPanel,
-        backgroundImage: croppedImage,
-        updatedAt: new Date(),
-      };
-      panelStore.set(updatedPanel);
-      currentPanel = updatedPanel;
-    }
-
+    backgroundImage = croppedImage;
+    // Обновляем все панели с новым фоновым изображением
+    panels = panels.map(panel => ({
+      ...panel,
+      backgroundImage: croppedImage,
+      updatedAt: new Date(),
+    }));
     setCurrentStep("text");
   }
 
@@ -78,32 +61,45 @@
     setCurrentStep("text");
   }
 
-  function handleTextUpdate(texts: Panel["texts"]) {
-    if (currentPanel) {
-      const updatedPanel = {
-        ...currentPanel,
-        texts,
-        updatedAt: new Date(),
-      };
-      panelStore.set(updatedPanel);
-    }
+  function handleAddText(text: string) {
+    if (!backgroundImage) return;
+    const newPanel = createPanelFromText(backgroundImage, text);
+    panels = [...panels, newPanel];
   }
 
-  async function handleDownload() {
-    if (!currentPanel) {
-      errorMessage = "Нет панели для скачивания";
-      return;
-    }
+  function handleUpdateText(panelId: string, text: string) {
+    panels = panels.map(panel => 
+      panel.id === panelId ? updatePanelText(panel, text) : panel
+    );
+  }
 
+  function handleDeletePanel(panelId: string) {
+    panels = panels.filter(panel => panel.id !== panelId);
+  }
+
+  async function handleDownload(panel: Panel) {
     try {
       setLoading(true);
-      const result = await exportService.exportPanel(currentPanel);
+      const result = await exportService.exportPanel(panel);
 
       if (!result.success) {
         errorMessage = result.error || "Ошибка экспорта панели";
       }
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : "Ошибка экспорта панели";
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDownloadAll() {
+    try {
+      setLoading(true);
+      for (const panel of panels) {
+        await exportService.exportPanel(panel);
+      }
+    } catch (error) {
+      errorMessage = error instanceof Error ? error.message : "Ошибка экспорта панелей";
     } finally {
       setLoading(false);
     }
@@ -131,15 +127,32 @@
         <ImageCropper imageSrc={uploadedImage} onCropComplete={handleCropComplete} onCancel={handleCropCancel} />
       {:else if $uiStore.currentStep === "text"}
         <div class="text-section">
-          <h2>Управление текстом</h2>
-          <TextManager onTextUpdate={handleTextUpdate} />
+          <h2>Добавьте тексты для панелей</h2>
+          <TextManager onTextAdd={handleAddText} />
         </div>
       {/if}
     </div>
 
     <div class="sidebar">
-      {#if $uiStore.currentStep === "text"}
-        <PanelPreview onDownload={handleDownload} />
+      {#if $uiStore.currentStep === "text" && panels.length > 0}
+        <div class="panels-container">
+          <div class="panels-header">
+            <h2>Созданные панели ({panels.length})</h2>
+            <Button variant="primary" onclick={handleDownloadAll}>Скачать все</Button>
+          </div>
+          <div class="panels-list">
+            {#each panels as panel (panel.id)}
+              <div class="panel-item">
+                <PanelPreview 
+                  panel={panel} 
+                  onDownload={() => handleDownload(panel)}
+                  onUpdate={(text) => handleUpdateText(panel.id, text)}
+                  onDelete={() => handleDeletePanel(panel.id)}
+                />
+              </div>
+            {/each}
+          </div>
+        </div>
       {/if}
     </div>
   </div>
@@ -201,6 +214,41 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+  }
+
+  .panels-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .panels-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    color: white;
+  }
+
+  .panels-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .panels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .panel-item {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
   }
 
   .error-message {

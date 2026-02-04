@@ -1,19 +1,15 @@
 
 <script lang="ts">
-  import { panelStore, addTextToPanel, updateTextInPanel, removeTextFromPanel } from "../stores/panelStore";
-  import type { TextItem } from "../lib/types/panel";
-  import { v4 as uuidv4 } from "uuid";
-  import { Button, IconButton } from "../lib/components/ui";
+  import { Button } from "../lib/components/ui";
 
-  let { onTextUpdate }: {
-    onTextUpdate: (texts: TextItem[]) => void;
+  let { onTextAdd }: {
+    onTextAdd: (text: string) => void;
   } = $props();
 
-  let currentPanel = $state($panelStore);
   let newText = $state("");
   let errorMessage = $state<string | null>(null);
 
-  // Общие настройки текста для всех текстов
+  // Общие настройки текста для всех панелей
   let commonTextSettings = $state({
     fontSize: 18,
     fontFamily: "Arial",
@@ -35,33 +31,7 @@
     "Trebuchet MS",
   ];
 
-  // Применить общие настройки ко всем текстам
-  function applyCommonSettingsToAll() {
-    if (!currentPanel) return;
-
-    const updatedTexts = currentPanel.texts.map(text => ({
-      ...text,
-      fontSize: commonTextSettings.fontSize,
-      fontFamily: commonTextSettings.fontFamily,
-      color: commonTextSettings.color,
-      textAlign: commonTextSettings.textAlign,
-      paddingX: commonTextSettings.paddingX,
-      verticalOffset: commonTextSettings.verticalOffset,
-    }));
-
-    const updatedPanel = updatePanel(currentPanel, { texts: updatedTexts });
-    panelStore.set(updatedPanel);
-    onTextUpdate(updatedTexts);
-  }
-
-  // Subscribe to panel store
-  $effect(() => {
-    currentPanel = $panelStore;
-  });
-
   function handleAddText() {
-    if (!currentPanel) return;
-
     if (!newText.trim()) {
       errorMessage = "Введите текст";
       return;
@@ -74,46 +44,44 @@
 
     try {
       errorMessage = null;
-      const updatedPanel = addTextToPanel(currentPanel, newText.trim());
-      panelStore.set(updatedPanel);
-      onTextUpdate(updatedPanel.texts);
+      onTextAdd(newText.trim());
       newText = "";
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : "Ошибка добавления текста";
     }
   }
 
-  function handleUpdateText(textId: string, updates: Partial<TextItem>) {
-    if (!currentPanel) return;
-
-    try {
-      errorMessage = null;
-      const updatedPanel = updateTextInPanel(currentPanel, textId, updates);
-      panelStore.set(updatedPanel);
-      onTextUpdate(updatedPanel.texts);
-    } catch (error) {
-      errorMessage = error instanceof Error ? error.message : "Ошибка обновления текста";
-    }
-  }
-
-  function handleRemoveText(textId: string) {
-    if (!currentPanel) return;
-
-    try {
-      errorMessage = null;
-      const updatedPanel = removeTextFromPanel(currentPanel, textId);
-      panelStore.set(updatedPanel);
-      onTextUpdate(updatedPanel.texts);
-    } catch (error) {
-      errorMessage = error instanceof Error ? error.message : "Ошибка удаления текста";
+  function handleKeyPress(e: KeyboardEvent) {
+    if (e.key === "Enter") {
+      handleAddText();
     }
   }
 </script>
 
 <div class="text-manager">
+  <div class="add-text-section">
+    <div class="input-group">
+      <input
+        type="text"
+        bind:value={newText}
+        placeholder="Введите текст для панели (например: links, about me, projects...)"
+        class="text-input"
+        maxlength="100"
+        onkeypress={handleKeyPress}
+      />
+      <Button variant="primary" onclick={handleAddText}>Добавить</Button>
+    </div>
+    {#if errorMessage}
+      <div class="error-message">
+        {errorMessage}
+      </div>
+    {/if}
+  </div>
+
   <!-- Общие настройки текста -->
   <div class="common-settings-section">
     <h3>Общие настройки текста</h3>
+    <p class="settings-note">Настройки применятся ко всем создаваемым панелям</p>
     
     <div class="settings-grid">
       <div class="control-group">
@@ -127,7 +95,6 @@
             value={commonTextSettings.fontSize}
             oninput={(e) => {
               commonTextSettings.fontSize = parseInt(e.target.value);
-              applyCommonSettingsToAll();
             }}
           />
           <span class="value-display">{commonTextSettings.fontSize}px</span>
@@ -141,7 +108,6 @@
             value={commonTextSettings.fontFamily}
             onchange={(e) => {
               commonTextSettings.fontFamily = e.target.value;
-              applyCommonSettingsToAll();
             }}
           >
             {#each availableFonts as font}
@@ -159,7 +125,6 @@
             value={commonTextSettings.color}
             oninput={(e) => {
               commonTextSettings.color = e.target.value;
-              applyCommonSettingsToAll();
             }}
           />
         </label>
@@ -169,36 +134,33 @@
         <label>
           Выравнивание:
           <div class="alignment-buttons">
-            <IconButton
-              variant={commonTextSettings.textAlign === 'left' ? 'primary' : 'secondary'}
+            <button
+              class="align-btn {commonTextSettings.textAlign === 'left' ? 'active' : ''}"
               onclick={() => {
                 commonTextSettings.textAlign = 'left';
-                applyCommonSettingsToAll();
               }}
-              ariaLabel="Выровнять по левому краю"
+              aria-label="Выровнять по левому краю"
             >
               ←
-            </IconButton>
-            <IconButton
-              variant={commonTextSettings.textAlign === 'center' ? 'primary' : 'secondary'}
+            </button>
+            <button
+              class="align-btn {commonTextSettings.textAlign === 'center' ? 'active' : ''}"
               onclick={() => {
                 commonTextSettings.textAlign = 'center';
-                applyCommonSettingsToAll();
               }}
-              ariaLabel="Выровнять по центру"
+              aria-label="Выровнять по центру"
             >
               ↔
-            </IconButton>
-            <IconButton
-              variant={commonTextSettings.textAlign === 'right' ? 'primary' : 'secondary'}
+            </button>
+            <button
+              class="align-btn {commonTextSettings.textAlign === 'right' ? 'active' : ''}"
               onclick={() => {
                 commonTextSettings.textAlign = 'right';
-                applyCommonSettingsToAll();
               }}
-              ariaLabel="Выровнять по правому краю"
+              aria-label="Выровнять по правому краю"
             >
               →
-            </IconButton>
+            </button>
           </div>
         </label>
       </div>
@@ -214,7 +176,6 @@
             value={commonTextSettings.paddingX}
             oninput={(e) => {
               commonTextSettings.paddingX = parseInt(e.target.value);
-              applyCommonSettingsToAll();
             }}
           />
           <span class="value-display">{commonTextSettings.paddingX}px</span>
@@ -232,7 +193,6 @@
             value={commonTextSettings.verticalOffset}
             oninput={(e) => {
               commonTextSettings.verticalOffset = parseInt(e.target.value);
-              applyCommonSettingsToAll();
             }}
           />
           <span class="value-display">{commonTextSettings.verticalOffset > 0 ? '+' : ''}{commonTextSettings.verticalOffset}px</span>
@@ -241,44 +201,6 @@
     </div>
   </div>
 
-  <div class="add-text-section">
-    <div class="input-group">
-      <input
-        type="text"
-        bind:value={newText}
-        placeholder="Введите текст..."
-        class="text-input"
-        maxlength="100"
-      />
-      <Button variant="primary" onclick={handleAddText}>Добавить</Button>
-    </div>
-    {#if errorMessage}
-      <div class="error-message">
-        {errorMessage}
-      </div>
-    {/if}
-  </div>
-
-  {#if currentPanel && currentPanel.texts.length > 0}
-    <div class="text-list">
-      {#each currentPanel.texts as textItem (textItem.id)}
-        <div class="text-item">
-          <span class="text-content">{textItem.text}</span>
-          <IconButton
-            variant="danger"
-            onclick={() => handleRemoveText(textItem.id)}
-            ariaLabel="Удалить текст"
-          >
-            ×
-          </IconButton>
-        </div>
-      {/each}
-    </div>
-  {:else}
-    <div class="empty-state">
-      <p>Нет добавленного текста</p>
-    </div>
-  {/if}
 </div>
 
 <style>
@@ -287,13 +209,6 @@
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-  }
-
-  .text-manager h2 {
-    margin: 0;
-    color: #333;
-    font-size: 1.5rem;
-    font-weight: 600;
   }
 
   .common-settings-section {
@@ -311,6 +226,13 @@
     font-weight: 500;
   }
 
+  .settings-note {
+    margin: 0 0 1rem 0;
+    color: #666;
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+
   .settings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -319,13 +241,35 @@
 
   .alignment-buttons {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .align-btn {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+  }
+
+  .align-btn:hover {
+    background: #f0f0f0;
+    border-color: #007bff;
+  }
+
+  .align-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
   }
 
   .add-text-section {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .input-group {
