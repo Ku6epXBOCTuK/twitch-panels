@@ -1,8 +1,10 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
+  import type { TextAlign, TextItem } from "$lib/types/panel";
+  import { textSettingsStore, updateAllTextSettings } from "$stores/panelStore";
 
   interface Props {
-    onTextAdd: (text: string) => void;
+    onTextAdd: (text: string, settings?: Partial<TextItem>) => void;
     onTextUpdate: (id: string, text: string) => void;
     onTextDelete: (id: string) => void;
     texts: Array<{ id: string; text: string }>;
@@ -13,15 +15,8 @@
   let newText = $state("");
   let errorMessage = $state<string | undefined>(undefined);
 
-  // Общие настройки текста для всех панелей
-  let commonTextSettings = $state({
-    fontSize: 18,
-    fontFamily: "Arial",
-    color: "#ffffff",
-    textAlign: "left",
-    paddingX: 10,
-    verticalOffset: 0,
-  });
+  // Use reactive store for text settings
+  let commonTextSettings = $derived($textSettingsStore);
 
   // Список доступных шрифтов
   const availableFonts = [
@@ -48,7 +43,7 @@
 
     try {
       errorMessage = undefined;
-      onTextAdd(newText.trim());
+      onTextAdd(newText.trim(), commonTextSettings);
       newText = "";
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : "Ошибка добавления текста";
@@ -133,7 +128,7 @@
             step="1"
             value={commonTextSettings.fontSize}
             oninput={(e: Event) => {
-              commonTextSettings.fontSize = parseInt((e.target as HTMLInputElement).value);
+              updateAllTextSettings({ fontSize: parseInt((e.target as HTMLInputElement).value) });
             }}
           />
           <span class="value-display">{commonTextSettings.fontSize}px</span>
@@ -146,7 +141,7 @@
           <select
             value={commonTextSettings.fontFamily}
             onchange={(e) => {
-              commonTextSettings.fontFamily = (e.target as HTMLSelectElement).value;
+              updateAllTextSettings({ fontFamily: (e.target as HTMLSelectElement).value });
             }}
           >
             {#each availableFonts as font}
@@ -163,7 +158,7 @@
             type="color"
             value={commonTextSettings.color}
             oninput={(e) => {
-              commonTextSettings.color = (e.target as HTMLInputElement).value;
+              updateAllTextSettings({ color: (e.target as HTMLInputElement).value });
             }}
           />
         </label>
@@ -176,7 +171,7 @@
             <button
               class="align-btn {commonTextSettings.textAlign === 'left' ? 'active' : ''}"
               onclick={() => {
-                commonTextSettings.textAlign = "left";
+                updateAllTextSettings({ textAlign: "left" as TextAlign });
               }}
               aria-label="Выровнять по левому краю"
             >
@@ -185,7 +180,7 @@
             <button
               class="align-btn {commonTextSettings.textAlign === 'center' ? 'active' : ''}"
               onclick={() => {
-                commonTextSettings.textAlign = "center";
+                updateAllTextSettings({ textAlign: "center" as TextAlign });
               }}
               aria-label="Выровнять по центру"
             >
@@ -194,7 +189,7 @@
             <button
               class="align-btn {commonTextSettings.textAlign === 'right' ? 'active' : ''}"
               onclick={() => {
-                commonTextSettings.textAlign = "right";
+                updateAllTextSettings({ textAlign: "right" as TextAlign });
               }}
               aria-label="Выровнять по правому краю"
             >
@@ -214,7 +209,7 @@
             step="1"
             value={commonTextSettings.paddingX}
             oninput={(e) => {
-              commonTextSettings.paddingX = parseInt((e.target as HTMLInputElement).value);
+              updateAllTextSettings({ paddingX: parseInt((e.target as HTMLInputElement).value) });
             }}
           />
           <span class="value-display">{commonTextSettings.paddingX}px</span>
@@ -231,11 +226,11 @@
             step="1"
             value={commonTextSettings.verticalOffset}
             oninput={(e) => {
-              commonTextSettings.verticalOffset = parseInt((e.target as HTMLInputElement).value);
+              updateAllTextSettings({ verticalOffset: parseInt((e.target as HTMLInputElement).value) });
             }}
           />
           <span class="value-display"
-            >{commonTextSettings.verticalOffset > 0 ? "+" : ""}{commonTextSettings.verticalOffset}px</span
+            >{(commonTextSettings.verticalOffset ?? 0) > 0 ? "+" : ""}{commonTextSettings.verticalOffset ?? 0}px</span
           >
         </label>
       </div>

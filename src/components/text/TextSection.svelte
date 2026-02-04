@@ -1,9 +1,10 @@
 <script lang="ts">
+  import type { TextItem } from "$lib/types/panel";
   import TextManager from "./TextManager.svelte";
 
   interface Props {
     texts: Array<{ id: string; text: string }>;
-    onTextAdd: (text: string) => void;
+    onTextAdd: (text: string, settings?: Partial<TextItem>) => void;
     onTextUpdate: (id: string, text: string) => void;
     onTextDelete: (id: string) => void;
   }

@@ -1,4 +1,4 @@
-import type { Panel } from "../lib/types/panel";
+import type { Panel, TextItem } from "../lib/types/panel";
 import { createPanelFromText, updatePanelText } from "../stores/panelStore";
 
 export class PanelService {
@@ -43,13 +43,18 @@ export class PanelService {
     return texts.filter((t) => t.id !== id);
   }
 
-  updatePanelsFromTexts(texts: Array<{ id: string; text: string }>, panels: Panel[], backgroundImage: string): Panel[] {
+  updatePanelsFromTexts(
+    texts: Array<{ id: string; text: string }>,
+    panels: Panel[],
+    backgroundImage: string,
+    textSettings?: Partial<TextItem>,
+  ): Panel[] {
     return texts.map((textItem) => {
       const existingPanel = panels.find((p) => p.text.text === textItem.text);
       if (existingPanel) {
         return updatePanelText(existingPanel, textItem.text);
       }
-      return createPanelFromText(backgroundImage, textItem.text);
+      return createPanelFromText(backgroundImage, textItem.text, 100, textSettings);
     });
   }
 
