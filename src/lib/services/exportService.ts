@@ -38,18 +38,17 @@ export class ExportService {
       ctx.drawImage(bgImage, 0, 0, 320, panel.height);
 
       // Рисуем текст
-      panel.texts.forEach((textItem) => {
-        ctx.font = `${textItem.fontSize}px ${textItem.fontFamily}`;
-        ctx.fillStyle = textItem.color;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+      const textItem = panel.text;
+      ctx.font = `${textItem.fontSize}px ${textItem.fontFamily}`;
+      ctx.fillStyle = textItem.color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
 
-        // Calculate position based on existing system
-        const x = 160; // Center of 320px panel
-        const y = panel.height / 2 + textItem.verticalOffset;
+      // Calculate position based on existing system
+      const x = 160; // Center of 320px panel
+      const y = panel.height / 2 + textItem.verticalOffset;
 
-        ctx.fillText(textItem.text, x, y);
-      });
+      ctx.fillText(textItem.text, x, y);
 
       // Конвертируем в blob и сохраняем
       canvas.toBlob((blob) => {

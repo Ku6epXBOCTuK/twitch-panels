@@ -18,7 +18,7 @@ export class PanelService {
   }
 
   isDuplicateText(texts: Array<{ id: string; text: string }>, text: string, excludeId?: string): boolean {
-    return texts.some(t => t.id !== excludeId && t.text === text);
+    return texts.some((t) => t.id !== excludeId && t.text === text);
   }
 
   addText(texts: Array<{ id: string; text: string }>, text: string): Array<{ id: string; text: string }> {
@@ -28,20 +28,24 @@ export class PanelService {
     return [...texts, { id: crypto.randomUUID(), text }];
   }
 
-  updateText(texts: Array<{ id: string; text: string }>, id: string, newText: string): Array<{ id: string; text: string }> {
+  updateText(
+    texts: Array<{ id: string; text: string }>,
+    id: string,
+    newText: string,
+  ): Array<{ id: string; text: string }> {
     if (!this.validateText(newText)) return texts;
     if (this.isDuplicateText(texts, newText, id)) return texts;
 
-    return texts.map(t => t.id === id ? { ...t, text: newText } : t);
+    return texts.map((t) => (t.id === id ? { ...t, text: newText } : t));
   }
 
   deleteText(texts: Array<{ id: string; text: string }>, id: string): Array<{ id: string; text: string }> {
-    return texts.filter(t => t.id !== id);
+    return texts.filter((t) => t.id !== id);
   }
 
   updatePanelsFromTexts(texts: Array<{ id: string; text: string }>, panels: Panel[], backgroundImage: string): Panel[] {
-    return texts.map(textItem => {
-      const existingPanel = panels.find(p => p.texts[0]?.text === textItem.text);
+    return texts.map((textItem) => {
+      const existingPanel = panels.find((p) => p.text.text === textItem.text);
       if (existingPanel) {
         return updatePanelText(existingPanel, textItem.text);
       }
@@ -50,7 +54,7 @@ export class PanelService {
   }
 
   updatePanelsBackground(panels: Panel[], newBackground: string): Panel[] {
-    return panels.map(panel => ({
+    return panels.map((panel) => ({
       ...panel,
       backgroundImage: newBackground,
       updatedAt: new Date(),

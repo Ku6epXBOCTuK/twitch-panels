@@ -13,11 +13,31 @@
   let backgroundImage = $state<string | undefined>(undefined);
 
   onMount(async () => {
+    // Initialize with default texts for common Twitch panels
+    console.log("[INIT] Creating default texts...");
+    const defaultTexts = [
+      { id: crypto.randomUUID(), text: "About" },
+      { id: crypto.randomUUID(), text: "Links" },
+    ];
+    texts = defaultTexts;
+    console.log("[INIT] Default texts created:", texts);
+
+    // Load background image
     try {
-      backgroundImage = await imageService.loadDefaultBackground();
+      console.log("[INIT] Loading default background...");
+      const loadedBackground = await imageService.loadDefaultBackground();
+      console.log("[INIT] Background loaded:", loadedBackground);
+      backgroundImage = loadedBackground;
     } catch (error) {
+      console.error("[INIT] Error loading background:", error);
       exportService.setErrorMessage("Не удалось загрузить фоновое изображение по умолчанию");
     }
+
+    // Create panels from texts (with or without background)
+    console.log("[INIT] Creating panels from texts...");
+    const initialPanels = panelService.updatePanelsFromTexts(texts, [], backgroundImage || "");
+    console.log("[INIT] Panels created:", initialPanels);
+    panels = initialPanels;
   });
 
   function handleImageUpload(image: string) {

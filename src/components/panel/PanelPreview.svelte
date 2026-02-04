@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Panel } from "$lib/types/panel";
+  import type { Panel, TextItem } from "$lib/types/panel";
   import { Image, Layer, Stage, Text } from "svelte-konva";
   import { setCurrentStep } from "../../stores/uiStore";
   import Button from "../ui/Button.svelte";
@@ -18,15 +18,27 @@
   }
 
   $effect(() => {
+    console.log(
+      "[PanelPreview] Effect triggered. Panel background:",
+      panel?.backgroundImage,
+      "Current image src:",
+      backgroundImage?.src,
+    );
     if (panel?.backgroundImage && panel.backgroundImage !== backgroundImage?.src) {
+      console.log("[PanelPreview] Loading new background image:", panel.backgroundImage);
       loadImage(panel.backgroundImage);
     }
   });
 
   function loadImage(src: string) {
+    console.log("[PanelPreview] Starting to load image:", src);
     const img = document.createElement("img");
     img.onload = () => {
+      console.log("[PanelPreview] Image loaded successfully:", src);
       backgroundImage = img;
+    };
+    img.onerror = (error) => {
+      console.error("[PanelPreview] Failed to load image:", src, error);
     };
     img.src = src;
   }
@@ -39,25 +51,34 @@
 
   function getTextPosition(textItem: TextItem) {
     const panelWidth = 320;
-    const paddingX = textItem.paddingX || 0;
+    const paddingX = textItem.paddingX || 20; // Default padding
     const verticalOffset = textItem.verticalOffset || 0;
     const centerY = panel.height / 2 + verticalOffset;
+    const textWidth = 300; // Width of the text area
 
+    let position;
     switch (textItem.textAlign) {
       case "left":
-        return { x: paddingX, y: centerY };
+        position = { x: paddingX, y: centerY };
+        break;
       case "right":
-        return { x: panelWidth - paddingX, y: centerY };
+        // For right alignment, position the right edge of text at panel edge minus padding
+        position = { x: panelWidth - textWidth - paddingX, y: centerY };
+        break;
       case "center":
       default:
-        return { x: panelWidth / 2, y: centerY };
+        // For center alignment, center the text area within the panel
+        position = { x: (panelWidth - textWidth) / 2, y: centerY };
+        break;
     }
+
+    return position;
   }
 </script>
 
 <div class="panel-preview">
   <div class="preview-header">
-    <div class="panel-title">{panel.texts[0]?.text || "Без названия"}</div>
+    <div class="panel-title">{panel.text?.text || "Без названия"}</div>
     <Button variant="primary" size="sm" onclick={handleDownload}>Скачать</Button>
   </div>
   <div class="preview-sections">
@@ -65,23 +86,29 @@
     <div class="preview-section">
       <div class="canvas-container">
         <Stage width={320} height={panel.height}>
+          <!-- Background layer -->
           <Layer>
             {#if backgroundImage}
               <Image image={backgroundImage} width={320} height={panel.height} />
             {/if}
-            {#each panel.texts || [] as textItem (textItem.id)}
-              {@const textPosition = getTextPosition(textItem)}
+          </Layer>
+
+          <!-- Text layer (renders above background) -->
+          <Layer>
+            {#if panel.text}
+              {@const textPosition = getTextPosition(panel.text)}
+
               <Text
-                text={textItem.text}
-                fontSize={textItem.fontSize}
-                fill={textItem.color}
-                fontFamily={textItem.fontFamily}
+                text={panel.text.text}
+                fontSize={panel.text.fontSize || 24}
+                fill={panel.text.color || "#ffffff"}
+                fontFamily={panel.text.fontFamily || "Arial"}
                 x={textPosition.x}
                 y={textPosition.y}
-                align={textItem.textAlign}
-                width={320 - textItem.paddingX * 2}
+                align={panel.text.textAlign || "center"}
+                width={300}
               />
-            {/each}
+            {/if}
           </Layer>
         </Stage>
       </div>

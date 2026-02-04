@@ -14,7 +14,7 @@ export interface TextItem {
 export interface Panel {
   id: string;
   backgroundImage: string;
-  texts: TextItem[];
+  text: TextItem;
   height: number;
   createdAt: Date;
   updatedAt: Date;

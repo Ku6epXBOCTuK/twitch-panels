@@ -4,11 +4,24 @@ import { type Panel, type TextItem } from "../lib/types/panel";
 
 export const panelStore: Writable<Panel | undefined> = writable(undefined);
 
+// Panel creation should go through panelService.updatePanelsFromTexts()
+// These functions are kept for backward compatibility but should be avoided
 export const createEmptyPanel = (height: number = 100): Panel => {
+  const defaultText: TextItem = {
+    id: uuidv4(),
+    text: "",
+    fontSize: 18,
+    fontFamily: "Arial",
+    color: "#ffffff",
+    textAlign: "center",
+    paddingX: 10,
+    verticalOffset: 0,
+  };
+
   return {
     id: uuidv4(),
     backgroundImage: "",
-    texts: [],
+    text: defaultText,
     height,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -23,32 +36,16 @@ export const updatePanel = (panel: Panel, updates: Partial<Panel>): Panel => {
   };
 };
 
-export const addTextToPanel = (panel: Panel, text: string): Panel => {
-  const newText: TextItem = {
-    id: uuidv4(),
-    text,
-    fontSize: 18,
-    fontFamily: "Arial",
-    color: "#ffffff",
-    textAlign: "center",
-    paddingX: 10,
-    verticalOffset: 0,
-  };
-
+export const updatePanelText = (panel: Panel, text: string): Panel => {
   return updatePanel(panel, {
-    texts: [...panel.texts, newText],
+    text: { ...panel.text, text },
   });
 };
 
-export const updateTextInPanel = (panel: Panel, textId: string, updates: Partial<Panel["texts"][0]>): Panel => {
-  const updatedTexts = panel.texts.map((text) => (text.id === textId ? { ...text, ...updates } : text));
-
-  return updatePanel(panel, { texts: updatedTexts });
-};
-
-export const removeTextFromPanel = (panel: Panel, textId: string): Panel => {
-  const updatedTexts = panel.texts.filter((text) => text.id !== textId);
-  return updatePanel(panel, { texts: updatedTexts });
+export const updateTextProperties = (panel: Panel, updates: Partial<TextItem>): Panel => {
+  return updatePanel(panel, {
+    text: { ...panel.text, ...updates },
+  });
 };
 
 export const createPanelFromText = (backgroundImage: string, text: string, height: number = 100): Panel => {
@@ -66,14 +63,9 @@ export const createPanelFromText = (backgroundImage: string, text: string, heigh
   return {
     id: uuidv4(),
     backgroundImage,
-    texts: [newText],
+    text: newText,
     height,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
-};
-
-export const updatePanelText = (panel: Panel, text: string): Panel => {
-  const updatedTexts = panel.texts.map((t) => ({ ...t, text }));
-  return updatePanel(panel, { texts: updatedTexts });
 };
