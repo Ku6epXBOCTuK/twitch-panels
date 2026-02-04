@@ -50,7 +50,14 @@ export class PanelStorage {
 
       const panels: Panel[] = JSON.parse(data);
 
-      return panels.filter((panel) => this.validatePanel(panel));
+      // Convert date strings back to Date objects and validate
+      return panels
+        .map((panel) => ({
+          ...panel,
+          createdAt: new Date(panel.createdAt),
+          updatedAt: new Date(panel.updatedAt),
+        }))
+        .filter((panel) => this.validatePanel(panel));
     } catch (error) {
       logError(error, "Failed to load panels");
       return [];
@@ -107,7 +114,9 @@ export class PanelStorage {
       typeof panel === "object" &&
       typeof panel.id === "string" &&
       typeof panel.backgroundImage === "string" &&
-      Array.isArray(panel.texts) &&
+      typeof panel.text === "object" &&
+      typeof panel.text?.id === "string" &&
+      typeof panel.text?.text === "string" &&
       typeof panel.height === "number" &&
       panel.height > 0 &&
       panel.height <= PANEL_SETTINGS.PANEL_HEIGHT_MAX &&
