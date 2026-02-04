@@ -1,27 +1,19 @@
 <script lang="ts">
   import TextManager from "./TextManager.svelte";
 
-  let {
-    texts,
-    onTextAdd,
-    onTextUpdate,
-    onTextDelete
-  }: {
+  interface Props {
     texts: Array<{ id: string; text: string }>;
     onTextAdd: (text: string) => void;
     onTextUpdate: (id: string, text: string) => void;
     onTextDelete: (id: string) => void;
-  } = $props();
+  }
+
+  let { texts, onTextAdd, onTextUpdate, onTextDelete }: Props = $props();
 </script>
 
 <div class="text-section">
   <h2>Добавьте тексты для панелей</h2>
-  <TextManager
-    onTextAdd={onTextAdd}
-    onTextUpdate={onTextUpdate}
-    onTextDelete={onTextDelete}
-    texts={texts}
-  />
+  <TextManager {onTextAdd} {onTextUpdate} {onTextDelete} {texts} />
 </div>
 
 <style>

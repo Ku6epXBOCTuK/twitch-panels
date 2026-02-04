@@ -2,6 +2,16 @@
   type IconButtonVariant = "primary" | "secondary" | "danger";
   type IconButtonSize = "sm" | "md" | "lg";
 
+  interface Props {
+    variant?: IconButtonVariant;
+    size?: IconButtonSize;
+    disabled?: boolean;
+    ariaLabel?: string;
+    class?: string;
+    children?: any;
+    [key: string]: any;
+  }
+
   let {
     variant = "secondary",
     size = "md",
@@ -10,15 +20,7 @@
     class: className = "",
     children,
     ...restProps
-  }: {
-    variant?: IconButtonVariant;
-    size?: IconButtonSize;
-    disabled?: boolean;
-    ariaLabel?: string;
-    class?: string;
-    children?: any;
-    [key: string]: any;
-  } = $props();
+  }: Props = $props();
 </script>
 
 <button

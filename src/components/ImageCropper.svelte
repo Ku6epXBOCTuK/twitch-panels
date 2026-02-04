@@ -6,15 +6,13 @@
   import { uiStore, setLoading } from "../stores/uiStore";
   import { Button } from "../lib/components/ui";
 
-  let {
-    imageSrc,
-    onCropComplete,
-    onCancel,
-  }: {
+  interface Props {
     imageSrc: string;
     onCropComplete: (croppedImage: string) => void;
     onCancel: () => void;
-  } = $props();
+  }
+
+  let { imageSrc, onCropComplete, onCancel }: Props = $props();
 
   let imageElement: HTMLImageElement;
   let cropper: CropperJS | null = null;
@@ -109,9 +107,7 @@
 
   <div class="cropper-actions">
     <Button variant="secondary" onclick={handleCancel} disabled={isProcessing}>Отмена</Button>
-    <Button variant="primary" onclick={handleCrop} disabled={isProcessing} loading={isProcessing}>
-      Применить
-    </Button>
+    <Button variant="primary" onclick={handleCrop} disabled={isProcessing} loading={isProcessing}>Применить</Button>
   </div>
 
   <div class="cropper-info">
@@ -202,11 +198,7 @@
     width: 100%;
   }
 
-  :global(.cropper-wrap-box,
-  .cropper-canvas,
-  .cropper-drag-box,
-  .cropper-crop-box,
-  .cropper-modal) {
+  :global(.cropper-wrap-box, .cropper-canvas, .cropper-drag-box, .cropper-crop-box, .cropper-modal) {
     bottom: 0;
     left: 0;
     position: absolute;
@@ -214,8 +206,7 @@
     top: 0;
   }
 
-  :global(.cropper-wrap-box,
-  .cropper-canvas) {
+  :global(.cropper-wrap-box, .cropper-canvas) {
     overflow: hidden;
   }
 

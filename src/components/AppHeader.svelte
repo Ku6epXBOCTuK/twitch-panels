@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Button } from "../lib/components/ui";
 
-  let {
-    onUploadNewImage
-  }: {
+  interface Props {
     onUploadNewImage?: () => void;
-  } = $props();
+  }
+
+  let { onUploadNewImage }: Props = $props();
 </script>
 
 <div class="app-header">

@@ -1,4 +1,3 @@
-
 <script lang="ts">
   import { onMount } from "svelte";
   import { panelStore } from "../stores/panelStore";
@@ -6,10 +5,11 @@
   import type { Panel } from "../lib/types/panel";
   import { IconButton } from "../lib/components/ui";
 
-  let { onPanelSelect, onPanelDelete }: {
+  interface Props {
     onPanelSelect: (panel: Panel) => void;
     onPanelDelete: (panelId: string) => void;
-  } = $props();
+  }
+  let { onPanelSelect, onPanelDelete }: Props = $props();
 
   let panels = $state<Panel[]>([]);
   let selectedPanelId = $state<string | null>(null);
@@ -76,9 +76,7 @@
 <div class="panel-list">
   <div class="panel-list-header">
     <h2>Сохраненные панели</h2>
-    <IconButton variant="secondary" onclick={loadPanels} ariaLabel="Обновить список">
-      ↻
-    </IconButton>
+    <IconButton variant="secondary" onclick={loadPanels} ariaLabel="Обновить список">↻</IconButton>
   </div>
 
   {#if errorMessage}
@@ -102,11 +100,7 @@
         >
           <div class="panel-preview">
             {#if panel.backgroundImage}
-              <img
-                src={panel.backgroundImage}
-                alt="Panel preview"
-                class="panel-image"
-              />
+              <img src={panel.backgroundImage} alt="Panel preview" class="panel-image" />
             {:else}
               <div class="no-image">Нет изображения</div>
             {/if}
@@ -121,7 +115,10 @@
             <div class="panel-actions">
               <IconButton
                 variant="danger"
-                onclick={(e) => { e.stopPropagation(); handlePanelDelete(panel.id); }}
+                onclick={(e) => {
+                  e.stopPropagation();
+                  handlePanelDelete(panel.id);
+                }}
                 ariaLabel="Удалить панель"
               >
                 🗑️

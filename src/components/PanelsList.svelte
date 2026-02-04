@@ -3,15 +3,12 @@
   import PanelPreview from "./PanelPreview.svelte";
   import { Button } from "../lib/components/ui";
 
-  let {
-    panels,
-    onDownload,
-    onDownloadAll
-  }: {
+  interface Props {
     panels: Panel[];
     onDownload: (panel: Panel) => void;
     onDownloadAll: () => void;
-  } = $props();
+  }
+  let { panels, onDownload, onDownloadAll }: Props = $props();
 </script>
 
 {#if panels.length > 0}
@@ -23,10 +20,7 @@
     <div class="panels-list">
       {#each panels as panel (panel.id)}
         <div class="panel-item">
-          <PanelPreview
-            panel={panel}
-            onDownload={() => onDownload(panel)}
-          />
+          <PanelPreview {panel} onDownload={() => onDownload(panel)} />
         </div>
       {/each}
     </div>

@@ -1,13 +1,14 @@
-
 <script lang="ts">
   import { Button } from "../lib/components/ui";
 
-  let { onTextAdd, onTextUpdate, onTextDelete, texts }: {
+  interface Props {
     onTextAdd: (text: string) => void;
     onTextUpdate: (id: string, text: string) => void;
     onTextDelete: (id: string) => void;
     texts: Array<{ id: string; text: string }>;
-  } = $props();
+  }
+
+  let { onTextAdd, onTextUpdate, onTextDelete, texts }: Props = $props();
 
   let newText = $state("");
   let errorMessage = $state<string | null>(null);
@@ -107,12 +108,7 @@
               class="text-edit-input"
               maxlength="100"
             />
-            <Button
-              variant="danger"
-              size="sm"
-              onclick={() => handleDeleteText(textItem.id)}
-              aria-label="Удалить текст"
-            >
+            <Button variant="danger" size="sm" onclick={() => handleDeleteText(textItem.id)} aria-label="Удалить текст">
               ×
             </Button>
           </div>
@@ -125,7 +121,7 @@
   <div class="common-settings-section">
     <h3>Общие настройки текста</h3>
     <p class="settings-note">Настройки применятся ко всем создаваемым панелям</p>
-    
+
     <div class="settings-grid">
       <div class="control-group">
         <label>
@@ -180,7 +176,7 @@
             <button
               class="align-btn {commonTextSettings.textAlign === 'left' ? 'active' : ''}"
               onclick={() => {
-                commonTextSettings.textAlign = 'left';
+                commonTextSettings.textAlign = "left";
               }}
               aria-label="Выровнять по левому краю"
             >
@@ -189,7 +185,7 @@
             <button
               class="align-btn {commonTextSettings.textAlign === 'center' ? 'active' : ''}"
               onclick={() => {
-                commonTextSettings.textAlign = 'center';
+                commonTextSettings.textAlign = "center";
               }}
               aria-label="Выровнять по центру"
             >
@@ -198,7 +194,7 @@
             <button
               class="align-btn {commonTextSettings.textAlign === 'right' ? 'active' : ''}"
               onclick={() => {
-                commonTextSettings.textAlign = 'right';
+                commonTextSettings.textAlign = "right";
               }}
               aria-label="Выровнять по правому краю"
             >
@@ -238,12 +234,13 @@
               commonTextSettings.verticalOffset = parseInt(e.target.value);
             }}
           />
-          <span class="value-display">{commonTextSettings.verticalOffset > 0 ? '+' : ''}{commonTextSettings.verticalOffset}px</span>
+          <span class="value-display"
+            >{commonTextSettings.verticalOffset > 0 ? "+" : ""}{commonTextSettings.verticalOffset}px</span
+          >
         </label>
       </div>
     </div>
   </div>
-
 </div>
 
 <style>

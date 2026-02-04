@@ -1,13 +1,12 @@
 <script lang="ts">
   import { Button } from "../lib/components/ui";
 
-  let {
-    backgroundImage,
-    onUploadNewImage
-  }: {
+  interface Props {
     backgroundImage?: string | null;
     onUploadNewImage: () => void;
-  } = $props();
+  }
+
+  let { backgroundImage, onUploadNewImage }: Props = $props();
 </script>
 
 {#if backgroundImage}

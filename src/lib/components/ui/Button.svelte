@@ -3,6 +3,18 @@
   type ButtonSize = "sm" | "md" | "lg";
   type ButtonType = "button" | "submit" | "reset";
 
+  interface Props {
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    disabled?: boolean;
+    type?: ButtonType;
+    fullWidth?: boolean;
+    loading?: boolean;
+    class?: string;
+    children?: any;
+    [key: string]: any;
+  }
+
   let {
     variant = "primary",
     size = "md",
@@ -13,17 +25,7 @@
     class: className = "",
     children,
     ...restProps
-  }: {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
-    disabled?: boolean;
-    type?: ButtonType;
-    fullWidth?: boolean;
-    loading?: boolean;
-    class?: string;
-    children?: any;
-    [key: string]: any;
-  } = $props();
+  }: Props = $props();
 </script>
 
 <button

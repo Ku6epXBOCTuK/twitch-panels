@@ -9,7 +9,11 @@
 
   let imageService = new ImageService();
 
-  let { onImageSelect }: { onImageSelect: (image: string) => void } = $props();
+  interface Props {
+    onImageSelect: (image: string) => void;
+  }
+
+  let { onImageSelect }: Props = $props();
 
   let dropZone = $state<HTMLElement | null>(null);
   let fileInput = $state<HTMLInputElement | null>(null);
@@ -167,7 +171,7 @@
       tabindex="0"
       onclick={triggerFileInput}
       onkeydown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           triggerFileInput();
         }
@@ -184,7 +188,13 @@
         <p>Перетащите файл сюда, нажмите для выбора, или вставьте через Ctrl+V</p>
 
         <div class="upload-methods">
-          <Button variant="primary" onclick={(e) => { e.stopPropagation(); triggerFileInput(); }}>Выбрать файл</Button>
+          <Button
+            variant="primary"
+            onclick={(e) => {
+              e.stopPropagation();
+              triggerFileInput();
+            }}>Выбрать файл</Button
+          >
 
           <Button variant="secondary" onclick={() => (showUrlInput = !showUrlInput)}>
             {showUrlInput ? "Скрыть" : "По URL"}
@@ -200,7 +210,9 @@
               required
               class="url-input"
             />
-            <Button type="submit" variant="primary" disabled={$uiStore.isLoading} loading={$uiStore.isLoading}>Загрузить</Button>
+            <Button type="submit" variant="primary" disabled={$uiStore.isLoading} loading={$uiStore.isLoading}
+              >Загрузить</Button
+            >
           </form>
         {/if}
 

@@ -6,13 +6,12 @@
   import { Stage, Layer, Image, Text } from "svelte-konva";
   import { Button } from "../lib/components/ui";
 
-  let {
-    panel,
-    onDownload,
-  }: {
+  interface Props {
     panel: Panel;
     onDownload?: () => void;
-  } = $props();
+  }
+
+  let { panel, onDownload }: Props = $props();
 
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);
 
@@ -63,33 +62,33 @@
     <div class="panel-title">{panel.texts[0]?.text || "Без названия"}</div>
     <Button variant="primary" size="sm" onclick={onDownload}>Скачать</Button>
   </div>
-    <div class="preview-sections">
-      <!-- Превью с текстом -->
-      <div class="preview-section">
-        <div class="canvas-container">
-          <Stage width={320} height={panel.height}>
-            <Layer>
-              {#if backgroundImage}
-                <Image image={backgroundImage} width={320} height={panel.height} />
-              {/if}
-              {#each panel.texts || [] as textItem (textItem.id)}
-                {@const textPosition = getTextPosition(textItem)}
-                <Text
-                  text={textItem.text}
-                  fontSize={textItem.fontSize}
-                  fill={textItem.color}
-                  fontFamily={textItem.fontFamily}
-                  x={textPosition.x}
-                  y={textPosition.y}
-                  align={textItem.textAlign}
-                  width={320 - textItem.paddingX * 2}
-                />
-              {/each}
-            </Layer>
-          </Stage>
-        </div>
+  <div class="preview-sections">
+    <!-- Превью с текстом -->
+    <div class="preview-section">
+      <div class="canvas-container">
+        <Stage width={320} height={panel.height}>
+          <Layer>
+            {#if backgroundImage}
+              <Image image={backgroundImage} width={320} height={panel.height} />
+            {/if}
+            {#each panel.texts || [] as textItem (textItem.id)}
+              {@const textPosition = getTextPosition(textItem)}
+              <Text
+                text={textItem.text}
+                fontSize={textItem.fontSize}
+                fill={textItem.color}
+                fontFamily={textItem.fontFamily}
+                x={textPosition.x}
+                y={textPosition.y}
+                align={textItem.textAlign}
+                width={320 - textItem.paddingX * 2}
+              />
+            {/each}
+          </Layer>
+        </Stage>
       </div>
     </div>
+  </div>
 </div>
 
 <style>

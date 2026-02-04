@@ -3,13 +3,12 @@
   import { panelStore } from "../stores/panelStore";
   import { Stage, Layer, Image, Text } from "svelte-konva";
 
-  let {
-    textItem,
-    height,
-  }: {
+  interface Props {
     textItem: TextItem;
     height: number;
-  } = $props();
+  }
+
+  let { textItem, height }: Props = $props();
 
   let bgImage: HTMLImageElement | undefined = $state(undefined);
   let currentPanel = $state($panelStore);

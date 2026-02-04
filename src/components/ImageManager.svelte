@@ -2,23 +2,19 @@
   import ImageUpload from "./ImageUpload.svelte";
   import ImageCropper from "./ImageCropper.svelte";
 
-  let {
-    currentStep,
-    uploadedImage,
-    onImageUpload,
-    onCropComplete,
-    onCropCancel
-  }: {
+  interface Props {
     currentStep: string;
     uploadedImage: string | null;
     onImageUpload: (image: string) => void;
     onCropComplete: (croppedImage: string) => void;
     onCropCancel: () => void;
-  } = $props();
+  }
+
+  let { currentStep, uploadedImage, onImageUpload, onCropComplete, onCropCancel }: Props = $props();
 </script>
 
 {#if currentStep === "upload"}
   <ImageUpload onImageSelect={onImageUpload} />
 {:else if currentStep === "crop" && uploadedImage}
-  <ImageCropper imageSrc={uploadedImage} onCropComplete={onCropComplete} onCancel={onCropCancel} />
+  <ImageCropper imageSrc={uploadedImage} {onCropComplete} onCancel={onCropCancel} />
 {/if}
