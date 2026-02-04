@@ -154,7 +154,10 @@
     <div class="sidebar">
       {#if $uiStore.currentStep === "text" && backgroundImage}
         <div class="background-preview">
-          <h3>Фоновое изображение</h3>
+          <div class="background-header">
+            <h3>Фоновое изображение</h3>
+            <Button variant="secondary" size="sm" onclick={handleUploadNewImage}>Загрузить</Button>
+          </div>
           <img src={backgroundImage} alt="Фон" />
         </div>
       {/if}
@@ -248,6 +251,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
+  .background-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   .background-preview h3 {
     margin: 0;
     color: #333;
@@ -257,6 +267,8 @@
 
   .background-preview img {
     width: 100%;
+    max-width: 320px;
+    height: auto;
     border-radius: 4px;
   }
 

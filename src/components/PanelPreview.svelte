@@ -69,6 +69,9 @@
         <div class="canvas-container">
           <Stage width={320} height={panel.height}>
             <Layer>
+              {#if backgroundImage}
+                <Image image={backgroundImage} width={320} height={panel.height} />
+              {/if}
               {#each panel.texts || [] as textItem (textItem.id)}
                 {@const textPosition = getTextPosition(textItem)}
                 <Text
