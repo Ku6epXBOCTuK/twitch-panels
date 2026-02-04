@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { uiStore } from "../stores/uiStore";
-  import ImageManager from "./ImageManager.svelte";
-  import TextSection from "./TextSection.svelte";
+  import { uiStore } from "../../stores/uiStore";
+  import ImageManager from "../image/ImageManager.svelte";
+  import TextSection from "../text/TextSection.svelte";
 
   interface Props {
     uploadedImage: string | undefined;

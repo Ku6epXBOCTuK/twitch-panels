@@ -4,9 +4,9 @@
   import { imageService } from "../services/imageService";
   import { panelService } from "../services/panelService";
   import { exportService } from "../services/exportService";
-  import type { Panel } from "../lib/types/panel";
+  import type { Panel } from "$lib/types/panel";
 
-  import AppContainer from "../components/AppContainer.svelte";
+  import AppContainer from "../components/layout/AppContainer.svelte";
 
   let uploadedImage = $state<string | undefined>(undefined);
   let panels = $state<Panel[]>([]);

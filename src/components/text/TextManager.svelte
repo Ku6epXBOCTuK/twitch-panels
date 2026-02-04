@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from "../lib/components/ui";
+  import { Button } from "$lib/components/ui";
 
   interface Props {
     onTextAdd: (text: string) => void;

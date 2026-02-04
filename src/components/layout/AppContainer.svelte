@@ -1,6 +1,6 @@
 <script lang="ts">
   import AppHeader from "./AppHeader.svelte";
-  import ErrorMessage from "./ErrorMessage.svelte";
+  import ErrorMessage from "../feedback/ErrorMessage.svelte";
   import AppContent from "./AppContent.svelte";
 
   interface Props {

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { TextItem } from "../lib/types/panel";
-  import { panelStore } from "../stores/panelStore";
+  import type { TextItem } from "$lib/types/panel";
+  import { panelStore } from "../../stores/panelStore";
   import { Stage, Layer, Image, Text } from "svelte-konva";
 
   interface Props {

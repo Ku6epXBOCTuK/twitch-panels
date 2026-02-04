@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { uiStore, setCurrentStep } from "../stores/uiStore";
-  import type { Panel } from "../lib/types/panel";
+  import { uiStore, setCurrentStep } from "../../stores/uiStore";
+  import type { Panel } from "$lib/types/panel";
 
   type TextItem = Panel["texts"][0];
   import { Stage, Layer, Image, Text } from "svelte-konva";
-  import { Button } from "../lib/components/ui";
+  import { Button } from "$lib/components/ui";
 
   interface Props {
     panel: Panel;
