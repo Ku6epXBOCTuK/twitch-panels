@@ -152,6 +152,12 @@
     </div>
 
     <div class="sidebar">
+      {#if $uiStore.currentStep === "text" && backgroundImage}
+        <div class="background-preview">
+          <h3>Фоновое изображение</h3>
+          <img src={backgroundImage} alt="Фон" />
+        </div>
+      {/if}
       {#if $uiStore.currentStep === "text" && panels.length > 0}
         <div class="panels-container">
           <div class="panels-header">
@@ -230,6 +236,28 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+  }
+
+  .background-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .background-preview h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .background-preview img {
+    width: 100%;
+    border-radius: 4px;
   }
 
   .panels-container {

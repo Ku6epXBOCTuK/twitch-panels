@@ -64,29 +64,11 @@
     <Button variant="primary" size="sm" onclick={onDownload}>Скачать</Button>
   </div>
     <div class="preview-sections">
-      <!-- Превью чистой картинки -->
-      <div class="preview-section">
-        <h3>Фон</h3>
-        <div class="canvas-container">
-          <Stage width={320} height={panel.height}>
-            <Layer>
-              {#if backgroundImage}
-                <Image image={backgroundImage} width={320} height={panel.height} />
-              {/if}
-            </Layer>
-          </Stage>
-        </div>
-      </div>
-
       <!-- Превью с текстом -->
       <div class="preview-section">
-        <h3>Финальный результат</h3>
         <div class="canvas-container">
           <Stage width={320} height={panel.height}>
             <Layer>
-              {#if backgroundImage}
-                <Image image={backgroundImage} width={320} height={panel.height} />
-              {/if}
               {#each panel.texts || [] as textItem (textItem.id)}
                 {@const textPosition = getTextPosition(textItem)}
                 <Text
