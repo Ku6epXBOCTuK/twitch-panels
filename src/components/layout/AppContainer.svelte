@@ -16,7 +16,7 @@
     onTextAdd: (text: string) => void;
     onTextUpdate: (id: string, newText: string) => void;
     onTextDelete: (id: string) => void;
-    onDownload: (panel: any) => Promise<void>;
+    onDownload: (panel: any, konvaStage: any) => Promise<void>;
     onDownloadAll: () => Promise<void>;
   }
 

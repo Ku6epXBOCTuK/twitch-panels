@@ -2,16 +2,27 @@
   import Button from "$components/ui/Button.svelte";
   import type { Panel, TextItem } from "$lib/types/panel";
   import { setCurrentStep } from "$stores/uiStore";
+  import type { Stage as KonvaStage } from "konva/lib/Stage";
   import { Image, Layer, Stage, Text } from "svelte-konva";
 
   interface Props {
     panel: Panel;
-    onDownload?: () => void;
+    onDownload?: (panel: Panel, konvaStage: KonvaStage) => void;
   }
 
   let { panel, onDownload }: Props = $props();
 
   let backgroundImage: HTMLImageElement | undefined = $state(undefined);
+  let konvaStage: KonvaStage | null = $state(null);
+  let stageComponent: any = $state(null);
+
+  // Get the Konva stage after component mounts
+  $effect(() => {
+    if (stageComponent) {
+      // According to svelte-konva docs, access the node property to get the underlying Konva Stage
+      konvaStage = stageComponent.node;
+    }
+  });
 
   function handleUploadNewImage() {
     setCurrentStep("upload");
@@ -25,7 +36,6 @@
 
   function loadImage(src: string) {
     // Remove verbose logging - image data is too large for console
-    console.log("[PanelPreview] Loading background image");
     const img = document.createElement("img");
     img.onload = () => {
       backgroundImage = img;
@@ -37,8 +47,41 @@
   }
 
   function handleDownload() {
-    if (onDownload) {
-      onDownload();
+    console.log("[PanelPreview] handleDownload called");
+    console.log("[PanelPreview] onDownload exists:", onDownload ? true : false);
+    console.log("[PanelPreview] konvaStage exists:", konvaStage ? true : false);
+    console.log("[PanelPreview] konvaStage value:", konvaStage);
+    console.log("[PanelPreview] stageComponent exists:", stageComponent ? true : false);
+
+    // Try different approaches to get the Konva stage for download
+    let stageToUse = konvaStage;
+
+    if (!stageToUse && stageComponent) {
+      console.log("[PanelPreview] konvaStage is null, trying to get stage from stageComponent");
+
+      // Try different properties that might contain the Konva stage
+      stageToUse = stageComponent.node || stageComponent.stage || stageComponent._stage || stageComponent;
+
+      // Check if this is actually a valid Konva stage
+      if (stageToUse && typeof stageToUse.toBlob === "function") {
+        console.log("[PanelPreview] Found valid Konva stage in stageComponent");
+      } else {
+        console.log("[PanelPreview] stageComponent itself might be the Konva stage");
+        // Maybe stageComponent IS the Konva stage - check if it has toBlob
+        if (typeof stageComponent.toBlob === "function") {
+          stageToUse = stageComponent;
+          console.log("[PanelPreview] ✅ stageComponent IS the Konva stage");
+        } else {
+          console.log("[PanelPreview] ❌ Could not find valid Konva stage");
+        }
+      }
+    }
+
+    if (onDownload && stageToUse) {
+      console.log("[PanelPreview] Calling onDownload with panel and stage");
+      onDownload(panel, stageToUse);
+    } else {
+      console.error("[PanelPreview] Cannot download - onDownload or valid stage is missing");
     }
   }
 
@@ -78,7 +121,7 @@
     <!-- Превью с текстом -->
     <div class="preview-section">
       <div class="canvas-container">
-        <Stage width={320} height={panel.height}>
+        <Stage width={320} height={panel.height} bind:this={stageComponent}>
           <!-- Background layer -->
           <Layer>
             {#if backgroundImage}

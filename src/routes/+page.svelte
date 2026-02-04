@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Panel, TextItem } from "$lib/types/panel";
+  import type { Stage as KonvaStage } from "konva/lib/Stage";
   import { onMount } from "svelte";
   import { exportService } from "../services/exportService";
   import { imageService } from "../services/imageService";
@@ -102,8 +103,8 @@
     panels = panelService.updatePanelsFromTexts(texts, panels, backgroundImage!);
   }
 
-  async function handleDownload(panel: Panel) {
-    await exportService.handleDownload(panel);
+  async function handleDownload(panel: Panel, konvaStage: KonvaStage) {
+    await exportService.handleDownload(panel, konvaStage);
   }
 
   async function handleDownloadAll() {
@@ -112,7 +113,7 @@
 </script>
 
 <AppContainer
-  errorMessage={exportService.getErrorMessage()}
+  errorMessage={exportService.getErrorMessage() || undefined}
   {uploadedImage}
   {texts}
   {backgroundImage}

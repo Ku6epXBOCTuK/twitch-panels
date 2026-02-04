@@ -1,6 +1,5 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
-  import { ImageService } from "$lib/services/imageService";
   import type { ImageCropResult } from "$lib/types/panel";
   import { setLoading } from "$stores/uiStore";
   import CropperJS from "cropperjs";
@@ -18,8 +17,6 @@
   let cropper: CropperJS | undefined = undefined;
   let isProcessing = $state(false);
   let errorMessage = $state<string | undefined>(undefined);
-
-  let imageService = new ImageService();
 
   onMount(() => {
     initializeCropper();

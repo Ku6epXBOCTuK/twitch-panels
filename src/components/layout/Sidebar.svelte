@@ -7,7 +7,7 @@
     backgroundImage: string | undefined;
     panels: any[];
     onUploadNewImage: () => void;
-    onDownload: (panel: any) => Promise<void>;
+    onDownload: (panel: any, konvaStage: any) => Promise<void>;
     onDownloadAll: () => Promise<void>;
   }
 

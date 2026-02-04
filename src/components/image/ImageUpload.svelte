@@ -1,12 +1,10 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
-  import { ImageService } from "$lib/services/imageService";
   import type { ImageUploadResult } from "$lib/types/panel";
   import { handleError } from "$lib/utils/errorHandler";
   import { clearError, setCurrentStep, setLoading, uiStore } from "$stores/uiStore";
   import { onMount } from "svelte";
-
-  let imageService = new ImageService();
+  import { imageService } from "../../services/imageService";
 
   interface Props {
     onImageSelect: (image: string) => void;

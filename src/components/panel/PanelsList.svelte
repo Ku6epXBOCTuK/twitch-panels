@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { Panel } from "$lib/types/panel";
-  import PanelPreview from "./PanelPreview.svelte";
+  import type { Stage as KonvaStage } from "konva/lib/Stage";
   import Button from "../ui/Button.svelte";
+  import PanelPreview from "./PanelPreview.svelte";
 
   interface Props {
     panels: Panel[];
-    onDownload: (panel: Panel) => void;
+    onDownload: (panel: Panel, konvaStage: KonvaStage) => void;
     onDownloadAll: () => void;
   }
   let { panels, onDownload, onDownloadAll }: Props = $props();
@@ -20,7 +21,7 @@
     <div class="panels-list">
       {#each panels as panel (panel.id)}
         <div class="panel-item">
-          <PanelPreview {panel} onDownload={() => onDownload(panel)} />
+          <PanelPreview {panel} onDownload={(panel, konvaStage) => onDownload(panel, konvaStage)} />
         </div>
       {/each}
     </div>
