@@ -4,15 +4,16 @@
 
   interface Props {
     text: string;
+    id: number;
     ondelete: () => void;
   }
 
-  let { text = $bindable(), ondelete }: Props = $props();
+  let { text = $bindable(), id, ondelete }: Props = $props();
 </script>
 
 <div class="text-item">
   <input type="text" bind:value={text} />
-  <Button icon={IconCross} type="danger" on:click={ondelete} />
+  <Button icon={IconCross} type="danger" onclick={() => ondelete(id)} />
 </div>
 
 <style>

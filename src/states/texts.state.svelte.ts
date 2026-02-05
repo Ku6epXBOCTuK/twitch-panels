@@ -24,7 +24,7 @@ function createTextsState(): TextsState {
       nextId++;
     },
     removeText(id: number) {
-      texts.filter((textItem) => textItem.id === id);
+      texts = texts.filter((textItem) => textItem.id !== id);
     },
   };
 }

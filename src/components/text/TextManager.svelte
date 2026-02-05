@@ -10,11 +10,16 @@
   let text: string = $state("");
 
   function addText() {
-    console.log(text);
+    let trimmed = text.trim();
+    if (trimmed.length !== 0) {
+      textsState.addText(trimmed);
+    }
     text = "";
   }
 
-  function deleteText(id: number) {}
+  function deleteText(id: number) {
+    textsState.removeText(id);
+  }
 </script>
 
 <Card title="Тексты панелей">
@@ -24,13 +29,12 @@
   </InputGroup>
   <div class="texts-list">
     {#each textsState.texts as { text, id } (id)}
-      <TextInlineEdit {text} ondelete={() => deleteText(id)} />
+      <TextInlineEdit {id} {text} ondelete={() => deleteText(id)} />
     {/each}
   </div>
 </Card>
 
 <style>
-  /* Texts List */
   .texts-list {
     display: flex;
     flex-direction: column;
