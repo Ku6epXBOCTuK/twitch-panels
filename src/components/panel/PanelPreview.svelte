@@ -65,10 +65,10 @@
 
   function getTextPosition(textItem: TextItem) {
     const panelWidth = PANEL_SETTINGS.PANEL_WIDTH;
-    const paddingX = textItem.paddingX ?? 20;
-    const verticalOffset = textItem.verticalOffset ?? 0;
+    const paddingX = textItem.paddingX;
+    const verticalOffset = textItem.verticalOffset;
     const centerY = panel.height / 2 + verticalOffset;
-    const textWidth = 300;
+    const textWidth = panelWidth - paddingX * 2;
 
     let position;
     switch (textItem.textAlign) {

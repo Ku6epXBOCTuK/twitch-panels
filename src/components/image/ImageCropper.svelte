@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
+  import { PANEL_SETTINGS } from "$lib/constants";
   import type { ImageCropResult } from "$lib/types/panel";
   import { setLoading } from "$stores/uiStore";
   import CropperJS from "cropperjs";
@@ -52,7 +53,7 @@
       }
 
       const canvas = await cropperCanvasElement.$toCanvas({
-        width: 320,
+        width: PANEL_SETTINGS.PANEL_WIDTH,
       });
 
       if (!canvas) {
