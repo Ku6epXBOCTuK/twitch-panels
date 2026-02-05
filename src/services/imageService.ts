@@ -1,3 +1,4 @@
+import { PANEL_SETTINGS } from "../lib/constants";
 import { setCurrentStep } from "../stores/uiStore";
 
 export class ImageService {
@@ -13,7 +14,7 @@ export class ImageService {
   }
 
   async loadDefaultBackground(): Promise<string> {
-    const defaultBackground = "/backgrounds/b1.jpg";
+    const defaultBackground = PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE;
     const response = await fetch(defaultBackground);
     if (!response.ok) throw new Error("Не удалось загрузить фоновое изображение");
     const blob = await response.blob();

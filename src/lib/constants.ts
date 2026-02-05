@@ -13,7 +13,7 @@ export const PANEL_SETTINGS = {
   PANEL_HEIGHT_MAX: 1000,
 
   // Default values
-  DEFAULT_BACKGROUND_IMAGE: "/backgrounds/b1.jpg",
+  DEFAULT_BACKGROUND_IMAGE: "./backgrounds/b1.jpg",
 } as const;
 
 // ===== TYPOGRAPHY =====
