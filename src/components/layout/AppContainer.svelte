@@ -1,7 +1,6 @@
 <script lang="ts">
   import ErrorMessage from "$components/feedback/ErrorMessage.svelte";
   import AppContent from "$components/layout/AppContent.svelte";
-  import AppHeader from "$components/layout/AppHeader.svelte";
 
   interface Props {
     errorMessage: string | undefined;
@@ -39,8 +38,6 @@
 </script>
 
 <div class="app-container">
-  <AppHeader />
-
   <ErrorMessage {errorMessage} />
 
   <AppContent
