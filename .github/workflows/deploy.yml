@@ -2,7 +2,7 @@ name: Deploy SvelteKit
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
     paths:
       - "src/**"
       - "package.json"
