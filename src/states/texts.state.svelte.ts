@@ -1,23 +1,30 @@
-export interface TextsState {
-  texts: string[];
-  addText(text: string): void;
-  removeText(text: string): void;
+export interface TextItem {
+  text: string;
+  id: number;
 }
 
-const defaultTexts: string[] = ["About me", "Links", "Projects"];
+export interface TextsState {
+  texts: Array<TextItem>;
+  addText(text: string): void;
+  removeText(id: number): void;
+}
+
+const defaultTexts: Array<TextItem> = ["About me", "Links", "Projects"].map((text, idx) => ({ text, id: idx }));
 
 function createTextsState(): TextsState {
-  let texts: string[] = $state(defaultTexts);
+  let texts: Array<TextItem> = $state(defaultTexts);
+  let nextId = $state(defaultTexts.length);
 
   return {
     get texts() {
       return texts;
     },
     addText(text: string) {
-      texts = [...texts, text];
+      texts.push({ text, id: nextId });
+      nextId++;
     },
-    removeText(text: string) {
-      texts = texts.filter((t) => t !== text);
+    removeText(id: number) {
+      texts.filter((textItem) => textItem.id === id);
     },
   };
 }

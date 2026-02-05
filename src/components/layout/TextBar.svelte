@@ -4,7 +4,7 @@
 </script>
 
 <div class="text-bar">
-  <Card title="Тексты панелей"><TextManager /></Card>
+  <TextManager />
 
   <Card title="Настройки текста">Настройки текста</Card>
 </div>
