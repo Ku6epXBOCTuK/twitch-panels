@@ -1,17 +1,14 @@
 <script lang="ts">
   import IconMoon from "$components/ui/Icons/IconMoon.svelte";
   import IconSun from "$components/ui/Icons/IconSun.svelte";
+  import { themeState } from "$states/theme.svelte";
 
   interface Props {}
 
   let {}: Props = $props();
 
   function toggleTheme() {
-    // TODO: need refactoring
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    const newTheme = currentTheme === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
+    themeState.toggle();
   }
 </script>
 

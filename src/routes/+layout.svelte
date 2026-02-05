@@ -1,10 +1,17 @@
 <script lang="ts">
   import AppHeader from "$components/layout/AppHeader.svelte";
+  import { themeState } from "$states/theme.svelte";
   import type { Snippet } from "svelte";
 
   interface Props {
     children: Snippet;
   }
+
+  $effect(() => {
+    const newTheme = themeState.theme;
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  });
 
   let { children }: Props = $props();
 </script>

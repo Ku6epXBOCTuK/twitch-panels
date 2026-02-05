@@ -1,17 +1,18 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
   import IconCross from "$components/ui/Icons/IconCross.svelte";
+  import { fly } from "svelte/transition";
 
   interface Props {
     text: string;
     id: number;
-    ondelete: () => void;
+    ondelete: (id: number) => void;
   }
 
   let { text = $bindable(), id, ondelete }: Props = $props();
 </script>
 
-<div class="text-item">
+<div class="text-item" transition:fly={{ x: 600, duration: 300 }}>
   <input type="text" bind:value={text} />
   <Button icon={IconCross} type="danger" onclick={() => ondelete(id)} />
 </div>

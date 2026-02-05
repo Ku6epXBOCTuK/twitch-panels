@@ -3,15 +3,9 @@ export interface TextItem {
   id: number;
 }
 
-export interface TextsState {
-  texts: Array<TextItem>;
-  addText(text: string): void;
-  removeText(id: number): void;
-}
-
 const defaultTexts: Array<TextItem> = ["About me", "Links", "Projects"].map((text, idx) => ({ text, id: idx }));
 
-function createTextsState(): TextsState {
+function createTextsState() {
   let texts: Array<TextItem> = $state(defaultTexts);
   let nextId = $state(defaultTexts.length);
 

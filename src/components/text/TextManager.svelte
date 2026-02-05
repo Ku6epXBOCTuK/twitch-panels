@@ -3,7 +3,7 @@
   import InputGroup from "$components/layout/InputGroup.svelte";
   import Button from "$components/ui/Button.svelte";
   import IconPlus from "$components/ui/Icons/IconPlus.svelte";
-  import { textsState } from "$states/texts.state.svelte";
+  import { textsState } from "$states/texts.svelte";
   import TextInlineEdit from "./TextInlineEdit.svelte";
   import TextInput from "./TextInput.svelte";
 

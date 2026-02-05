@@ -39,6 +39,7 @@
     padding: 16px;
     margin-bottom: 16px;
     transition: var(--transition);
+    overflow: hidden;
   }
 
   .card-title {
