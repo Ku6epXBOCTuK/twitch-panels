@@ -24,7 +24,7 @@
 <style>
   :root {
     --bg-primary: #ffffff;
-    --bg-secondary: #fafafa;
+    --bg-secondary: #dddddd;
     --bg-card: #ffffff;
     --bg-hover: #f5f5f5;
 
@@ -50,7 +50,7 @@
 
   :global([data-theme="dark"]) {
     --bg-primary: #0a0a0a;
-    --bg-secondary: #1a1a1a;
+    --bg-secondary: #333333;
     --bg-card: #1a1a1a;
     --bg-hover: #2a2a2a;
 

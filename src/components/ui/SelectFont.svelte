@@ -1,4 +1,12 @@
-<select class="select-input">
+<script lang="ts">
+  interface Props {
+    value: string;
+  }
+
+  let { value = $bindable() }: Props = $props();
+</script>
+
+<select class="select-input" bind:value>
   <option value="Arial">Arial</option>
   <option value="Verdana">Verdana</option>
   <option value="Georgia">Georgia</option>

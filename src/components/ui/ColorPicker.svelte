@@ -1,5 +1,15 @@
-<input type="color" value="#ffffff" class="color-input" />
-<span class="color-value">#ffffff</span>
+<script lang="ts">
+  import type { HexColor } from "$lib/types/text";
+
+  interface Props {
+    value: HexColor;
+  }
+
+  let { value = $bindable() }: Props = $props();
+</script>
+
+<input type="color" bind:value class="color-input" />
+<span class="color-value">{value}</span>
 
 <style>
   .color-input {
@@ -10,6 +20,8 @@
     cursor: pointer;
     transition: var(--transition);
     background: var(--bg-primary);
+    padding: 0px 8px;
+    flex: 1;
   }
 
   .color-input:hover {

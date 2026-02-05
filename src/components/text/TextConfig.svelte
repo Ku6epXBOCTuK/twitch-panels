@@ -6,27 +6,28 @@
   import ColorPicker from "$components/ui/ColorPicker.svelte";
   import RangeSlider from "$components/ui/RangeSlider.svelte";
   import SelectFont from "$components/ui/SelectFont.svelte";
+  import { textConfigState } from "$states/textConfig.svelte";
 </script>
 
 <Card title="Настройки текста">
   <SettingsGrid>
     <SettingsRow label="Размер">
-      <RangeSlider />
+      <RangeSlider bind:value={textConfigState.fontSize} min={10} max={100} step={1} />
     </SettingsRow>
     <SettingsRow label="Шрифт">
-      <SelectFont />
+      <SelectFont bind:value={textConfigState.fontFamily} />
     </SettingsRow>
     <SettingsRow label="Цвет">
-      <ColorPicker />
+      <ColorPicker bind:value={textConfigState.color} />
     </SettingsRow>
     <SettingsRow label="Выравнивание">
-      <Alignment />
+      <Alignment bind:align={textConfigState.align} />
     </SettingsRow>
     <SettingsRow label="Отступы">
-      <RangeSlider />
+      <RangeSlider bind:value={textConfigState.paddingX} min={0} max={100} step={1} />
     </SettingsRow>
     <SettingsRow label="Смещение">
-      <RangeSlider />
+      <RangeSlider bind:value={textConfigState.offsetY} min={-100} max={100} step={1} />
     </SettingsRow>
   </SettingsGrid>
 </Card>

@@ -1,5 +1,19 @@
-<input type="range" id="fontSize" min="12" max="48" value="18" class="slider" />
-<span class="value-display" id="fontSizeValue">18</span>
+<script lang="ts">
+  import type { ChangeEventHandler } from "svelte/elements";
+
+  interface Props {
+    value: number;
+    min?: number;
+    max?: number;
+    step?: number;
+    onchange?: ChangeEventHandler<HTMLInputElement>;
+  }
+
+  let { value = $bindable(), min = 0, max = 100, step = 1, onchange = () => {} }: Props = $props();
+</script>
+
+<input type="range" {min} {max} {step} bind:value class="slider" {onchange} />
+<span class="value-display">{value}</span>
 
 <style>
   .slider {

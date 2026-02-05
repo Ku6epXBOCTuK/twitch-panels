@@ -1,6 +1,6 @@
 export type Theme = "dark" | "light";
 
-function createThemeState() {
+function createState() {
   let current: Theme = $state("dark");
 
   return {
@@ -13,4 +13,4 @@ function createThemeState() {
   };
 }
 
-export const themeState = createThemeState();
+export const themeState = createState();

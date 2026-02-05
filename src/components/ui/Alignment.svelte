@@ -1,16 +1,23 @@
 <script lang="ts">
+  import type { TextAlign } from "$lib/types/text";
   import IconAlignCenter from "./Icons/IconAlignCenter.svelte";
   import IconAlignLeft from "./Icons/IconAlignLeft.svelte";
   import IconAlignRight from "./Icons/IconAlignRight.svelte";
+
+  interface Props {
+    align: TextAlign;
+  }
+
+  let { align = $bindable("left") }: Props = $props();
 </script>
 
-<button class="align-btn active">
+<button class="align-btn" class:active={align === "left"} onclick={() => (align = "left")}>
   <IconAlignLeft />
 </button>
-<button class="align-btn">
+<button class="align-btn" class:active={align === "center"} onclick={() => (align = "center")}>
   <IconAlignCenter />
 </button>
-<button class="align-btn">
+<button class="align-btn" class:active={align === "right"} onclick={() => (align = "right")}>
   <IconAlignRight />
 </button>
 
