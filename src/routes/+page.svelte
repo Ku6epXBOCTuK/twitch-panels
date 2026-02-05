@@ -7,7 +7,8 @@
   import { panelService } from "../services/panelService";
   import { textSettingsStore } from "../stores/panelStore";
 
-  import AppContainer from "../components/layout/AppContainer.svelte";
+  import PanelBar from "$components/layout/PanelBar.svelte";
+  import TextBar from "$components/layout/TextBar.svelte";
 
   let uploadedImage = $state<string | undefined>(undefined);
   let panels = $state<Panel[]>([]);
@@ -103,7 +104,12 @@
   }
 </script>
 
-<AppContainer
+<div class="main-grid">
+  <TextBar />
+  <PanelBar />
+</div>
+
+<!-- <AppContainer
   errorMessage={exportService.getErrorMessage() || undefined}
   {uploadedImage}
   {texts}
@@ -118,4 +124,18 @@
   onTextDelete={handleDeleteText}
   onDownload={handleDownload}
   onDownloadAll={handleDownloadAll}
-/>
+/> -->
+
+<style>
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 1024px) {
+    .main-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

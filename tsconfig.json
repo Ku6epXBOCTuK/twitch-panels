@@ -12,6 +12,7 @@
     "strict": true,
     "strictNullChecks": true,
     "exactOptionalPropertyTypes": true,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "allowArbitraryExtensions": true
   }
 }

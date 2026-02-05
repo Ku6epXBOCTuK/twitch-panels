@@ -1,0 +1,13 @@
+<script lang="ts">
+  import TextManager from "$components/text/TextManager.svelte";
+  import Card from "./Card.svelte";
+</script>
+
+<div class="text-bar">
+  <Card title="Тексты панелей"><TextManager /></Card>
+
+  <Card title="Настройки текста">Настройки текста</Card>
+</div>
+
+<style>
+</style>
