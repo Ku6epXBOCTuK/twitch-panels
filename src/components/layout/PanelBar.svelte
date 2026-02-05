@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Badge from "$components/ui/Badge.svelte";
   import IconArrowLeft from "$components/ui/Icons/IconArrowLeft.svelte";
   import IconArrowRight from "$components/ui/Icons/IconArrowRight.svelte";
   import Card from "./Card.svelte";
@@ -8,7 +9,7 @@
   <Card title="Фоновое изображение">фоновое изображение</Card>
 
   {#snippet panelTitle()}
-    Панели <span class="badge" id="panelCount">0</span>
+    Панели <Badge text="0" />
   {/snippet}
 
   {#snippet panelControls()}
