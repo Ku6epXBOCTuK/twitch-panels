@@ -7,7 +7,7 @@
     onclick?: MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
     label?: string;
-    type?: "primary" | "secondary" | "danger" | "outline";
+    type?: "primary" | "secondary" | "danger" | "outline" | "mini";
   }
 
   let { icon: Icon, onclick = () => {}, disabled = false, label = "", type = "primary" }: Props = $props();
@@ -19,6 +19,7 @@
   class:btn-secondary={type === "secondary"}
   class:btn-outline={type === "outline"}
   class:btn-danger={type === "danger"}
+  class:btn-mini={type === "mini"}
   {disabled}
   {onclick}
 >
@@ -47,18 +48,18 @@
     height: 16px;
   }
 
-  .btn-primary {
-    background: var(--accent-primary);
-    color: white;
-  }
-
-  .btn-primary:hover:not(:disabled) {
+  .btn:hover:not(:disabled) {
     background: var(--accent-hover);
   }
 
-  .btn-primary:disabled {
+  .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: var(--accent-primary);
+    color: white;
   }
 
   .btn-secondary {
@@ -83,11 +84,6 @@
     color: var(--accent-primary);
   }
 
-  .btn-outline:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
   .btn-danger {
     background: var(--danger);
     color: white;
@@ -106,5 +102,21 @@
 
   .btn-danger:hover {
     background: #dc2626;
+  }
+
+  .btn-mini {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    justify-content: center;
+  }
+
+  .btn-mini:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
   }
 </style>

@@ -58,4 +58,10 @@
     align-items: center;
     margin-bottom: 12px;
   }
+
+  .card-snippet {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 </style>
