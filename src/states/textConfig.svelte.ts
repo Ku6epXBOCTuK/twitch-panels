@@ -1,4 +1,4 @@
-import type { HexColor, TextAlign } from "$lib/types/text";
+import type { HexColor, TextAlign } from "$lib/util-types";
 
 export type TextConfig = {
   fontSize: number;

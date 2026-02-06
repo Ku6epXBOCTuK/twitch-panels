@@ -6,7 +6,7 @@
   let { text }: Props = $props();
 </script>
 
-<span class="badge" id="panelCount">{text}</span>
+<span class="badge">{text}</span>
 
 <style>
   .badge {

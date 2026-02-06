@@ -4,7 +4,7 @@
   import Button from "$components/ui/Button.svelte";
   import IconDownload from "$components/ui/Icons/IconDownload.svelte";
   import IconEmpty from "$components/ui/Icons/IconEmpty.svelte";
-  import type { SlideDirection } from "$lib/types/utils";
+  import type { SlideDirection } from "$lib/util-types";
   import { textsState } from "$states/texts.svelte";
   import Preview from "./Preview.svelte";
   import PreviewControls from "./PreviewControls.svelte";
@@ -14,7 +14,13 @@
 
   $effect(() => {
     $inspect(current, textsState.texts);
-    if (current > textsState.texts.length - 1) current = textsState.texts.length - 1;
+    if (textsState.texts.length === 0) {
+      current = 0;
+    } else {
+      if (current > textsState.texts.length - 1) {
+        current = textsState.texts.length - 1;
+      }
+    }
   });
 </script>
 
@@ -30,9 +36,9 @@
   <div class="panel-viewer">
     <div class="panel-display">
       {#if textsState.texts.length}
-        <!-- {@const text = } -->
         {#key current}
-          <Preview text={textsState.texts[current].text} {direction} />
+          {@const text = textsState?.texts[current]?.text}
+          <Preview {text} {direction} />
         {/key}
       {:else}
         <div class="empty-state">
@@ -64,6 +70,7 @@
     justify-content: center;
     align-items: center;
     min-height: 150px;
+    position: relative;
   }
 
   .panel-actions {
