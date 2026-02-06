@@ -4,13 +4,13 @@
 
   interface Props {
     icon: Component;
-    onclick: MouseEventHandler<HTMLButtonElement>;
+    onclick?: MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
     label?: string;
     type?: "primary" | "secondary" | "danger" | "outline";
   }
 
-  let { icon: Icon, onclick, disabled = false, label = "", type = "primary" }: Props = $props();
+  let { icon: Icon, onclick = () => {}, disabled = false, label = "", type = "primary" }: Props = $props();
 </script>
 
 <button

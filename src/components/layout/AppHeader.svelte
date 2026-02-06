@@ -3,10 +3,6 @@
   import IconSun from "$components/ui/Icons/IconSun.svelte";
   import { themeState } from "$states/theme.svelte";
 
-  interface Props {}
-
-  let {}: Props = $props();
-
   function toggleTheme() {
     themeState.toggle();
   }
