@@ -12,8 +12,8 @@ export function formatError(error: unknown, defaultMessage: string = "Произ
   return `${defaultMessage}: Произошла неизвестная ошибка`;
 }
 
-export function createError(message: string, code: string, recoverable: boolean = true, details?: unknown): AppError {
-  return new AppError(message, code, recoverable);
+export function createError(message: string, code: string, details?: unknown): AppError {
+  return new AppError(message, code, details);
 }
 
 export function logError(error: unknown, context?: string): void {
