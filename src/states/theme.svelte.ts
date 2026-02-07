@@ -7,6 +7,9 @@ function createState() {
     get theme() {
       return current;
     },
+    set theme(value: Theme) {
+      current = value;
+    },
     toggle() {
       current = current === "dark" ? "light" : "dark";
     },

@@ -1,3 +1,5 @@
+import { PANEL_SETTINGS } from "$lib/constants";
+
 export type ImageConfig = {
   image: HTMLImageElement | undefined;
   imageLink: string;
@@ -8,8 +10,8 @@ export type ImageConfig = {
   cropBottom: number;
 };
 
-async function createState() {
-  const defaults: ImageConfig = {
+export class ImageConfigState {
+  #state: ImageConfig = $state({
     image: undefined,
     imageLink: "",
     imageReady: false,
@@ -17,70 +19,96 @@ async function createState() {
     cropTop: 0,
     cropRight: 0,
     cropBottom: 0,
-  };
+  });
 
-  let state: ImageConfig = $state({ ...defaults });
-  let currentAbortController: AbortController | null = null;
+  #currentAbortController: AbortController | null = null;
 
-  function cleanup() {
-    if (currentAbortController) {
-      currentAbortController.abort();
-      currentAbortController = null;
+  get image() {
+    return this.#state.image;
+  }
+  get imageReady() {
+    return this.#state.imageReady;
+  }
+  get imageLink() {
+    return this.#state.imageLink;
+  }
+  get cropLeft() {
+    return this.#state.cropLeft;
+  }
+  get cropTop() {
+    return this.#state.cropTop;
+  }
+  get cropRight() {
+    return this.#state.cropRight;
+  }
+  get cropBottom() {
+    return this.#state.cropBottom;
+  }
+
+  set cropLeft(v) {
+    this.#state.cropLeft = v;
+  }
+  set cropTop(v) {
+    this.#state.cropTop = v;
+  }
+  set cropRight(v) {
+    this.#state.cropRight = v;
+  }
+  set cropBottom(v) {
+    this.#state.cropBottom = v;
+  }
+
+  private cleanup() {
+    if (this.#currentAbortController) {
+      this.#currentAbortController.abort();
+      this.#currentAbortController = null;
     }
 
-    if (state.image) {
-      state.image.onload = null;
-      state.image.onerror = null;
-      state.image.src = "";
-      state.image = undefined;
+    if (this.#state.image) {
+      this.#state.image.onload = null;
+      this.#state.image.onerror = null;
+      this.#state.image.src = "";
+      this.#state.image = undefined;
     }
   }
 
-  async function uploadImageByLink(link: string): Promise<void> {
-    cleanup();
+  async uploadImageByLink(link: string): Promise<void> {
+    this.cleanup();
 
-    state.imageReady = false;
-    state.imageLink = link;
+    this.#state.imageReady = false;
+    this.#state.imageLink = link;
 
-    currentAbortController = new AbortController();
-    const { signal } = currentAbortController;
+    this.#currentAbortController = new AbortController();
+    const { signal } = this.#currentAbortController;
 
     return new Promise((resolve, reject) => {
-      if (signal.aborted) {
-        reject(new DOMException("Aborted", "AbortError"));
-        return;
-      }
-
       const img = new Image();
       img.crossOrigin = "anonymous";
 
-      img.onload = () => {
-        if (signal.aborted) return;
-
+      const onFinished = () => {
         img.onload = null;
         img.onerror = null;
+      };
 
-        state.image = img;
-        state.imageReady = true;
+      img.onload = () => {
+        if (signal.aborted) return;
+        onFinished();
+        this.#state.image = img;
+        this.#state.imageReady = true;
         resolve();
       };
 
-      img.onerror = (error) => {
+      img.onerror = () => {
         if (signal.aborted) return;
-
-        img.onload = null;
-        img.onerror = null;
-        img.src = "";
-
-        state.imageReady = false;
+        onFinished();
+        this.#state.imageReady = false;
         reject(new Error(`Failed to load image: ${link}`));
       };
 
       signal.addEventListener(
         "abort",
         () => {
-          img.onload = null;
-          img.onerror = null;
+          onFinished();
           img.src = "";
           reject(new DOMException("Aborted", "AbortError"));
         },
@@ -91,30 +119,20 @@ async function createState() {
     });
   }
 
-  await uploadImageByLink("./backgrounds/b1.jpg");
+  reset() {
+    this.cleanup();
+    this.#state.imageLink = "";
+    this.#state.imageReady = false;
+    this.#state.cropLeft = 0;
+    this.#state.cropTop = 0;
+    this.#state.cropRight = 0;
+    this.#state.cropBottom = 0;
+  }
 
-  return {
-    get image() {
-      return state.image;
-    },
-    get imageReady() {
-      return state.imageReady;
-    },
-    get imageLink() {
-      return state.imageLink;
-    },
-
-    uploadImageByLink,
-
-    reset() {
-      cleanup();
-      Object.assign(state, defaults);
-    },
-
-    destroy() {
-      cleanup();
-    },
-  };
+  destroy() {
+    this.cleanup();
+  }
 }
 
-export const imageConfigState = await createState();
+export const imageConfigState = new ImageConfigState();
+imageConfigState.uploadImageByLink(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE).catch(() => {});

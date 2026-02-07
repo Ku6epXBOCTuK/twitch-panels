@@ -32,7 +32,7 @@ function createState() {
       return state.fontFamily;
     },
     set fontFamily(fontFamily: string) {
-      state.fontFamily = this.fontFamily;
+      state.fontFamily = fontFamily;
     },
     get color() {
       return state.color;
