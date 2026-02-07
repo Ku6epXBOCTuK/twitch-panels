@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { TextAlign } from "$lib/types/text";
+  import type { TextAlignType } from "$lib/constants";
   import IconAlignCenter from "./Icons/IconAlignCenter.svelte";
   import IconAlignLeft from "./Icons/IconAlignLeft.svelte";
   import IconAlignRight from "./Icons/IconAlignRight.svelte";
 
   interface Props {
-    align: TextAlign;
+    align: TextAlignType;
   }
 
   let { align = $bindable("left") }: Props = $props();

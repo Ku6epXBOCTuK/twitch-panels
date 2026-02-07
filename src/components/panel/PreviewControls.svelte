@@ -2,11 +2,11 @@
   import Button from "$components/ui/Button.svelte";
   import IconArrowLeft from "$components/ui/Icons/IconArrowLeft.svelte";
   import IconArrowRight from "$components/ui/Icons/IconArrowRight.svelte";
-  import type { SlideDirection } from "$lib/util-types";
+  import type { SlideDirectionType } from "$lib/constants";
 
   interface Props {
     current: number;
-    direction: SlideDirection;
+    direction: SlideDirectionType;
     max: number;
   }
 

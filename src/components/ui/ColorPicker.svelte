@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { HexColor } from "$lib/types/text";
+  import type { HexColor } from "$lib/types";
 
   interface Props {
     value: HexColor;

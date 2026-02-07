@@ -4,13 +4,13 @@
   import Button from "$components/ui/Button.svelte";
   import IconDownload from "$components/ui/Icons/IconDownload.svelte";
   import IconEmpty from "$components/ui/Icons/IconEmpty.svelte";
-  import type { SlideDirection } from "$lib/util-types";
+  import type { SlideDirectionType } from "$lib/constants";
   import { textsState } from "$states/texts.svelte";
   import Preview from "./Preview.svelte";
   import PreviewControls from "./PreviewControls.svelte";
 
   let current: number = $state(0);
-  let direction: SlideDirection = $state("next");
+  let direction: SlideDirectionType = $state("next");
 
   $effect(() => {
     $inspect(current, textsState.texts);

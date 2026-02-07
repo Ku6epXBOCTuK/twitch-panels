@@ -1,27 +1,47 @@
 <script lang="ts">
-  import type { SlideDirection } from "$lib/util-types";
-  import { imageConfigState } from "$states/image.svelte";
+  import { PANEL_SETTINGS, type SlideDirectionType } from "$lib/constants";
+  import { imageConfigState } from "$states/imageConfig.svelte";
+  import { textConfigState } from "$states/textConfig.svelte";
   import { Image, Layer, Stage, Text } from "svelte-konva";
   import { fly } from "svelte/transition";
 
   interface Props {
     text: string;
-    direction: SlideDirection;
+    direction: SlideDirectionType;
   }
 
   let { text, direction }: Props = $props();
 
-  let xDirection = $derived(direction == "next" ? 320 : -320);
+  let xDirection = $derived(direction == "next" ? PANEL_SETTINGS.PANEL_WIDTH : -PANEL_SETTINGS.PANEL_WIDTH);
 
   let image: HTMLImageElement | undefined = imageConfigState.image;
+
+  let { align, fontSize, fontFamily, paddingX, offsetY, color } = textConfigState;
+
+  let x = $derived(paddingX);
+  let y = $derived(10 + offsetY);
+  let width = $derived(PANEL_SETTINGS.PANEL_WIDTH - 2 * paddingX);
+  let height = PANEL_SETTINGS.PANEL_HEIGHT_DEFAULT;
 </script>
 
 <div class="konva-wrapper" in:fly={{ x: xDirection, duration: 300 }} out:fly={{ x: -xDirection, duration: 300 }}>
   <Stage width={320} height={100}>
     <Layer>
       <Image {image}></Image>
-      {$inspect(image)}
-      <Text {text} x={10} y={10} fontsize="32" fill="white"></Text>
+      {$inspect(paddingX)}
+      <Text
+        {text}
+        {x}
+        {y}
+        {width}
+        {height}
+        fontSize={textConfigState.fontSize}
+        fill={textConfigState.color}
+        fontFamily={textConfigState.fontFamily}
+        align={textConfigState.align}
+        wrap="none"
+        ellipsis={true}
+      />
     </Layer>
   </Stage>
 </div>

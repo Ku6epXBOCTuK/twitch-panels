@@ -1,10 +1,11 @@
-import type { HexColor, TextAlign } from "$lib/util-types";
+import type { TextAlignType } from "$lib/constants";
+import type { HexColor } from "$lib/types";
 
 export type TextConfig = {
   fontSize: number;
   fontFamily: string;
   color: HexColor;
-  align: TextAlign;
+  align: TextAlignType;
   paddingX: number;
   offsetY: number;
 };
@@ -42,7 +43,7 @@ function createState() {
     get align() {
       return state.align;
     },
-    set align(align: TextAlign) {
+    set align(align: TextAlignType) {
       state.align = align;
     },
     get paddingX() {
