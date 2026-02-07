@@ -3,7 +3,6 @@ import { konvaAllStagesState } from "$states/konvaAllStages.svelte";
 
 describe("konvaAllStages.svelte", () => {
   beforeEach(() => {
-    // Clear the array before each test
     konvaAllStagesState.length = 0;
   });
 

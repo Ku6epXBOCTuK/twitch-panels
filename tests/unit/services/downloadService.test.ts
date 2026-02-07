@@ -10,13 +10,11 @@ vi.mock("file-saver", () => {
 });
 
 vi.mock("jszip", () => {
-  // Создаем объект с методами заранее, чтобы иметь к ним доступ
   const mockZipInstance = {
     file: vi.fn().mockReturnThis(),
     generateAsync: vi.fn().mockResolvedValue(new Blob([])),
   };
 
-  // Возвращаем функцию-конструктор
   return {
     default: vi.fn(function () {
       return mockZipInstance;
