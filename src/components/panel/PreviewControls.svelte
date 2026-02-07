@@ -3,6 +3,7 @@
   import IconArrowLeft from "$components/ui/Icons/IconArrowLeft.svelte";
   import IconArrowRight from "$components/ui/Icons/IconArrowRight.svelte";
   import type { SlideDirectionType } from "$lib/constants";
+  import { PANEL_SETTINGS } from "$lib/constants";
 
   interface Props {
     current: number;
@@ -24,6 +25,8 @@
     if (current < max - 1) current++;
     direction = "next";
   }
+
+  let xDirection = $derived(direction == "next" ? PANEL_SETTINGS.PANEL_WIDTH : -PANEL_SETTINGS.PANEL_WIDTH);
 </script>
 
 <Button icon={IconArrowLeft} type="mini" onclick={prev} disabled={isFirst} />

@@ -4,16 +4,22 @@
   import Button from "$components/ui/Button.svelte";
   import IconDownload from "$components/ui/Icons/IconDownload.svelte";
   import IconEmpty from "$components/ui/Icons/IconEmpty.svelte";
-  import type { SlideDirectionType } from "$lib/constants";
+  import { PANEL_SETTINGS, type SlideDirectionType } from "$lib/constants";
+  import { downloadService, type DownloadItem } from "$services/downloadService";
+  import { konvaAllStagesState } from "$states/konvaAllStages.svelte";
+  import { konvaStageState } from "$states/konvaStage.svelte";
   import { textsState } from "$states/texts.svelte";
+  import { fly } from "svelte/transition";
   import Preview from "./Preview.svelte";
+  import PreviewAll from "./PreviewAll.svelte";
   import PreviewControls from "./PreviewControls.svelte";
 
   let current: number = $state(0);
   let direction: SlideDirectionType = $state("next");
 
+  let xDirection = $derived(direction == "next" ? PANEL_SETTINGS.PANEL_WIDTH : -PANEL_SETTINGS.PANEL_WIDTH);
+
   $effect(() => {
-    $inspect(current, textsState.texts);
     if (textsState.texts.length === 0) {
       current = 0;
     } else {
@@ -22,6 +28,22 @@
       }
     }
   });
+
+  function downloadAll() {
+    let downloadItems: Array<DownloadItem> = textsState.texts.map((text, idx) => ({
+      filename: text.text,
+      stage: konvaAllStagesState[idx]?.node,
+    }));
+
+    downloadService.downloadAll(downloadItems);
+  }
+
+  function downloadCurrent() {
+    let node = konvaStageState.stage?.node;
+    if (node) {
+      downloadService.downloadPanel(node, textsState.texts[current].text);
+    }
+  }
 </script>
 
 {#snippet panelTitle()}
@@ -38,7 +60,13 @@
       {#if textsState.texts.length}
         {#key current}
           {@const text = textsState?.texts[current]?.text}
-          <Preview {text} {direction} />
+          <div
+            class="konva-wrapper"
+            in:fly={{ x: xDirection, duration: 300 }}
+            out:fly={{ x: -xDirection, duration: 300 }}
+          >
+            <Preview {text} bind:stage={konvaStageState.stage} />
+          </div>
         {/key}
       {:else}
         <div class="empty-state">
@@ -49,11 +77,12 @@
     </div>
 
     <div class="panel-actions">
-      <Button label="Скачать всё" icon={IconDownload} />
-      <Button label="Скачать" type="outline" icon={IconDownload} />
+      <Button label="Скачать всё" icon={IconDownload} onclick={downloadAll} />
+      <Button label="Скачать" type="outline" icon={IconDownload} onclick={downloadCurrent} />
     </div>
   </div>
 </Card>
+<PreviewAll />
 
 <style>
   .panel-viewer {
@@ -93,5 +122,16 @@
 
   .empty-state p {
     font-size: 14px;
+  }
+
+  .konva-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
