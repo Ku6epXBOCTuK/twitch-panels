@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
-import { describe, expect, it, vi } from "vitest";
 import TextInput from "$components/text/TextInput.svelte";
+import { fireEvent, render } from "@testing-library/svelte";
+import { describe, expect, it, vi } from "vitest";
 
 describe("TextInput.svelte", () => {
   it("should render with initial value", () => {
@@ -63,6 +63,4 @@ describe("TextInput.svelte", () => {
 
     expect(onenter).not.toHaveBeenCalled();
   });
-
-
 });

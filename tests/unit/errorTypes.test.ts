@@ -1,4 +1,4 @@
-import { AppError, ImageError, TextError, CanvasError, StorageError } from "$lib/error.types";
+import { AppError, CanvasError, ImageError, StorageError, TextError } from "$lib/error.types";
 import { describe, expect, it } from "vitest";
 
 describe("error.types", () => {
@@ -153,7 +153,7 @@ describe("error.types", () => {
         new StorageError("Test"),
       ];
 
-      errors.forEach(error => {
+      errors.forEach((error) => {
         expect(error).toBeInstanceOf(AppError);
         expect(error).toBeInstanceOf(Error);
       });
@@ -165,8 +165,8 @@ describe("error.types", () => {
         new TextError("Test"),
       ];
 
-      const imageErrors = errors.filter(e => e instanceof ImageError);
-      const textErrors = errors.filter(e => e instanceof TextError);
+      const imageErrors = errors.filter((e) => e instanceof ImageError);
+      const textErrors = errors.filter((e) => e instanceof TextError);
 
       expect(imageErrors).toHaveLength(1);
       expect(textErrors).toHaveLength(1);

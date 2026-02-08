@@ -1,10 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
-import { describe, expect, it, vi } from "vitest";
 import Button from "$components/ui/Button.svelte";
-import MockIcon from "./__mocks__/MockIcon.svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { describe, expect, it, vi } from "vitest";
+import MockIcon from "./MockIcon.svelte";
 
 describe("Button.svelte", () => {
-
   it("should render with icon and label", () => {
     const { container } = render(Button, {
       props: {
@@ -68,6 +67,4 @@ describe("Button.svelte", () => {
     const button = container.querySelector("button");
     expect(button).not.toBeDisabled();
   });
-
-
 });

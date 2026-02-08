@@ -7,6 +7,4 @@ describe("CropInline.svelte", () => {
     const { container } = render(CropInline);
     expect(container).toBeInTheDocument();
   });
-
-
 });

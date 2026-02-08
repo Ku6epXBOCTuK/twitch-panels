@@ -7,6 +7,4 @@ describe("PanelBar.svelte", () => {
     const { container } = render(PanelBar);
     expect(container).toBeInTheDocument();
   });
-
-
 });

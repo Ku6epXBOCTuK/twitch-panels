@@ -7,6 +7,4 @@ describe("TextBar.svelte", () => {
     const { container } = render(TextBar);
     expect(container).toBeInTheDocument();
   });
-
-
 });

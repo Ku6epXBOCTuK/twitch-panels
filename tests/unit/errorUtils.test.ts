@@ -1,5 +1,5 @@
-import { AppError, ImageError, TextError, CanvasError, StorageError } from "$lib/error.types";
-import { formatError, createError, logError } from "$lib/utils/errorUtils";
+import { AppError, CanvasError, ImageError, StorageError, TextError } from "$lib/error.types";
+import { createError, formatError, logError } from "$lib/utils/errorUtils";
 import { describe, expect, it, vi } from "vitest";
 
 describe("errorUtils", () => {

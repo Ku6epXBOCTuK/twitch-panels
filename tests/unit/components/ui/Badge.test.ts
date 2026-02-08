@@ -1,6 +1,6 @@
+import Badge from "$components/ui/Badge.svelte";
 import { render, screen } from "@testing-library/svelte";
 import { describe, expect, it } from "vitest";
-import Badge from "$components/ui/Badge.svelte";
 
 describe("Badge.svelte", () => {
   it("should render with string text", () => {

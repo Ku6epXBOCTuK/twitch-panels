@@ -1,6 +1,6 @@
 import Preview from "$components/panel/Preview.svelte";
-import { render, cleanup } from "@testing-library/svelte";
-import { describe, expect, it, afterEach } from "vitest";
+import { cleanup, render } from "@testing-library/svelte";
+import { afterEach, describe, expect, it } from "vitest";
 
 afterEach(() => {
   cleanup();
@@ -29,6 +29,4 @@ describe("Preview.svelte", () => {
     const stage = container.querySelector("canvas");
     expect(stage).toBeInTheDocument();
   });
-
-
 });

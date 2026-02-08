@@ -1,6 +1,6 @@
 import SelectFont from "$components/ui/SelectFont.svelte";
-import { fireEvent, render, screen } from "@testing-library/svelte";
-import { describe, expect, it } from "vitest";
+import { render } from "@testing-library/svelte";
+import { describe, it } from "vitest";
 
 describe("SelectFont.svelte", () => {
   it("should render without crashing", () => {

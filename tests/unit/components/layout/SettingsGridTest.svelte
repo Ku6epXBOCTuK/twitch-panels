@@ -1,4 +1,3 @@
-<!-- SettingsGridTest.svelte -->
 <script>
   import SettingsGrid from "$components/layout/SettingsGrid.svelte";
 </script>

@@ -1,14 +1,12 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
-import { describe, expect, it, beforeEach } from "vitest";
-import { themeState } from "$states/theme.svelte";
 import AppHeader from "$components/layout/AppHeader.svelte";
+import { themeState } from "$states/theme.svelte";
+import { fireEvent, render } from "@testing-library/svelte";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("AppHeader.svelte", () => {
   beforeEach(() => {
     themeState.theme = "dark";
   });
-
-
 
   it("should toggle theme on button click", async () => {
     const { container } = render(AppHeader);
@@ -23,6 +21,4 @@ describe("AppHeader.svelte", () => {
     await fireEvent.click(toggleButton);
     expect(themeState.theme).toBe("dark");
   });
-
-
 });

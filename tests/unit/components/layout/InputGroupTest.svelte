@@ -1,4 +1,3 @@
-<!-- InputGroupTest.svelte -->
 <script>
   import InputGroup from "$components/layout/InputGroup.svelte";
 </script>

@@ -1,4 +1,3 @@
-<!-- CardTest.svelte -->
 <script>
   import Card from "$components/layout/Card.svelte";
 </script>

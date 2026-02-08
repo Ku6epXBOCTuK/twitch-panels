@@ -1,4 +1,3 @@
-<!-- SettingsRowTest.svelte -->
 <script>
   import SettingsRow from "$components/layout/SettingsRow.svelte";
 </script>

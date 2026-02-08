@@ -1,12 +1,12 @@
 import {
-  PANEL_SETTINGS,
-  TYPOGRAPHY,
+  DEFAULT_TEXT_ALIGN,
   IMAGE_SETTINGS,
+  PANEL_SETTINGS,
   SlideDirection,
   type SlideDirectionType,
   TextAlign,
   type TextAlignType,
-  DEFAULT_TEXT_ALIGN,
+  TYPOGRAPHY,
 } from "$lib/constants";
 import { describe, expect, it } from "vitest";
 
@@ -159,7 +159,7 @@ describe("constants", () => {
     });
 
     it("should have string format types", () => {
-      IMAGE_SETTINGS.SUPPORTED_FORMATS.forEach(format => {
+      IMAGE_SETTINGS.SUPPORTED_FORMATS.forEach((format) => {
         expect(typeof format).toBe("string");
         expect(format).toMatch(/^image\//);
       });

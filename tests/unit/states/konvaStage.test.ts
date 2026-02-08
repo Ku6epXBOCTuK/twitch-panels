@@ -51,37 +51,4 @@ describe("konvaStage.svelte", () => {
       expect(konvaStageState.stage).not.toStrictEqual(firstStage);
     });
   });
-
-  // describe("stage lifecycle", () => {
-  //   it("should handle stage creation", () => {
-  //     const mockStage = { id: "new-stage" } as any;
-
-  //     konvaStageState.stage = mockStage;
-
-  //     expect(konvaStageState.stage).toStrictEqual(mockStage);
-  //     expect(konvaStageState.stage?.id).toBe("new-stage");
-  //   });
-
-  //   it("should handle stage destruction", () => {
-  //     const mockStage = { id: "to-destroy" } as any;
-
-  //     konvaStageState.stage = mockStage;
-  //     expect(konvaStageState.stage).toBeDefined();
-
-  //     konvaStageState.stage = undefined;
-  //     expect(konvaStageState.stage).toBeUndefined();
-  //   });
-
-  //   it("should handle stage replacement", () => {
-  //     const oldStage = { id: "old" } as any;
-  //     const newStage = { id: "new" } as any;
-
-  //     konvaStageState.stage = oldStage;
-  //     expect(konvaStageState.stage).toStrictEqual(oldStage);
-
-  //     konvaStageState.stage = newStage;
-  //     expect(konvaStageState.stage).toStrictEqual(newStage);
-  //     expect(konvaStageState.stage).not.toStrictEqual(oldStage);
-  //   });
-  // });
 });

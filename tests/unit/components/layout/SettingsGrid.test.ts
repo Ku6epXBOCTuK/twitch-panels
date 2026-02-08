@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
 import { describe, expect, it } from "vitest";
 import SettingsGridTest from "./SettingsGridTest.svelte";
 

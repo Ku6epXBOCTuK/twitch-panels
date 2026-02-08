@@ -1,6 +1,6 @@
 import TextInlineEdit from "$components/text/TextInlineEdit.svelte";
-import { render, cleanup } from "@testing-library/svelte";
-import { describe, expect, it, afterEach } from "vitest";
+import { cleanup, render } from "@testing-library/svelte";
+import { afterEach, describe, expect, it } from "vitest";
 
 afterEach(() => {
   cleanup();
@@ -20,8 +20,6 @@ describe("TextInlineEdit.svelte", () => {
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue("Test text");
   });
-
-
 
   it("should render with empty text", () => {
     render(TextInlineEdit, {

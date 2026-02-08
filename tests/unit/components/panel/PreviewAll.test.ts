@@ -1,7 +1,7 @@
 import PreviewAll from "$components/panel/PreviewAll.svelte";
 import { textsState } from "$states/texts.svelte";
-import { render, screen } from "@testing-library/svelte";
-import { beforeEach, describe, expect, it } from "vitest";
+import { render } from "@testing-library/svelte";
+import { beforeEach, describe, it } from "vitest";
 
 describe("PreviewAll.svelte", () => {
   beforeEach(() => {

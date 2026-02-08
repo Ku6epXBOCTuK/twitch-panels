@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { themeState } from "$states/theme.svelte";
+import { describe, expect, it } from "vitest";
 
 describe("theme.svelte", () => {
   describe("initial state", () => {

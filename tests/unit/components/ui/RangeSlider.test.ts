@@ -1,10 +1,8 @@
 import RangeSlider from "$components/ui/RangeSlider.svelte";
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render } from "@testing-library/svelte";
 import { describe, expect, it, vi } from "vitest";
 
 describe("RangeSlider.svelte", () => {
-
-
   it("should call onchange handler", async () => {
     const onchange = vi.fn();
     const { container } = render(RangeSlider, {
