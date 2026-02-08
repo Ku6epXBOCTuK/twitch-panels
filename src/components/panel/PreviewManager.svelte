@@ -2,13 +2,12 @@
   import Card from "$components/layout/Card.svelte";
   import Badge from "$components/ui/Badge.svelte";
   import Button from "$components/ui/Button.svelte";
-  import IconDownload from "$components/ui/Icons/IconDownload.svelte";
-  import IconEmpty from "$components/ui/Icons/IconEmpty.svelte";
   import { PANEL_SETTINGS, type SlideDirectionType } from "$lib/constants";
   import { downloadService, type DownloadItem } from "$services/downloadService";
   import { konvaAllStagesState } from "$states/konvaAllStages.svelte";
   import { konvaStageState } from "$states/konvaStage.svelte";
   import { textsState } from "$states/texts.svelte";
+  import { Download, StickyNote } from "@lucide/svelte";
   import { fly } from "svelte/transition";
   import Preview from "./Preview.svelte";
   import PreviewAll from "./PreviewAll.svelte";
@@ -70,15 +69,15 @@
         {/key}
       {:else}
         <div class="empty-state">
-          <IconEmpty />
+          <StickyNote />
           <p>Добавьте тексты для создания панелей</p>
         </div>
       {/if}
     </div>
 
     <div class="panel-actions">
-      <Button label="Скачать всё" icon={IconDownload} onclick={downloadAll} />
-      <Button label="Скачать" type="outline" icon={IconDownload} onclick={downloadCurrent} />
+      <Button label="Скачать всё" icon={Download} onclick={downloadAll} />
+      <Button label="Скачать" type="outline" icon={Download} onclick={downloadCurrent} />
     </div>
   </div>
 </Card>

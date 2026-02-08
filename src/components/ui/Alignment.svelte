@@ -1,8 +1,6 @@
 <script lang="ts">
   import type { TextAlignType } from "$lib/constants";
-  import IconAlignCenter from "./Icons/IconAlignCenter.svelte";
-  import IconAlignLeft from "./Icons/IconAlignLeft.svelte";
-  import IconAlignRight from "./Icons/IconAlignRight.svelte";
+  import { TextAlignCenter, TextAlignEnd, TextAlignStart } from "@lucide/svelte";
 
   interface Props {
     align: TextAlignType;
@@ -12,13 +10,13 @@
 </script>
 
 <button class="align-btn" class:active={align === "left"} onclick={() => (align = "left")}>
-  <IconAlignLeft />
+  <TextAlignStart />
 </button>
 <button class="align-btn" class:active={align === "center"} onclick={() => (align = "center")}>
-  <IconAlignCenter />
+  <TextAlignCenter />
 </button>
 <button class="align-btn" class:active={align === "right"} onclick={() => (align = "right")}>
-  <IconAlignRight />
+  <TextAlignEnd />
 </button>
 
 <style>

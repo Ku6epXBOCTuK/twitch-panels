@@ -41,6 +41,7 @@
     "web-animations-js": "^2.3.2"
   },
   "dependencies": {
+    "@lucide/svelte": "^0.563.1",
     "@types/cropperjs": "^1.1.5",
     "@types/uuid": "^10.0.0",
     "cropperjs": "^2.1.0",

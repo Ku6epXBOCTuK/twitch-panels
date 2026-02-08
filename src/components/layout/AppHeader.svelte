@@ -1,7 +1,6 @@
 <script lang="ts">
-  import IconMoon from "$components/ui/Icons/IconMoon.svelte";
-  import IconSun from "$components/ui/Icons/IconSun.svelte";
   import { themeState } from "$states/theme.svelte";
+  import { Moon, Sun } from "@lucide/svelte";
 
   function toggleTheme() {
     themeState.toggle();
@@ -12,8 +11,8 @@
   <div class="header-content">
     <h1>Twitch Panels</h1>
     <button class="theme-toggle" aria-label="Toggle theme" onclick={toggleTheme}>
-      <IconSun />
-      <IconMoon />
+      <Sun />
+      <Moon />
     </button>
   </div>
 </header>

@@ -3,10 +3,8 @@
   import SettingsGrid from "$components/layout/SettingsGrid.svelte";
   import SettingsRow from "$components/layout/SettingsRow.svelte";
   import Button from "$components/ui/Button.svelte";
-  import IconEdit from "$components/ui/Icons/IconEdit.svelte";
-  import IconReset from "$components/ui/Icons/IconReset.svelte";
-  import IconUpload from "$components/ui/Icons/IconUpload.svelte";
   import RangeSlider from "$components/ui/RangeSlider.svelte";
+  import { Pencil, RotateCcw as Reset, Upload } from "@lucide/svelte";
   import CropInline from "./CropInline.svelte";
 
   let brightness = $state(100);
@@ -18,9 +16,9 @@
     <CropInline />
 
     <div class="crop-controls">
-      <Button label="Загрузить" icon={IconUpload} type="secondary" />
-      <Button label="Редактировать" icon={IconEdit} type="outline" />
-      <Button label="Сбросить" icon={IconReset} type="outline" />
+      <Button label="Загрузить" icon={Upload} type="secondary" />
+      <Button label="Редактировать" icon={Reset} type="outline" />
+      <Button label="Сбросить" icon={Pencil} type="outline" />
     </div>
 
     <SettingsGrid>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
-  import IconCross from "$components/ui/Icons/IconCross.svelte";
+  import { X as Cross } from "@lucide/svelte";
   import { fly } from "svelte/transition";
 
   interface Props {
@@ -14,7 +14,7 @@
 
 <div class="text-item" transition:fly={{ x: 600, duration: 300 }}>
   <input type="text" bind:value={text} />
-  <Button icon={IconCross} type="danger" onclick={() => ondelete(id)} />
+  <Button icon={Cross} type="danger" onclick={() => ondelete(id)} />
 </div>
 
 <style>
