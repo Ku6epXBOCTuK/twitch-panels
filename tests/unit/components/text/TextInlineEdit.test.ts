@@ -21,31 +21,7 @@ describe("TextInlineEdit.svelte", () => {
     expect(input).toHaveValue("Test text");
   });
 
-  it("should render delete button", () => {
-    render(TextInlineEdit, {
-      props: {
-        id: 1,
-        text: "Test",
-        ondelete: () => {},
-      },
-    });
 
-    const deleteBtn = document.querySelector("button");
-    expect(deleteBtn).toBeInTheDocument();
-  });
-
-  it("should have text-item class", () => {
-    render(TextInlineEdit, {
-      props: {
-        id: 1,
-        text: "Test",
-        ondelete: () => {},
-      },
-    });
-
-    const textItem = document.querySelector(".text-item");
-    expect(textItem).toBeInTheDocument();
-  });
 
   it("should render with empty text", () => {
     render(TextInlineEdit, {

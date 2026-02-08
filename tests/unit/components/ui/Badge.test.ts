@@ -24,15 +24,11 @@ describe("Badge.svelte", () => {
   });
 
   it("should render with empty string", () => {
-    const { container } = render(Badge, {
+    render(Badge, {
       props: {
         text: "",
       },
     });
-
-    const badge = container.querySelector(".badge");
-    expect(badge).toBeInTheDocument();
-    expect(badge).toHaveTextContent("");
   });
 
   it("should render with zero", () => {

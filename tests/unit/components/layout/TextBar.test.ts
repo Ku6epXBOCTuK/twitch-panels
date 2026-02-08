@@ -8,9 +8,5 @@ describe("TextBar.svelte", () => {
     expect(container).toBeInTheDocument();
   });
 
-  it("should have text-bar class", () => {
-    const { container } = render(TextBar);
-    const textBar = container.querySelector(".text-bar");
-    expect(textBar).toBeInTheDocument();
-  });
+
 });

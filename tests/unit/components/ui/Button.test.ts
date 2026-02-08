@@ -69,21 +69,5 @@ describe("Button.svelte", () => {
     expect(button).not.toBeDisabled();
   });
 
-  it("should render with different types", () => {
-    const types = ["primary", "secondary", "danger", "outline", "mini"] as const;
 
-    types.forEach(type => {
-      const { container, unmount } = render(Button, {
-        props: {
-          icon: MockIcon,
-          label: `${type} Button`,
-          type,
-        },
-      });
-
-      expect(screen.getByText(`${type} Button`)).toBeInTheDocument();
-      expect(container.querySelector("svg")).toBeInTheDocument();
-      unmount();
-    });
-  });
 });

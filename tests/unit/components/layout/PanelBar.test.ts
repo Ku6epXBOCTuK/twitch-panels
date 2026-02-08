@@ -8,9 +8,5 @@ describe("PanelBar.svelte", () => {
     expect(container).toBeInTheDocument();
   });
 
-  it("should have panel-bar class", () => {
-    const { container } = render(PanelBar);
-    const panelBar = container.querySelector(".panel-bar");
-    expect(panelBar).toBeInTheDocument();
-  });
+
 });

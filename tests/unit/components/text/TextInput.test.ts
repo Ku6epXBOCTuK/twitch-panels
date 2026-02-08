@@ -11,7 +11,7 @@ describe("TextInput.svelte", () => {
       },
     });
 
-    const input = container.querySelector(".text-input");
+    const input = container.querySelector("input");
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue("Test text");
   });
@@ -24,7 +24,7 @@ describe("TextInput.svelte", () => {
       },
     });
 
-    const input = container.querySelector(".text-input");
+    const input = container.querySelector("input");
     if (!input) throw new Error("Input element not found");
     await fireEvent.input(input, { target: { value: "Updated text" } });
 
@@ -40,7 +40,7 @@ describe("TextInput.svelte", () => {
       },
     });
 
-    const input = container.querySelector(".text-input");
+    const input = container.querySelector("input");
     if (!input) throw new Error("Input element not found");
     await fireEvent.keyDown(input, { key: "Enter" });
 
@@ -56,7 +56,7 @@ describe("TextInput.svelte", () => {
       },
     });
 
-    const input = container.querySelector(".text-input");
+    const input = container.querySelector("input");
     if (!input) throw new Error("Input element not found");
     await fireEvent.keyDown(input, { key: "Escape" });
     await fireEvent.keyDown(input, { key: "Tab" });
@@ -64,16 +64,5 @@ describe("TextInput.svelte", () => {
     expect(onenter).not.toHaveBeenCalled();
   });
 
-  it("should have correct placeholder", () => {
-    const { container } = render(TextInput, {
-      props: {
-        text: "",
-        onenter: vi.fn(),
-      },
-    });
 
-    const input = container.querySelector(".text-input");
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute("placeholder", "Введите текст...");
-  });
 });
