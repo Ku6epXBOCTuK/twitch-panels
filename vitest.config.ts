@@ -5,9 +5,13 @@ export default defineConfig({
   plugins: [sveltekit()],
   test: {
     environment: "jsdom",
+    globals: true,
     isolate: true,
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/**/*.{test,spec}.{js,ts}"],
+    env: {
+      DEBUG_PRINT_LIMIT: "0",
+    },
     coverage: {
       provider: "istanbul",
       enabled: true,
