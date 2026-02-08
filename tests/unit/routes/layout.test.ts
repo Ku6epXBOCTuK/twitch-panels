@@ -27,24 +27,14 @@ describe("+layout.svelte", () => {
   });
 });
 
-import Layout from "$routes/+layout.svelte";
+import LayoutTest from "./LayoutTest.svelte";
 import { render, screen } from "@testing-library/svelte";
-import { createRawSnippet } from "svelte";
 
 describe("Layout Component Coverage", () => {
   it("should render children snippet and initialize props", () => {
-    const testId = "test-child";
-    const childrenSnippet = createRawSnippet(() => ({
-      render: () => `<span data-testid="${testId}">Hello</span>`,
-    }));
+    render(LayoutTest);
 
-    render(Layout, {
-      props: {
-        children: childrenSnippet,
-      },
-    });
-
-    expect(screen.getByTestId(testId)).toBeInTheDocument();
+    expect(screen.getByTestId("test-child")).toBeInTheDocument();
     expect(screen.getByRole("banner")).toBeInTheDocument();
   });
 });
