@@ -7,8 +7,9 @@
   import { konvaAllStagesState } from "$states/konvaAllStages.svelte";
   import { konvaStageState } from "$states/konvaStage.svelte";
   import { textsState } from "$states/texts.svelte";
-  import { Download, StickyNote } from "@lucide/svelte";
   import { fly } from "svelte/transition";
+  import Download from "~icons/lucide/download";
+  import StickyNote from "~icons/lucide/sticky-note";
   import Preview from "./Preview.svelte";
   import PreviewAll from "./PreviewAll.svelte";
   import PreviewControls from "./PreviewControls.svelte";

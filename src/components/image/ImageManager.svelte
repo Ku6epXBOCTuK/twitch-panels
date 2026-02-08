@@ -4,7 +4,13 @@
   import SettingsRow from "$components/layout/SettingsRow.svelte";
   import Button from "$components/ui/Button.svelte";
   import RangeSlider from "$components/ui/RangeSlider.svelte";
-  import { Pencil, RotateCcw as Reset, Upload } from "@lucide/svelte";
+  // import { Pencil, RotateCcw as Reset, Upload } from "@lucide/svelte";
+  // import Pencil from "@lucide/svelte/icons/pencil";
+  // import Reset from "@lucide/svelte/icons/rotate-ccw";
+  // import Upload from "@lucide/svelte/icons/upload";
+  import Pencil from "~icons/lucide/pencil";
+  import Reset from "~icons/lucide/rotate-ccw";
+  import Upload from "~icons/lucide/upload";
   import CropInline from "./CropInline.svelte";
 
   let brightness = $state(100);

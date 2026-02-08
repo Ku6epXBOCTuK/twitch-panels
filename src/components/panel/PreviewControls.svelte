@@ -2,7 +2,8 @@
   import Button from "$components/ui/Button.svelte";
   import type { SlideDirectionType } from "$lib/constants";
   import { PANEL_SETTINGS } from "$lib/constants";
-  import { ChevronLeft, ChevronRight } from "@lucide/svelte";
+  import ChevronLeft from "~icons/lucide/chevron-left";
+  import ChevronRight from "~icons/lucide/chevron-right";
 
   interface Props {
     current: number;

@@ -13,6 +13,7 @@
     "strictNullChecks": true,
     "exactOptionalPropertyTypes": true,
     "moduleResolution": "bundler",
-    "allowArbitraryExtensions": true
+    "allowArbitraryExtensions": true,
+    "types": ["unplugin-icons/types/svelte"]
   }
 }

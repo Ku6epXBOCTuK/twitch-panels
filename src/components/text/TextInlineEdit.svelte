@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
-  import { X as Cross } from "@lucide/svelte";
   import { fly } from "svelte/transition";
+  import Cross from "~icons/lucide/x";
 
   interface Props {
     text: string;

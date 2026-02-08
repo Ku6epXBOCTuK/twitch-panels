@@ -1,6 +1,9 @@
 <script lang="ts">
   import type { TextAlignType } from "$lib/constants";
-  import { TextAlignCenter, TextAlignEnd, TextAlignStart } from "@lucide/svelte";
+  import TextAlignCenter from "~icons/lucide/text-align-center";
+  import TextAlignEnd from "~icons/lucide/text-align-end";
+  import TextAlignStart from "~icons/lucide/text-align-start";
+  // import { TextAlignCenter, TextAlignEnd, TextAlignStart } from "@lucide/svelte";
 
   interface Props {
     align: TextAlignType;
@@ -31,30 +34,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-secondary);
   }
 
   .align-btn :global(svg) {
     width: 16px;
     height: 16px;
-    stroke: var(--text-secondary);
     transition: var(--transition);
   }
 
   .align-btn:hover {
     background: var(--bg-hover);
     border-color: var(--accent-primary);
-  }
-
-  .align-btn:hover :global(svg) {
-    stroke: var(--accent-primary);
+    color: var(--accent-primary);
   }
 
   .align-btn.active {
     background: var(--accent-primary);
     border-color: var(--accent-primary);
-  }
-
-  .align-btn.active :global(svg) {
-    stroke: white;
+    color: white;
   }
 </style>

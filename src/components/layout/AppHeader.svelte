@@ -1,6 +1,7 @@
 <script lang="ts">
   import { themeState } from "$states/theme.svelte";
-  import { Moon, Sun } from "@lucide/svelte";
+  import Moon from "~icons/lucide/moon";
+  import Sun from "~icons/lucide/sun";
 
   function toggleTheme() {
     themeState.toggle();
