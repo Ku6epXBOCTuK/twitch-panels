@@ -10,10 +10,7 @@
   let text: string = $state("");
 
   function addText() {
-    let trimmed = text.trim();
-    if (trimmed.length !== 0) {
-      textsState.addText(trimmed);
-    }
+    textsState.addText(text);
     text = "";
   }
 

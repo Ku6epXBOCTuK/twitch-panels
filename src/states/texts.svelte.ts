@@ -14,6 +14,7 @@ function createState() {
       return texts;
     },
     addText(text: string) {
+      if (text.trim().length === 0) return;
       texts.push({ text, id: nextId });
       nextId++;
     },

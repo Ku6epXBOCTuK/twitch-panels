@@ -1,14 +1,18 @@
 import TextManager from "$components/text/TextManager.svelte";
 import { textsState } from "$states/texts.svelte";
-import { render } from "@testing-library/svelte";
-import { beforeEach, describe, it } from "vitest";
+import { render, screen } from "@testing-library/svelte";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("TextManager.svelte", () => {
   beforeEach(() => {
-    textsState.texts.length = 0;
+    while (textsState.texts.length > 0) {
+      textsState.texts.pop();
+    }
   });
 
   it("should render without crashing", () => {
     render(TextManager);
+    const cardTitle = screen.getByText("Тексты панелей");
+    expect(cardTitle).toBeInTheDocument();
   });
 });
