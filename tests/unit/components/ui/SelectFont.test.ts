@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
-import { describe, expect, it } from "vitest";
 import SelectFont from "$components/ui/SelectFont.svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { describe, expect, it } from "vitest";
 
 describe("SelectFont.svelte", () => {
   const fonts = [
@@ -33,7 +33,7 @@ describe("SelectFont.svelte", () => {
       },
     });
 
-    fonts.forEach(font => {
+    fonts.forEach((font) => {
       const options = screen.queryAllByText(font);
       expect(options.length).toBeGreaterThan(0);
     });
@@ -47,6 +47,7 @@ describe("SelectFont.svelte", () => {
     });
 
     const select = container.querySelector(".select-input");
+    if (!select) throw new Error("Select element not found");
     await fireEvent.change(select, { target: { value: "Verdana" } });
 
     expect(select).toHaveValue("Verdana");
@@ -60,6 +61,7 @@ describe("SelectFont.svelte", () => {
     });
 
     const select = container.querySelector(".select-input");
+    if (!select) throw new Error("Select element not found");
 
     await fireEvent.change(select, { target: { value: "Georgia" } });
     expect(select).toHaveValue("Georgia");

@@ -38,6 +38,7 @@ describe("Button.svelte", () => {
     });
 
     const button = container.querySelector("button");
+    if (!button) throw new Error("Button element not found");
     await fireEvent.click(button);
 
     expect(onclick).toHaveBeenCalledTimes(1);

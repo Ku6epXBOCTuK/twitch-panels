@@ -26,6 +26,7 @@ describe("AppHeader.svelte", () => {
     const { container } = render(AppHeader);
 
     const toggleButton = container.querySelector(".theme-toggle");
+    if (!toggleButton) throw new Error("Toggle button not found");
 
     themeState.theme = "dark";
     await fireEvent.click(toggleButton);

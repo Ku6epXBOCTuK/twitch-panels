@@ -1,6 +1,6 @@
-import InputGroupTest from "$components/layout/InputGroupTest.svelte";
 import { render, screen } from "@testing-library/svelte";
 import { describe, expect, it } from "vitest";
+import InputGroupTest from "./InputGroupTest.svelte";
 
 describe("InputGroup.svelte", () => {
   it("should render multiple children using a wrapper component", () => {

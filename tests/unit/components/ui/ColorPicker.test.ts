@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
-import { describe, expect, it } from "vitest";
 import ColorPicker from "$components/ui/ColorPicker.svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { describe, expect, it } from "vitest";
 
 describe("ColorPicker.svelte", () => {
   it("should render with initial value", () => {
@@ -23,6 +23,7 @@ describe("ColorPicker.svelte", () => {
     });
 
     const input = container.querySelector(".color-input");
+    if (!input) throw new Error("Input element not found");
     await fireEvent.input(input, { target: { value: "#ff0000" } });
 
     expect(screen.getByText("#ff0000")).toBeInTheDocument();

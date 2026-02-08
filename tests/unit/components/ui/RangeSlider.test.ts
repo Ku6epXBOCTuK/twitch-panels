@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
-import { describe, expect, it, vi } from "vitest";
 import RangeSlider from "$components/ui/RangeSlider.svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { describe, expect, it, vi } from "vitest";
 
 describe("RangeSlider.svelte", () => {
   it("should render with default props", () => {
@@ -39,6 +39,7 @@ describe("RangeSlider.svelte", () => {
     });
 
     const slider = container.querySelector(".slider");
+    if (!slider) throw new Error("Slider element not found");
     await fireEvent.input(slider, { target: { value: "75" } });
 
     expect(screen.getByText("75")).toBeInTheDocument();
@@ -54,6 +55,7 @@ describe("RangeSlider.svelte", () => {
     });
 
     const slider = container.querySelector(".slider");
+    if (!slider) throw new Error("Slider element not found");
     await fireEvent.change(slider, { target: { value: "75" } });
 
     expect(onchange).toHaveBeenCalled();

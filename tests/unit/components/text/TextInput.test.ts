@@ -25,6 +25,7 @@ describe("TextInput.svelte", () => {
     });
 
     const input = container.querySelector(".text-input");
+    if (!input) throw new Error("Input element not found");
     await fireEvent.input(input, { target: { value: "Updated text" } });
 
     expect(input).toHaveValue("Updated text");
@@ -40,6 +41,7 @@ describe("TextInput.svelte", () => {
     });
 
     const input = container.querySelector(".text-input");
+    if (!input) throw new Error("Input element not found");
     await fireEvent.keyDown(input, { key: "Enter" });
 
     expect(onenter).toHaveBeenCalledTimes(1);
@@ -55,6 +57,7 @@ describe("TextInput.svelte", () => {
     });
 
     const input = container.querySelector(".text-input");
+    if (!input) throw new Error("Input element not found");
     await fireEvent.keyDown(input, { key: "Escape" });
     await fireEvent.keyDown(input, { key: "Tab" });
 
