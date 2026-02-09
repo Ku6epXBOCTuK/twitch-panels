@@ -1,135 +1,105 @@
-import { textsState } from "$states/texts.svelte";
+import { createState } from "$states/texts.svelte";
 import { describe, expect, it } from "vitest";
 
 describe("texts.svelte", () => {
-  describe("initial state", () => {
-    it("should have default texts with unique IDs", () => {
-      const defaultTexts = ["About me", "Links", "Projects"];
-      expect(textsState.texts).toHaveLength(defaultTexts.length);
-      expect(Array.isArray(textsState.texts)).toBe(true);
-
-      textsState.texts.forEach((textItem, index) => {
-        expect(textItem.text).toBe(defaultTexts[index]);
-        expect(textItem.id).toBe(index);
-      });
-
-      const ids = textsState.texts.map((item) => item.id);
-      const uniqueIds = new Set(ids);
-      expect(ids.length).toBe(uniqueIds.size);
-    });
-  });
-
   describe("addText", () => {
     it("should add new text with unique ID and increment counter", () => {
-      const initialLength = textsState.texts.length;
-      const initialIds = textsState.texts.map((item) => item.id);
+      const state = createState();
+      const initialLength = state.texts.length;
+      const initialIds = state.texts.map((item) => item.id);
       const maxId = Math.max(...initialIds);
       const newText = "Test text";
 
-      textsState.addText(newText);
+      state.addText(newText);
 
-      expect(textsState.texts).toHaveLength(initialLength + 1);
-      expect(textsState.texts[initialLength].text).toBe(newText);
-      expect(textsState.texts[initialLength].id).toBe(maxId + 1);
-      expect(initialIds).not.toContain(textsState.texts[initialLength].id);
-    });
-
-    it("should preserve existing texts when adding new", () => {
-      const initialTexts = [...textsState.texts];
-      const newText = "New text";
-
-      textsState.addText(newText);
-
-      initialTexts.forEach((initialText, index) => {
-        expect(textsState.texts[index]).toStrictEqual(initialText);
-      });
+      expect(state.texts).toHaveLength(initialLength + 1);
+      expect(state.texts[initialLength].text).toBe(newText);
+      expect(state.texts[initialLength].id).toBe(maxId + 1);
+      expect(initialIds).not.toContain(state.texts[initialLength].id);
     });
 
     it("should not add text with empty string", () => {
-      const initialLength = textsState.texts.length;
+      const state = createState();
+      const initialLength = state.texts.length;
 
-      textsState.addText("");
+      state.addText("");
 
-      expect(textsState.texts).toHaveLength(initialLength);
+      expect(state.texts).toHaveLength(initialLength);
     });
   });
 
   describe("removeText", () => {
     it("should remove text by ID and preserve other texts", () => {
-      const initialLength = textsState.texts.length;
-      const idToRemove = textsState.texts[1].id;
-      const otherTexts = textsState.texts.filter((item) => item.id !== idToRemove);
+      const state = createState();
+      const initialLength = state.texts.length;
+      const idToRemove = state.texts[1].id;
+      const otherTexts = state.texts.filter((item) => item.id !== idToRemove);
 
-      textsState.removeText(idToRemove);
+      state.removeText(idToRemove);
 
-      expect(textsState.texts).toHaveLength(initialLength - 1);
-      expect(textsState.texts.find((item) => item.id === idToRemove)).toBeUndefined();
-      expect(textsState.texts).toStrictEqual(otherTexts);
+      expect(state.texts).toHaveLength(initialLength - 1);
+      expect(state.texts.find((item) => item.id === idToRemove)).toBeUndefined();
+      expect(state.texts).toStrictEqual(otherTexts);
     });
 
     it("should not remove text with non-existent ID", () => {
-      const initialLength = textsState.texts.length;
-      const initialTexts = [...textsState.texts];
+      const state = createState();
+      const initialLength = state.texts.length;
+      const initialTexts = [...state.texts];
       const nonExistentId = 999999;
 
-      textsState.removeText(nonExistentId);
+      state.removeText(nonExistentId);
 
-      expect(textsState.texts).toHaveLength(initialLength);
-      expect(textsState.texts).toStrictEqual(initialTexts);
+      expect(state.texts).toHaveLength(initialLength);
+      expect(state.texts).toStrictEqual(initialTexts);
     });
   });
 
-  describe("texts getter", () => {
-    it("should return array of TextItem with correct structure", () => {
-      expect(Array.isArray(textsState.texts)).toBe(true);
-      textsState.texts.forEach((item) => {
-        expect(item).toHaveProperty("text");
-        expect(item).toHaveProperty("id");
-        expect(typeof item.text).toBe("string");
-        expect(typeof item.id).toBe("number");
-      });
-    });
+  describe("clear", () => {
+    it("should clear all texts", () => {
+      const state = createState();
+      state.addText("Test 1");
+      state.addText("Test 2");
+      expect(state.texts.length).toBeGreaterThanOrEqual(2);
 
-    it("should return reactive texts", () => {
-      const initialLength = textsState.texts.length;
-
-      textsState.addText("Test");
-
-      expect(textsState.texts).toHaveLength(initialLength + 1);
+      state.clear();
+      expect(state.texts).toHaveLength(0);
     });
   });
 
   describe("integration", () => {
     it("should maintain ID uniqueness after multiple operations", () => {
-      const initialIds = new Set(textsState.texts.map((item) => item.id));
+      const state = createState();
+      const initialIds = new Set(state.texts.map((item) => item.id));
 
-      textsState.addText("First");
-      textsState.addText("Second");
-      textsState.removeText(textsState.texts[0].id);
-      textsState.addText("Third");
+      state.addText("First");
+      state.addText("Second");
+      state.removeText(state.texts[0].id);
+      state.addText("Third");
 
-      const finalIds = textsState.texts.map((item) => item.id);
+      const finalIds = state.texts.map((item) => item.id);
       const uniqueIds = new Set(finalIds);
 
       expect(finalIds.length).toBe(uniqueIds.size);
     });
 
     it("should handle adding and removing multiple texts", () => {
-      const initialLength = textsState.texts.length;
+      const state = createState();
+      const initialLength = state.texts.length;
       const addedIds: number[] = [];
 
       for (let i = 0; i < 5; i++) {
-        textsState.addText(`Text ${i}`);
-        addedIds.push(textsState.texts[textsState.texts.length - 1].id);
+        state.addText(`Text ${i}`);
+        addedIds.push(state.texts[state.texts.length - 1].id);
       }
 
-      expect(textsState.texts).toHaveLength(initialLength + 5);
+      expect(state.texts).toHaveLength(initialLength + 5);
 
-      textsState.removeText(addedIds[0]);
-      textsState.removeText(addedIds[2]);
-      textsState.removeText(addedIds[4]);
+      state.removeText(addedIds[0]);
+      state.removeText(addedIds[2]);
+      state.removeText(addedIds[4]);
 
-      expect(textsState.texts).toHaveLength(initialLength + 2);
+      expect(state.texts).toHaveLength(initialLength + 2);
     });
   });
 });

@@ -5,7 +5,7 @@ export interface TextItem {
 
 const defaultTexts: Array<TextItem> = ["About me", "Links", "Projects"].map((text, idx) => ({ text, id: idx }));
 
-function createState() {
+export function createState() {
   let texts: Array<TextItem> = $state(defaultTexts);
   let nextId = $state(defaultTexts.length);
 
@@ -20,6 +20,10 @@ function createState() {
     },
     removeText(id: number) {
       texts = texts.filter((textItem) => textItem.id !== id);
+    },
+    clear() {
+      texts = [];
+      nextId = 0;
     },
   };
 }
