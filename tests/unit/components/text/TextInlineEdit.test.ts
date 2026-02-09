@@ -1,5 +1,5 @@
 import TextInlineEdit from "$components/text/TextInlineEdit.svelte";
-import { cleanup, render } from "@testing-library/svelte";
+import { cleanup, render, screen } from "@testing-library/svelte";
 import { afterEach, describe, expect, it } from "vitest";
 
 afterEach(() => {
@@ -16,7 +16,7 @@ describe("TextInlineEdit.svelte", () => {
       },
     });
 
-    const input = document.querySelector("input[type='text']");
+    const input = screen.getByRole("textbox");
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue("Test text");
   });
@@ -30,7 +30,7 @@ describe("TextInlineEdit.svelte", () => {
       },
     });
 
-    const input = document.querySelector("input[type='text']");
+    const input = screen.getByRole("textbox");
     expect(input).toHaveValue("");
   });
 });

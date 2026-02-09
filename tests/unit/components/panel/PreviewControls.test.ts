@@ -1,5 +1,5 @@
 import PreviewControls from "$components/panel/PreviewControls.svelte";
-import { cleanup, render } from "@testing-library/svelte";
+import { cleanup, render, screen } from "@testing-library/svelte";
 import { afterEach, describe, expect, it } from "vitest";
 
 afterEach(() => {
@@ -16,7 +16,7 @@ describe("PreviewControls.svelte", () => {
       },
     });
 
-    const buttons = document.querySelectorAll("button");
+    const buttons = screen.getAllByRole("button");
     expect(buttons.length).toBeGreaterThan(0);
   });
 });

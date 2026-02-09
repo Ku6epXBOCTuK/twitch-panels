@@ -5,7 +5,7 @@ import MockIcon from "./MockIcon.svelte";
 
 describe("Button.svelte", () => {
   it("should render with icon and label", () => {
-    const { container } = render(Button, {
+    render(Button, {
       props: {
         icon: MockIcon,
         label: "Test Button",
@@ -14,23 +14,23 @@ describe("Button.svelte", () => {
     });
 
     expect(screen.getByText("Test Button")).toBeInTheDocument();
-    expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /test button/i })).toBeInTheDocument();
   });
 
   it("should render with icon only", () => {
-    const { container } = render(Button, {
+    render(Button, {
       props: {
         icon: MockIcon,
         ariaLabel: "Test button",
       },
     });
 
-    expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /test button/i })).toBeInTheDocument();
   });
 
   it("should call onclick handler", async () => {
     const onclick = vi.fn();
-    const { container } = render(Button, {
+    render(Button, {
       props: {
         icon: MockIcon,
         label: "Click me",
@@ -39,15 +39,14 @@ describe("Button.svelte", () => {
       },
     });
 
-    const button = container.querySelector("button");
-    if (!button) throw new Error("Button element not found");
+    const button = screen.getByRole("button", { name: /test button/i });
     await fireEvent.click(button);
 
     expect(onclick).toHaveBeenCalledTimes(1);
   });
 
   it("should be disabled when disabled prop is true", () => {
-    const { container } = render(Button, {
+    render(Button, {
       props: {
         icon: MockIcon,
         label: "Disabled",
@@ -56,12 +55,12 @@ describe("Button.svelte", () => {
       },
     });
 
-    const button = container.querySelector("button");
+    const button = screen.getByRole("button", { name: /test button/i });
     expect(button).toBeDisabled();
   });
 
   it("should not be disabled by default", () => {
-    const { container } = render(Button, {
+    render(Button, {
       props: {
         icon: MockIcon,
         label: "Enabled",
@@ -69,7 +68,7 @@ describe("Button.svelte", () => {
       },
     });
 
-    const button = container.querySelector("button");
+    const button = screen.getByRole("button", { name: /test button/i });
     expect(button).not.toBeDisabled();
   });
 });

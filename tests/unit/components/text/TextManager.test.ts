@@ -1,6 +1,6 @@
 import TextManager from "$components/text/TextManager.svelte";
 import { textsState } from "$states/texts.svelte";
-import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("TextManager.svelte", () => {
@@ -98,9 +98,8 @@ describe("TextManager.svelte", () => {
       const textItems = screen.queryAllByRole("listitem");
       expect(textItems).toHaveLength(1);
 
-      const inputs = textItems[0].querySelectorAll('input[type="text"]');
-      expect(inputs).toHaveLength(1);
-      expect(inputs[0]).toHaveValue("Test text");
+      const input = within(textItems[0]).getByRole("textbox");
+      expect(input).toHaveValue("Test text");
     });
 
     it("should call textsState.removeText when delete button is clicked", () => {
