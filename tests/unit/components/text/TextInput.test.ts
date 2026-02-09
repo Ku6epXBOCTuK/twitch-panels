@@ -8,6 +8,7 @@ describe("TextInput.svelte", () => {
       props: {
         text: "Test text",
         onenter: vi.fn(),
+        ariaLabel: "Test input",
       },
     });
 
@@ -21,6 +22,7 @@ describe("TextInput.svelte", () => {
       props: {
         text: "Initial",
         onenter: vi.fn(),
+        ariaLabel: "Test input",
       },
     });
 
@@ -37,6 +39,7 @@ describe("TextInput.svelte", () => {
       props: {
         text: "Test",
         onenter,
+        ariaLabel: "Test input",
       },
     });
 
@@ -53,6 +56,7 @@ describe("TextInput.svelte", () => {
       props: {
         text: "Test",
         onenter,
+        ariaLabel: "Test input",
       },
     });
 

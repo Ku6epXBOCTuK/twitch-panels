@@ -75,6 +75,11 @@
     box-sizing: border-box;
   }
 
+  :global(ul) {
+    list-style: none;
+    text-indent: 0;
+  }
+
   :global(body) {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
     background: var(--bg-primary);

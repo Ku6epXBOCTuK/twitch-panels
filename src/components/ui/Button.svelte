@@ -4,13 +4,14 @@
 
   interface Props {
     icon: Component;
+    ariaLabel: string;
     onclick?: MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
     label?: string;
     type?: "primary" | "secondary" | "danger" | "outline" | "mini";
   }
 
-  let { icon: Icon, onclick = () => {}, disabled = false, label = "", type = "primary" }: Props = $props();
+  let { icon: Icon, ariaLabel, onclick = () => {}, disabled = false, label = "", type = "primary" }: Props = $props();
 </script>
 
 <button
@@ -22,6 +23,7 @@
   class:btn-mini={type === "mini"}
   {disabled}
   {onclick}
+  aria-label={ariaLabel}
 >
   <Icon />
   {label}

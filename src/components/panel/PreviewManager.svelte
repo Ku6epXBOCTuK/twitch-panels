@@ -2,7 +2,7 @@
   import Card from "$components/layout/Card.svelte";
   import Badge from "$components/ui/Badge.svelte";
   import Button from "$components/ui/Button.svelte";
-  import { PANEL_SETTINGS, type SlideDirectionType } from "$lib/constants";
+  import { PANEL_SETTINGS, TRANSITION_DURATION, type SlideDirectionType } from "$lib/constants";
   import { downloadService, type DownloadItem } from "$services/downloadService";
   import { konvaAllStagesState } from "$states/konvaAllStages.svelte";
   import { konvaStageState } from "$states/konvaStage.svelte";
@@ -62,8 +62,8 @@
           {@const text = textsState?.texts[current]?.text}
           <div
             class="konva-wrapper"
-            in:fly={{ x: xDirection, duration: 300 }}
-            out:fly={{ x: -xDirection, duration: 300 }}
+            in:fly={{ x: xDirection, duration: TRANSITION_DURATION }}
+            out:fly={{ x: -xDirection, duration: TRANSITION_DURATION }}
           >
             <Preview {text} bind:stage={konvaStageState.stage} />
           </div>
@@ -77,8 +77,8 @@
     </div>
 
     <div class="panel-actions">
-      <Button label="Скачать всё" icon={Download} onclick={downloadAll} />
-      <Button label="Скачать" type="outline" icon={Download} onclick={downloadCurrent} />
+      <Button label="Скачать всё" ariaLabel="Download all" icon={Download} onclick={downloadAll} />
+      <Button label="Скачать" ariaLabel="Download current" type="outline" icon={Download} onclick={downloadCurrent} />
     </div>
   </div>
 </Card>

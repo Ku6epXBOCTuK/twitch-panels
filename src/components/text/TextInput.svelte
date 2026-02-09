@@ -1,10 +1,11 @@
 <script lang="ts">
   interface Props {
     text: string;
+    ariaLabel: string;
     onenter: () => void;
   }
 
-  let { text = $bindable(), onenter }: Props = $props();
+  let { text = $bindable(), onenter, ariaLabel }: Props = $props();
 
   function handleKeyboard(event: KeyboardEvent) {
     if (event.key === "Enter") {
@@ -13,7 +14,14 @@
   }
 </script>
 
-<input bind:value={text} class="text-input" type="text" placeholder="Введите текст..." onkeydown={handleKeyboard} />
+<input
+  aria-label={ariaLabel}
+  bind:value={text}
+  class="text-input"
+  type="text"
+  placeholder="Введите текст..."
+  onkeydown={handleKeyboard}
+/>
 
 <style>
   .text-input {

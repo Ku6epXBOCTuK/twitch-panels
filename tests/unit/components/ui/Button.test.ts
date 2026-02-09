@@ -9,6 +9,7 @@ describe("Button.svelte", () => {
       props: {
         icon: MockIcon,
         label: "Test Button",
+        ariaLabel: "Test button",
       },
     });
 
@@ -20,6 +21,7 @@ describe("Button.svelte", () => {
     const { container } = render(Button, {
       props: {
         icon: MockIcon,
+        ariaLabel: "Test button",
       },
     });
 
@@ -33,6 +35,7 @@ describe("Button.svelte", () => {
         icon: MockIcon,
         label: "Click me",
         onclick,
+        ariaLabel: "Test button",
       },
     });
 
@@ -49,6 +52,7 @@ describe("Button.svelte", () => {
         icon: MockIcon,
         label: "Disabled",
         disabled: true,
+        ariaLabel: "Test button",
       },
     });
 
@@ -61,6 +65,7 @@ describe("Button.svelte", () => {
       props: {
         icon: MockIcon,
         label: "Enabled",
+        ariaLabel: "Test button",
       },
     });
 

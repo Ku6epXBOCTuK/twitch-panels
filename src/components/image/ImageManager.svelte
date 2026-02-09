@@ -22,9 +22,9 @@
     <CropInline />
 
     <div class="crop-controls">
-      <Button label="Загрузить" icon={Upload} type="secondary" />
-      <Button label="Редактировать" icon={Reset} type="outline" />
-      <Button label="Сбросить" icon={Pencil} type="outline" />
+      <Button label="Загрузить" ariaLabel="Upload" icon={Upload} type="secondary" />
+      <Button label="Редактировать" ariaLabel="Edit" icon={Reset} type="outline" />
+      <Button label="Сбросить" ariaLabel="Reset" icon={Pencil} type="outline" />
     </div>
 
     <SettingsGrid>

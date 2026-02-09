@@ -21,14 +21,14 @@
 
 <Card title="Тексты панелей">
   <InputGroup>
-    <TextInput bind:text onenter={addText} />
-    <Button icon={Plus} onclick={addText} />
+    <TextInput ariaLabel="Input new text" bind:text onenter={addText} />
+    <Button icon={Plus} ariaLabel="Add text" onclick={addText} />
   </InputGroup>
-  <div class="texts-list">
+  <ul class="texts-list">
     {#each textsState.texts as { text, id } (id)}
       <TextInlineEdit {id} {text} ondelete={() => deleteText(id)} />
     {/each}
-  </div>
+  </ul>
 </Card>
 
 <style>

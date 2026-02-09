@@ -1,7 +1,6 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
   import type { SlideDirectionType } from "$lib/constants";
-  import { PANEL_SETTINGS } from "$lib/constants";
   import ChevronLeft from "~icons/lucide/chevron-left";
   import ChevronRight from "~icons/lucide/chevron-right";
 
@@ -25,13 +24,11 @@
     if (current < max - 1) current++;
     direction = "next";
   }
-
-  let xDirection = $derived(direction == "next" ? PANEL_SETTINGS.PANEL_WIDTH : -PANEL_SETTINGS.PANEL_WIDTH);
 </script>
 
-<Button icon={ChevronLeft} type="mini" onclick={prev} disabled={isFirst} />
+<Button icon={ChevronLeft} ariaLabel="Previous slide" type="mini" onclick={prev} disabled={isFirst} />
 <span class="panel-indicator">{current + 1} / {max}</span>
-<Button icon={ChevronRight} type="mini" onclick={next} disabled={isLast} />
+<Button icon={ChevronRight} ariaLabel="Next slide" type="mini" onclick={next} disabled={isLast} />
 
 <style>
   .panel-indicator {

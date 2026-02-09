@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
+  import { TRANSITION_DURATION } from "$lib/constants";
   import { fly } from "svelte/transition";
   import Cross from "~icons/lucide/x";
 
@@ -12,10 +13,10 @@
   let { text = $bindable(), id, ondelete }: Props = $props();
 </script>
 
-<div class="text-item" transition:fly={{ x: 600, duration: 300 }}>
+<li class="text-item" transition:fly={{ x: 600, duration: TRANSITION_DURATION }}>
   <input type="text" bind:value={text} />
-  <Button icon={Cross} type="danger" onclick={() => ondelete(id)} />
-</div>
+  <Button icon={Cross} ariaLabel="Delete" type="danger" onclick={() => ondelete(id)} />
+</li>
 
 <style>
   .text-item {
