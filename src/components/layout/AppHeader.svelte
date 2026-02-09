@@ -12,8 +12,8 @@
   <div class="header-content">
     <h1>Twitch Panels</h1>
     <button class="theme-toggle" aria-label="Toggle theme" onclick={toggleTheme}>
-      <Sun />
-      <Moon />
+      <Sun class="sun-icon" />
+      <Moon class="moon-icon" />
     </button>
   </div>
 </header>

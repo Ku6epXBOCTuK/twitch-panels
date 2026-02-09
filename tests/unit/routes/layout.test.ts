@@ -5,27 +5,27 @@ import LayoutTest from "./LayoutTest.svelte";
 
 describe("+layout.svelte", () => {
   beforeEach(() => {
-    themeState.theme = "dark";
+    themeState.current = "dark";
     vi.clearAllMocks();
   });
 
   it("should apply dark theme", () => {
-    themeState.theme = "dark";
+    themeState.current = "dark";
 
-    expect(themeState.theme).toBe("dark");
+    expect(themeState.current).toBe("dark");
   });
 
   it("should apply light theme", () => {
-    themeState.theme = "light";
+    themeState.current = "light";
 
-    expect(themeState.theme).toBe("light");
+    expect(themeState.current).toBe("light");
   });
 
   it("should toggle theme", () => {
-    themeState.theme = "dark";
+    themeState.current = "dark";
     themeState.toggle();
 
-    expect(themeState.theme).toBe("light");
+    expect(themeState.current).toBe("light");
   });
 });
 

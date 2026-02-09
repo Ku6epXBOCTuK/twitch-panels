@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 describe("AppHeader.svelte", () => {
   beforeEach(() => {
-    themeState.theme = "dark";
+    themeState.current = "dark";
   });
 
   it("should toggle theme on button click", async () => {
@@ -13,11 +13,11 @@ describe("AppHeader.svelte", () => {
 
     const toggleButton = screen.getByRole("button", { name: /toggle theme/i });
 
-    themeState.theme = "dark";
+    themeState.current = "dark";
     await fireEvent.click(toggleButton);
-    expect(themeState.theme).toBe("light");
+    expect(themeState.current).toBe("light");
 
     await fireEvent.click(toggleButton);
-    expect(themeState.theme).toBe("dark");
+    expect(themeState.current).toBe("dark");
   });
 });

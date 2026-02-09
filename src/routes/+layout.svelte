@@ -10,9 +10,8 @@
   }
 
   $effect(() => {
-    const newTheme = themeState.theme;
+    const newTheme = themeState.current;
     document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
   });
 
   let { children }: Props = $props();

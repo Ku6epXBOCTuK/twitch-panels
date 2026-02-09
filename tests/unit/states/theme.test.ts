@@ -1,49 +1,45 @@
+import { Theme } from "$lib/constants";
+import { STATE_DATA } from "$states/persisted.svelte";
 import { themeState } from "$states/theme.svelte";
 import { describe, expect, it } from "vitest";
 
+const THEME_VALUES = Object.values(Theme);
+
 describe("theme.svelte", () => {
   describe("initial state", () => {
-    it("should have initial theme", () => {
-      expect(themeState.theme).toBeDefined();
-      expect(["light", "dark"]).toContain(themeState.theme);
-    });
-
-    it("should start with dark theme by default", () => {
-      expect(themeState.theme).toBe("dark");
+    it("should have valid initial theme value", () => {
+      expect(THEME_VALUES).toContain(themeState.current);
     });
   });
 
   describe("toggle", () => {
-    it("should toggle between light and dark themes", () => {
-      const initialTheme = themeState.theme;
+    it("should toggle between themes", () => {
+      themeState.current = Theme.LIGHT;
+      themeState.toggle();
+      expect(themeState.current).toBe(Theme.DARK);
 
       themeState.toggle();
-      expect(themeState.theme).not.toBe(initialTheme);
-
-      themeState.toggle();
-      expect(themeState.theme).toBe(initialTheme);
-    });
-
-    it("should switch from dark to light", () => {
-      themeState.theme = "dark";
-      themeState.toggle();
-      expect(themeState.theme).toBe("light");
-    });
-
-    it("should switch from light to dark", () => {
-      themeState.theme = "light";
-      themeState.toggle();
-      expect(themeState.theme).toBe("dark");
+      expect(themeState.current).toBe(Theme.LIGHT);
     });
   });
 
-  describe("theme getter", () => {
-    it("should return current theme", () => {
-      themeState.theme = "dark";
-      expect(themeState.theme).toBe("dark");
+  describe("current setter", () => {
+    it("should set theme correctly", () => {
+      themeState.current = Theme.DARK;
+      expect(themeState.current).toBe(Theme.DARK);
 
-      themeState.theme = "light";
-      expect(themeState.theme).toBe("light");
+      themeState.current = Theme.LIGHT;
+      expect(themeState.current).toBe(Theme.LIGHT);
+    });
+  });
+
+  describe("STATE_DATA", () => {
+    it("should serialize and deserialize theme", () => {
+      themeState.current = Theme.DARK;
+      expect(themeState[STATE_DATA]).toEqual({ current: Theme.DARK });
+
+      themeState[STATE_DATA] = { current: Theme.LIGHT };
+      expect(themeState.current).toBe(Theme.LIGHT);
     });
   });
 });

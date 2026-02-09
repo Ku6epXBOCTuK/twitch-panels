@@ -1,3 +1,5 @@
+import { STATE_DATA, withPersistence } from "./persisted.svelte";
+
 export interface TextItem {
   text: string;
   id: number;
@@ -25,7 +27,14 @@ export function createState() {
       texts = [];
       nextId = 0;
     },
+    get [STATE_DATA]() {
+      return texts.map(({ text }) => text);
+    },
+    set [STATE_DATA](newTexts: Array<string>) {
+      texts = newTexts.map((text, idx) => ({ text, id: idx }));
+      nextId = newTexts.length;
+    },
   };
 }
 
-export const textsState = createState();
+export const textsState = withPersistence("texts", createState());

@@ -66,4 +66,11 @@ export const TextAlign = {
 export type TextAlignType = (typeof TextAlign)[keyof typeof TextAlign];
 export const DEFAULT_TEXT_ALIGN: TextAlignType = TextAlign.CENTER;
 
+export const Theme = {
+  DARK: "dark",
+  LIGHT: "light",
+} as const;
+
+export type ThemeType = (typeof Theme)[keyof typeof Theme];
+
 export const TRANSITION_DURATION = import.meta.env.MODE === "test" ? 0 : 300;

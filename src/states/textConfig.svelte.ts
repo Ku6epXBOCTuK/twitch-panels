@@ -1,5 +1,6 @@
-import type { TextAlignType } from "$lib/constants";
+import { type TextAlignType } from "$lib/constants";
 import type { HexColor } from "$lib/types";
+import { STATE_DATA, withPersistence } from "./persisted.svelte";
 
 export type TextConfig = {
   fontSize: number;
@@ -58,7 +59,25 @@ function createState() {
     set offsetY(offsetY: number) {
       state.offsetY = offsetY;
     },
+    get [STATE_DATA]() {
+      return {
+        fontSize: state.fontSize,
+        fontFamily: state.fontFamily,
+        color: state.color,
+        align: state.align,
+        paddingX: state.paddingX,
+        offsetY: state.offsetY,
+      };
+    },
+    set [STATE_DATA](newConfig: TextConfig) {
+      state.fontSize = newConfig.fontSize;
+      state.fontFamily = newConfig.fontFamily;
+      state.color = newConfig.color;
+      state.align = newConfig.align;
+      state.paddingX = newConfig.paddingX;
+      state.offsetY = newConfig.offsetY;
+    },
   };
 }
 
-export const textConfigState = createState();
+export const textConfigState = withPersistence("text-config", createState());
