@@ -1,5 +1,3 @@
-import { PANEL_SETTINGS } from "$lib/constants";
-
 export type ImageConfig = {
   image: HTMLImageElement | undefined;
   imageLink: string;
@@ -11,52 +9,15 @@ export type ImageConfig = {
 };
 
 export class ImageConfigState {
-  #state: ImageConfig = $state({
-    image: undefined,
-    imageLink: "",
-    imageReady: false,
-    cropLeft: 0,
-    cropTop: 0,
-    cropRight: 0,
-    cropBottom: 0,
-  });
+  image = $state<HTMLImageElement | undefined>(undefined);
+  imageLink = $state("");
+  imageReady = $state(false);
+  cropLeft = $state(0);
+  cropTop = $state(0);
+  cropRight = $state(0);
+  cropBottom = $state(0);
 
   #currentAbortController: AbortController | null = null;
-
-  get image() {
-    return this.#state.image;
-  }
-  get imageReady() {
-    return this.#state.imageReady;
-  }
-  get imageLink() {
-    return this.#state.imageLink;
-  }
-  get cropLeft() {
-    return this.#state.cropLeft;
-  }
-  get cropTop() {
-    return this.#state.cropTop;
-  }
-  get cropRight() {
-    return this.#state.cropRight;
-  }
-  get cropBottom() {
-    return this.#state.cropBottom;
-  }
-
-  set cropLeft(v) {
-    this.#state.cropLeft = v;
-  }
-  set cropTop(v) {
-    this.#state.cropTop = v;
-  }
-  set cropRight(v) {
-    this.#state.cropRight = v;
-  }
-  set cropBottom(v) {
-    this.#state.cropBottom = v;
-  }
 
   private cleanup() {
     if (this.#currentAbortController) {
@@ -64,19 +25,19 @@ export class ImageConfigState {
       this.#currentAbortController = null;
     }
 
-    if (this.#state.image) {
-      this.#state.image.onload = null;
-      this.#state.image.onerror = null;
-      this.#state.image.src = "";
-      this.#state.image = undefined;
+    if (this.image) {
+      this.image.onload = null;
+      this.image.onerror = null;
+      this.image.src = "";
+      this.image = undefined;
     }
   }
 
   async uploadImageByLink(link: string): Promise<void> {
     this.cleanup();
 
-    this.#state.imageReady = false;
-    this.#state.imageLink = link;
+    this.imageReady = false;
+    this.imageLink = link;
 
     this.#currentAbortController = new AbortController();
     const { signal } = this.#currentAbortController;
@@ -93,15 +54,15 @@ export class ImageConfigState {
       img.onload = () => {
         if (signal.aborted) return;
         onFinished();
-        this.#state.image = img;
-        this.#state.imageReady = true;
+        this.image = img;
+        this.imageReady = true;
         resolve();
       };
 
       img.onerror = () => {
         if (signal.aborted) return;
         onFinished();
-        this.#state.imageReady = false;
+        this.imageReady = false;
         reject(new Error(`Failed to load image: ${link}`));
       };
 
@@ -121,12 +82,12 @@ export class ImageConfigState {
 
   reset() {
     this.cleanup();
-    this.#state.imageLink = "";
-    this.#state.imageReady = false;
-    this.#state.cropLeft = 0;
-    this.#state.cropTop = 0;
-    this.#state.cropRight = 0;
-    this.#state.cropBottom = 0;
+    this.imageLink = "";
+    this.imageReady = false;
+    this.cropLeft = 0;
+    this.cropTop = 0;
+    this.cropRight = 0;
+    this.cropBottom = 0;
   }
 
   destroy() {
@@ -135,4 +96,3 @@ export class ImageConfigState {
 }
 
 export const imageConfigState = new ImageConfigState();
-imageConfigState.uploadImageByLink(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE).catch(() => {});

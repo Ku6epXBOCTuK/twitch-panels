@@ -11,8 +11,6 @@
 
   let { text, stage = $bindable() }: Props = $props();
 
-  let image: HTMLImageElement | undefined = imageConfigState.image;
-
   let x = $derived(textConfigState.paddingX);
   let y = $derived(10 + textConfigState.offsetY);
   let width = $derived(PANEL_SETTINGS.PANEL_WIDTH - 2 * textConfigState.paddingX);
@@ -21,7 +19,7 @@
 
 <Stage width={320} height={100} bind:this={stage}>
   <Layer>
-    <Image {image}></Image>
+    <Image image={imageConfigState.image}></Image>
     <Text
       {text}
       {x}

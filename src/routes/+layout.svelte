@@ -1,7 +1,9 @@
 <script lang="ts">
   import AppHeader from "$components/layout/AppHeader.svelte";
+  import { PANEL_SETTINGS } from "$lib/constants";
+  import { imageConfigState } from "$states/imageConfig.svelte";
   import { themeState } from "$states/theme.svelte";
-  import type { Snippet } from "svelte";
+  import { onMount, type Snippet } from "svelte";
 
   interface Props {
     children: Snippet;
@@ -14,6 +16,10 @@
   });
 
   let { children }: Props = $props();
+
+  onMount(async () => {
+    await imageConfigState.uploadImageByLink(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE);
+  });
 </script>
 
 <div class="container">
