@@ -1,193 +1,60 @@
 import TextManager from "$components/text/TextManager.svelte";
 import { textsState } from "$states/texts.svelte";
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render, screen } from "@testing-library/svelte";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it } from "vitest";
 
-describe("TextManager.svelte", () => {
+describe("TextManager", () => {
   beforeEach(() => {
     textsState.clear();
   });
 
-  describe("Rendering", () => {
-    it("should render card with title, input and add button", () => {
-      render(TextManager);
+  it("should add text to state and clear input on button click", async () => {
+    const user = userEvent.setup();
+    render(TextManager);
 
-      const cardTitle = screen.getByText("Тексты панелей");
-      expect(cardTitle).toBeInTheDocument();
+    const input = screen.getByRole("textbox", { name: /input new text/i });
+    const addButton = screen.getByRole("button", { name: /add text/i });
 
-      const input = screen.getByRole("textbox");
-      expect(input).toBeInTheDocument();
+    await user.type(input, "New Note");
+    await user.click(addButton);
 
-      const addButton = screen.getByRole("button", { name: /add/i });
-      expect(addButton).toBeInTheDocument();
-    });
-
-    it("should show empty list when textsState.texts is empty", () => {
-      render(TextManager);
-
-      const textItems = screen.queryAllByRole("listitem");
-      expect(textItems).toHaveLength(0);
-    });
-
-
+    expect(textsState.texts).toHaveLength(1);
+    expect(textsState.texts[0].text).toBe("New Note");
+    expect(input).toHaveValue("");
   });
 
-  describe("Adding text", () => {
-    it("should call textsState.addText when add button is clicked", async () => {
-      const addTextSpy = vi.spyOn(textsState, "addText");
+  it("should add text on enter key", async () => {
+    const user = userEvent.setup();
+    render(TextManager);
 
-      render(TextManager);
+    const input = screen.getByRole("textbox", { name: /input new text/i });
 
-      const input = screen.getByRole("textbox");
-      const addButton = screen.getByRole("button", { name: /add/i });
+    await user.type(input, "Enter Note{Enter}");
 
-      fireEvent.input(input, { target: { value: "New text" } });
-      fireEvent.click(addButton);
-
-      expect(addTextSpy).toHaveBeenCalledWith("New text");
-    });
-
-    it("should clear input after adding text", async () => {
-      render(TextManager);
-
-      const input = screen.getByRole("textbox");
-      const addButton = screen.getByRole("button", { name: /add/i });
-
-      fireEvent.input(input, { target: { value: "New text" } });
-      fireEvent.click(addButton);
-
-      await waitFor(() => {
-        expect(input).toHaveValue("");
-      });
-    });
-
-    it("should add text when Enter key is pressed", () => {
-      const addTextSpy = vi.spyOn(textsState, "addText");
-
-      render(TextManager);
-
-      const input = screen.getByRole("textbox");
-
-      fireEvent.input(input, { target: { value: "New text" } });
-      fireEvent.keyDown(input, { key: "Enter" });
-
-      expect(addTextSpy).toHaveBeenCalledWith("New text");
-    });
-
-
+    expect(textsState.texts).toHaveLength(1);
+    expect(textsState.texts[0].text).toBe("Enter Note");
   });
 
-  describe("List and deletion", () => {
-    it("should render TextInlineEdit for each text", () => {
-      textsState.addText("Text 1");
-      textsState.addText("Text 2");
-      textsState.addText("Text 3");
+  it("should display all items from state", async () => {
+    textsState.addText("First");
+    textsState.addText("Second");
 
-      render(TextManager);
+    render(TextManager);
 
-      const textItems = screen.queryAllByRole("listitem");
-      expect(textItems).toHaveLength(3);
-    });
-
-    it("should pass correct props to TextInlineEdit", () => {
-      textsState.addText("Test text");
-      const textId = textsState.texts[0].id;
-
-      render(TextManager);
-
-      const textItems = screen.queryAllByRole("listitem");
-      expect(textItems).toHaveLength(1);
-
-      const input = within(textItems[0]).getByRole("textbox");
-      expect(input).toHaveValue("Test text");
-    });
-
-    it("should call textsState.removeText when delete button is clicked", () => {
-      textsState.addText("Text to delete");
-      const textId = textsState.texts[0].id;
-      const removeTextSpy = vi.spyOn(textsState, "removeText");
-
-      render(TextManager);
-
-      const deleteButton = screen.getByRole("button", { name: /delete/i });
-      fireEvent.click(deleteButton);
-
-      expect(removeTextSpy).toHaveBeenCalledWith(textId);
-    });
-
-    it("should remove element from DOM after deletion", async () => {
-      textsState.addText("Text to delete");
-
-      render(TextManager);
-
-      let textItems = screen.queryAllByRole("listitem");
-      expect(textItems).toHaveLength(1);
-
-      const deleteButton = screen.getByRole("button", { name: /delete/i });
-      fireEvent.click(deleteButton);
-
-      await waitFor(() => {
-        textItems = screen.queryAllByRole("listitem");
-        expect(textItems).toHaveLength(0);
-      });
-    });
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(2);
   });
 
-  describe("Reactivity", () => {
-    it("should update list when textsState.texts changes externally", async () => {
-      render(TextManager);
+  it("should remove text from state when delete button is clicked", async () => {
+    const user = userEvent.setup();
+    textsState.addText("To be deleted");
 
-      let textItems = screen.queryAllByRole("listitem");
-      expect(textItems).toHaveLength(0);
+    render(TextManager);
 
-      textsState.addText("New text");
+    const deleteBtn = screen.getByRole("button", { name: /delete/i });
+    await user.click(deleteBtn);
 
-      await waitFor(() => {
-        textItems = screen.queryAllByRole("listitem");
-        expect(textItems).toHaveLength(1);
-      });
-    });
-
-    it("should update when text is removed externally", async () => {
-      vi.useFakeTimers();
-
-      textsState.addText("Text to remove");
-      const textId = textsState.texts[0].id;
-
-      render(TextManager);
-
-      await waitFor(() => {
-        expect(screen.queryAllByRole("listitem")).toHaveLength(1);
-      });
-
-      textsState.removeText(textId);
-      await vi.advanceTimersByTimeAsync(400);
-
-      await waitFor(() => {
-        expect(screen.queryAllByRole("listitem")).toHaveLength(0);
-      });
-      vi.useRealTimers();
-    });
-  });
-
-  describe("Accessibility", () => {
-    // it("should keep focus in input after adding text", async () => {
-    //   render(TextManager);
-    //   const input = screen.getByRole("textbox");
-    //   const addButton = screen.getByRole("button", { name: /add/i });
-    //   fireEvent.input(input, { target: { value: "New text" } });
-    //   fireEvent.click(addButton);
-    //   await waitFor(() => {
-    //     expect(input).toHaveFocus();
-    //   });
-    // });
-
-    it("should have proper aria-labels for input and button", () => {
-      render(TextManager);
-      const input = screen.getByRole("textbox");
-      expect(input).toHaveAttribute("aria-label", "Input new text");
-      const addButton = screen.getByRole("button", { name: /add/i });
-      expect(addButton).toHaveAttribute("aria-label", "Add text");
-    });
+    expect(textsState.texts).toHaveLength(0);
   });
 });

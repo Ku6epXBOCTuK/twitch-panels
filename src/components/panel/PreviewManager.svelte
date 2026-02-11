@@ -69,7 +69,7 @@
           </div>
         {/key}
       {:else}
-        <div class="empty-state">
+        <div class="empty-state" aria-label="Empty texts info">
           <StickyNote />
           <p>Добавьте тексты для создания панелей</p>
         </div>

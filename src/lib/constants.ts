@@ -64,6 +64,7 @@ export const TextAlign = {
 } as const;
 
 export type TextAlignType = (typeof TextAlign)[keyof typeof TextAlign];
+
 export const DEFAULT_TEXT_ALIGN: TextAlignType = TextAlign.CENTER;
 
 export const Theme = {

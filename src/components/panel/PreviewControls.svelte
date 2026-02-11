@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
-  import type { SlideDirectionType } from "$lib/constants";
+  import { SlideDirection, type SlideDirectionType } from "$lib/constants";
   import ChevronLeft from "~icons/lucide/chevron-left";
   import ChevronRight from "~icons/lucide/chevron-right";
 
@@ -10,19 +10,19 @@
     max: number;
   }
 
-  let { current = $bindable(), direction = $bindable("next"), max }: Props = $props();
+  let { current = $bindable(), direction = $bindable(SlideDirection.NEXT), max }: Props = $props();
 
   let isFirst = $derived(current === 0);
   let isLast = $derived(current === max - 1);
 
   function prev() {
     if (current > 0) current--;
-    direction = "prev";
+    direction = SlideDirection.PREV;
   }
 
-  function next() {
+  async function next() {
     if (current < max - 1) current++;
-    direction = "next";
+    direction = SlideDirection.NEXT;
   }
 </script>
 

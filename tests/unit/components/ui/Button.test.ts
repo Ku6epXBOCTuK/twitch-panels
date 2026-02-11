@@ -1,5 +1,6 @@
 import Button from "$components/ui/Button.svelte";
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import MockIcon from "./MockIcon.svelte";
 
@@ -25,11 +26,15 @@ describe("Button.svelte", () => {
       },
     });
 
-    expect(screen.getByRole("button", { name: /test button/i })).toBeInTheDocument();
+    const button = screen.getByRole("button", { name: /test button/i });
+    expect(button).toBeInTheDocument();
+    expect(button.textContent.trim()).toBe("");
   });
 
   it("should call onclick handler", async () => {
     const onclick = vi.fn();
+    const user = userEvent.setup();
+
     render(Button, {
       props: {
         icon: MockIcon,
@@ -40,9 +45,25 @@ describe("Button.svelte", () => {
     });
 
     const button = screen.getByRole("button", { name: /test button/i });
-    await fireEvent.click(button);
+    await user.click(button);
 
     expect(onclick).toHaveBeenCalledTimes(1);
+  });
+
+  it("should not throw error when clicked without onclick prop", async () => {
+    const user = userEvent.setup();
+
+    render(Button, {
+      props: {
+        icon: MockIcon,
+        label: "Click me",
+        ariaLabel: "Test button",
+      },
+    });
+
+    const button = screen.getByRole("button", { name: /test button/i });
+
+    expect(() => user.click(button)).not.toThrow();
   });
 
   it("should be disabled when disabled prop is true", () => {

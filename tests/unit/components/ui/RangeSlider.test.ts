@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 describe("RangeSlider.svelte", () => {
   it("should call onchange handler", async () => {
     const onchange = vi.fn();
+
     render(RangeSlider, {
       props: {
         value: 50,

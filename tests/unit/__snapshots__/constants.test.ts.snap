@@ -1,0 +1,59 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Application Constants Logic > Global Contract (Snapshot) > should match the previous configuration snapshot 1`] = `
+{
+  "DEFAULT_TEXT_ALIGN": "center",
+  "IMAGE_SETTINGS": {
+    "MAX_FILE_SIZE": 10485760,
+    "SUPPORTED_FORMATS": [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ],
+  },
+  "PANEL_SETTINGS": {
+    "DEFAULT_BACKGROUND_IMAGE": "./backgrounds/b1.jpg",
+    "PANEL_HEIGHT_DEFAULT": 100,
+    "PANEL_HEIGHT_MAX": 200,
+    "PANEL_WIDTH": 320,
+  },
+  "SlideDirection": {
+    "NEXT": "next",
+    "PREV": "prev",
+  },
+  "TRANSITION_DURATION": 0,
+  "TYPOGRAPHY": {
+    "FONT_FAMILIES": [
+      "Arial",
+      "Verdana",
+      "Georgia",
+      "Times New Roman",
+      "Courier New",
+      "Impact",
+      "Comic Sans MS",
+      "Trebuchet MS",
+    ],
+    "FONT_FAMILY_DEFAULT": "Arial",
+    "FONT_SIZE_DEFAULT": 32,
+    "FONT_SIZE_MAX": 72,
+    "FONT_SIZE_MIN": 10,
+    "MAX_TEXT_LENGTH": 100,
+    "PADDING_X_DEFAULT": 10,
+    "PADDING_X_MAX": 100,
+    "TEXT_COLOR_DEFAULT": "#ffffff",
+    "VERTICAL_OFFSET_MAX": 100,
+    "VERTICAL_OFFSET_MIN": -100,
+  },
+  "TextAlign": {
+    "CENTER": "center",
+    "LEFT": "left",
+    "RIGHT": "right",
+  },
+  "Theme": {
+    "DARK": "dark",
+    "LIGHT": "light",
+  },
+}
+`;

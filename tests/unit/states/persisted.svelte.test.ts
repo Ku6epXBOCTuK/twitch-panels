@@ -1,7 +1,6 @@
 import { STATE_DATA, withPersistence } from "$states/persisted.svelte";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
   return {
@@ -62,7 +61,6 @@ describe("persisted.svelte", () => {
         [STATE_DATA]: { value: 0 },
       };
 
-      // Should not throw and state should remain unchanged
       expect(() => withPersistence("test-key", state)).not.toThrow();
       expect(state[STATE_DATA]).toEqual({ value: 0 });
     });
@@ -88,10 +86,8 @@ describe("persisted.svelte", () => {
       withPersistence("test-key", state, 500);
 
       state[STATE_DATA] = { count: 2 };
-      // Wait for effect to set the debounced timeout
       await Promise.resolve();
 
-      // Fast-forward time to trigger debounced save
       vi.advanceTimersByTime(500);
 
       await Promise.resolve();
@@ -110,7 +106,6 @@ describe("persisted.svelte", () => {
 
       state[STATE_DATA] = { count: 2 };
 
-      // Wait for effect to run
       await Promise.resolve();
 
       expect(localStorageMock.setItem).toHaveBeenCalledWith("test-key", JSON.stringify({ count: 2 }));
@@ -118,10 +113,6 @@ describe("persisted.svelte", () => {
 
     it("should cleanup timeout on state change during debounce", async () => {
       vi.useFakeTimers();
-      // const state = {
-      //   [STATE_DATA]: { count: 1 },
-      // };
-
       const data = $state({ count: 1 });
 
       const state = {
@@ -135,21 +126,15 @@ describe("persisted.svelte", () => {
 
       withPersistence("test-key", state, 500);
 
-      // First change - sets timeout for count:2
       state[STATE_DATA] = { count: 2 };
-      // Let effect run and set the timeout
       await Promise.resolve();
 
-      // Second change before first timeout fires - should clear previous and set new timeout for count:3
       state[STATE_DATA] = { count: 3 };
-      // Let effect run and clear old timeout, set new one
       await Promise.resolve();
 
-      // Run only the currently pending timer (the one for count:3)
       vi.runOnlyPendingTimers();
       await Promise.resolve();
 
-      // Should only have saved the latest value (count:3)
       expect(localStorageMock.setItem).toHaveBeenCalledTimes(1);
       expect(localStorageMock.setItem).toHaveBeenCalledWith("test-key", JSON.stringify({ count: 3 }));
 
@@ -163,13 +148,10 @@ describe("persisted.svelte", () => {
 
       withPersistence("test-key", state);
 
-      // The default debounce should be used (0 in test mode)
       state[STATE_DATA] = { test: false };
 
-      // Wait for effect to run
       await Promise.resolve();
 
-      // In test mode, DEBOUNCE_DURATION is 0, so immediate save
       expect(localStorageMock.setItem).toHaveBeenCalled();
     });
   });

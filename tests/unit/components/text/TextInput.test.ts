@@ -1,5 +1,6 @@
 import TextInput from "$components/text/TextInput.svelte";
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 describe("TextInput.svelte", () => {
@@ -18,6 +19,7 @@ describe("TextInput.svelte", () => {
   });
 
   it("should update value on input", async () => {
+    const user = userEvent.setup();
     render(TextInput, {
       props: {
         text: "Initial",
@@ -27,41 +29,33 @@ describe("TextInput.svelte", () => {
     });
 
     const input = screen.getByRole("textbox", { name: /test input/i });
-    await fireEvent.input(input, { target: { value: "Updated text" } });
+    await user.clear(input);
+    await user.type(input, "Updated text");
 
     expect(input).toHaveValue("Updated text");
   });
 
-  it("should call onenter when Enter key is pressed", async () => {
-    const onenter = vi.fn();
+  it("should call onenter only on Enter key and not on others", async () => {
+    const user = userEvent.setup();
+    const onenterSpy = vi.fn();
+
     render(TextInput, {
       props: {
-        text: "Test",
-        onenter,
+        text: "test",
+        onenter: onenterSpy,
         ariaLabel: "Test input",
       },
     });
 
     const input = screen.getByRole("textbox", { name: /test input/i });
-    await fireEvent.keyDown(input, { key: "Enter" });
 
-    expect(onenter).toHaveBeenCalledTimes(1);
-  });
+    await user.type(input, "abc");
+    expect(onenterSpy).not.toHaveBeenCalled();
 
-  it("should not call onenter when other keys are pressed", async () => {
-    const onenter = vi.fn();
-    render(TextInput, {
-      props: {
-        text: "Test",
-        onenter,
-        ariaLabel: "Test input",
-      },
-    });
+    await user.keyboard("{Escape}");
+    expect(onenterSpy).not.toHaveBeenCalled();
 
-    const input = screen.getByRole("textbox", { name: /test input/i });
-    await fireEvent.keyDown(input, { key: "Escape" });
-    await fireEvent.keyDown(input, { key: "Tab" });
-
-    expect(onenter).not.toHaveBeenCalled();
+    await user.type(input, "{Enter}");
+    expect(onenterSpy).toHaveBeenCalledTimes(1);
   });
 });
