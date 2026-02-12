@@ -9,7 +9,7 @@ describe("Alignment.svelte", () => {
     const user = userEvent.setup();
     render(AlignmentTest);
 
-    const buttons = screen.getAllByRole("button");
+    const buttons = screen.getAllByRole("radio");
     const stateDisplay = screen.getByTestId("align-value");
 
     const allButtonsToClick = [...buttons, buttons[0]];
@@ -38,7 +38,7 @@ describe("Alignment.svelte", () => {
 
     await rerender({ align: TextAlign.CENTER });
 
-    const centerBtn = screen.getByRole("button", { name: new RegExp(TextAlign.CENTER, "i") });
-    expect(centerBtn).toHaveClass("active");
+    const centerBtn = screen.getByRole("radio", { name: new RegExp(TextAlign.CENTER, "i") });
+    expect(centerBtn).toBeChecked();
   });
 });

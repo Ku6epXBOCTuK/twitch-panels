@@ -4,17 +4,20 @@
   interface Props {
     label: string;
     children: Snippet;
+    noLabel?: boolean;
   }
 
-  let { label, children }: Props = $props();
+  let { label, children, noLabel = false }: Props = $props();
+
+  let tag = $derived(noLabel ? "div" : "label");
 </script>
 
-<label class="setting-row">
+<svelte:element this={tag} class="setting-row">
   <div class="setting-label">{label}</div>
   <div class="setting-control">
     {@render children()}
   </div>
-</label>
+</svelte:element>
 
 <style>
   .setting-row {

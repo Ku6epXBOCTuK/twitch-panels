@@ -20,7 +20,7 @@
     <SettingsRow label="Цвет">
       <ColorPicker bind:value={textConfigState.color} />
     </SettingsRow>
-    <SettingsRow label="Выравнивание">
+    <SettingsRow label="Выравнивание" noLabel={true}>
       <Alignment bind:align={textConfigState.align} />
     </SettingsRow>
     <SettingsRow label="Отступы">
