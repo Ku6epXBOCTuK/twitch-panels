@@ -24,30 +24,30 @@
     align-items: center;
     gap: 8px;
     padding: 8px 10px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-main);
     border-radius: var(--radius);
     transition: var(--transition);
   }
 
   .text-item:hover {
-    border-color: var(--border-hover);
+    border-color: var(--border-strong);
   }
 
   .text-item input {
     flex: 1;
     padding: 6px 10px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-main);
     border-radius: 4px;
     font-size: 14px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    background: var(--surface-main);
+    color: var(--text-main);
     transition: var(--transition);
     font-family: inherit;
   }
 
   .text-item input:focus {
     outline: none;
-    border-color: var(--accent-primary);
+    border-color: var(--border-strong);
   }
 </style>

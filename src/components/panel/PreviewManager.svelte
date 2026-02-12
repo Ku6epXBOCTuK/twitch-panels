@@ -78,7 +78,7 @@
 
     <div class="panel-actions">
       <Button label="Скачать всё" ariaLabel="Download all" icon={Download} onclick={downloadAll} />
-      <Button label="Скачать" ariaLabel="Download current" type="outline" icon={Download} onclick={downloadCurrent} />
+      <Button label="Скачать" ariaLabel="Download current" type="secondary" icon={Download} onclick={downloadCurrent} />
     </div>
   </div>
 </Card>
@@ -92,7 +92,7 @@
   }
 
   .panel-display {
-    background: var(--bg-secondary);
+    background: var(--surface-subtle);
     border-radius: var(--radius);
     padding: 20px;
     display: flex;
@@ -110,7 +110,6 @@
   .empty-state {
     text-align: center;
     padding: 32px 16px;
-    color: var(--text-tertiary);
   }
 
   .empty-state :global(svg) {

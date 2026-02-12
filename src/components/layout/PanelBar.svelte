@@ -7,6 +7,3 @@
   <ImageManager />
   <PreviewManager />
 </div>
-
-<style>
-</style>

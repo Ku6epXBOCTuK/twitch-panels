@@ -20,7 +20,7 @@
     flex: 1;
     height: 4px;
     border-radius: 2px;
-    background: var(--bg-secondary);
+    background: var(--surface-control);
     outline: none;
     -webkit-appearance: none;
     appearance: none;
@@ -32,7 +32,7 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--accent-primary);
+    background: var(--action-primary);
     cursor: pointer;
     transition: var(--transition);
   }
@@ -45,7 +45,7 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--accent-primary);
+    background: var(--action-primary);
     cursor: pointer;
     border: none;
     transition: var(--transition);
@@ -56,13 +56,13 @@
   }
 
   .value-display {
-    color: var(--text-primary);
+    color: var(--text-main);
     font-weight: 500;
     min-width: 40px;
     text-align: right;
     font-size: 13px;
     padding: 4px 8px;
-    background: var(--bg-secondary);
+    background: var(--surface-main);
     border-radius: 4px;
   }
 </style>

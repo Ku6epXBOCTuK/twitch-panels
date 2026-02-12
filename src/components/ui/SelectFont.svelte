@@ -20,10 +20,10 @@
 <style>
   .select-input {
     padding: 8px 10px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-main);
     border-radius: var(--radius);
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    background: var(--surface-main);
+    color: var(--text-main);
     font-size: 13px;
     cursor: pointer;
     transition: var(--transition);
@@ -33,6 +33,6 @@
 
   .select-input:focus {
     outline: none;
-    border-color: var(--accent-primary);
+    border-color: var(--border-strong);
   }
 </style>

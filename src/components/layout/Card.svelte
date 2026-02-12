@@ -33,19 +33,20 @@
 
 <style>
   .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-main);
     border-radius: var(--radius);
     padding: 16px;
     margin-bottom: 16px;
     transition: var(--transition);
     overflow: hidden;
+    box-shadow: var(--shadow);
   }
 
   .card-title {
     font-size: 15px;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-main);
     margin-bottom: 12px;
     display: flex;
     align-items: center;

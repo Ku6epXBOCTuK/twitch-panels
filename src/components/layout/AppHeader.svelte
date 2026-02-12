@@ -20,11 +20,12 @@
 
 <style>
   .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--action-primary) 0%, var(--action-secondary) 100%);
+    color: var(--text-action);
     padding: 16px 20px;
     border-radius: var(--radius);
     margin-bottom: 16px;
+    box-shadow: var(--shadow-md);
   }
 
   .header-content {

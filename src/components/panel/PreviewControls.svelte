@@ -33,7 +33,6 @@
 <style>
   .panel-indicator {
     font-size: 13px;
-    color: var(--text-secondary);
     font-weight: 500;
     min-width: 50px;
     text-align: center;

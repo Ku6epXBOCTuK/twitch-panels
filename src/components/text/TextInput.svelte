@@ -27,21 +27,21 @@
   .text-input {
     flex: 1;
     padding: 10px 12px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-main);
     border-radius: var(--radius);
     font-size: 14px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    background: var(--surface-main);
+    color: var(--text-main);
     transition: var(--transition);
     font-family: inherit;
   }
 
   .text-input:focus {
     outline: none;
-    border-color: var(--accent-primary);
+    border-color: var(--border-strong);
   }
 
   .text-input::placeholder {
-    color: var(--text-tertiary);
+    color: var(--text-muted);
   }
 </style>

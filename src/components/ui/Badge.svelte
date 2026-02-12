@@ -16,8 +16,8 @@
     min-width: 20px;
     height: 20px;
     padding: 0 6px;
-    background: var(--accent-light);
-    color: var(--accent-primary);
+    background: var(--action-primary);
+    color: var(--text-action);
     border-radius: 10px;
     font-size: 11px;
     font-weight: 600;

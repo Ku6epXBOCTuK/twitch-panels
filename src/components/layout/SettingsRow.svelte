@@ -25,7 +25,7 @@
   }
 
   .setting-label {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-size: 13px;
     font-weight: 500;
   }

@@ -21,7 +21,7 @@
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 5;
-    background: var(--bg-secondary);
+    background: var(--surface-subtle);
     border-radius: var(--radius);
     overflow: hidden;
     cursor: crosshair;
@@ -35,7 +35,7 @@
 
   .crop-box {
     position: absolute;
-    border: 2px solid var(--accent-primary);
+    border: 2px solid var(--action-primary);
     box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
     cursor: move;
     display: none;
@@ -50,7 +50,7 @@
     width: 10px;
     height: 10px;
     background: white;
-    border: 2px solid var(--accent-primary);
+    border: 2px solid var(--action-primary);
     border-radius: 50%;
   }
 

@@ -9,9 +9,18 @@
     disabled?: boolean;
     label?: string;
     type?: "primary" | "secondary" | "danger" | "outline" | "mini";
+    extra?: "grow";
   }
 
-  let { icon: Icon, ariaLabel, onclick = () => {}, disabled = false, label = "", type = "primary" }: Props = $props();
+  let {
+    icon: Icon,
+    ariaLabel,
+    onclick = () => {},
+    disabled = false,
+    label = "",
+    type = "primary",
+    extra,
+  }: Props = $props();
 </script>
 
 <button
@@ -21,6 +30,7 @@
   class:btn-outline={type === "outline"}
   class:btn-danger={type === "danger"}
   class:btn-mini={type === "mini"}
+  class:grow={extra === "grow"}
   {disabled}
   {onclick}
   aria-label={ariaLabel}
@@ -31,6 +41,8 @@
 
 <style>
   .btn {
+    --btn-main: var(--action-primary);
+    --btn-hover: var(--action-primary-hover);
     padding: 10px 16px;
     border: none;
     border-radius: var(--radius);
@@ -43,6 +55,8 @@
     gap: 6px;
     font-family: inherit;
     white-space: nowrap;
+    background-color: var(--btn-main);
+    color: oklch(from var(--btn-main) 99% 0.05 h);
   }
 
   .btn :global(svg) {
@@ -50,75 +64,52 @@
     height: 16px;
   }
 
-  .btn:hover:not(:disabled) {
-    background: var(--accent-hover);
-  }
-
   .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .btn-primary {
-    background: var(--accent-primary);
-    color: white;
+  .btn:hover:not(:disabled) {
+    background-color: var(--btn-hover);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-secondary {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-  }
-
-  .btn-secondary:hover {
-    background: var(--bg-hover);
+    --btn-main: var(--action-secondary);
+    --btn-hover: var(--action-secondary-hover);
   }
 
   .btn-outline {
     background: transparent;
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border: 1px solid var(--border-strong);
   }
 
   .btn-outline:hover:not(:disabled) {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    color: var(--text-main);
   }
 
   .btn-danger {
-    background: var(--danger);
-    color: white;
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: var(--transition);
-    min-width: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .btn-danger:hover {
-    background: #dc2626;
+    --btn-main: var(--danger-base);
   }
 
   .btn-mini {
     width: 32px;
     height: 32px;
     padding: 0;
-    border: 1px solid var(--border-color);
-    background: var(--bg-primary);
+    border: 1px solid var(--border-main);
     border-radius: var(--radius);
-    color: var(--text-secondary);
     justify-content: center;
   }
 
   .btn-mini:hover:not(:disabled) {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
+    border-color: var(--border-main);
+  }
+
+  .grow {
+    flex-grow: 1;
+    justify-content: center;
   }
 </style>

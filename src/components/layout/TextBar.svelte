@@ -7,6 +7,3 @@
   <TextManager />
   <TextConfig />
 </div>
-
-<style>
-</style>
