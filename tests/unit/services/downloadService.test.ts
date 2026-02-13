@@ -1,6 +1,7 @@
 import { DownloadService, type DownloadItem } from "$services/downloadService";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
+import type { Stage } from "konva/lib/Stage";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("file-saver", () => {
@@ -24,17 +25,17 @@ vi.mock("jszip", () => {
 
 describe("DownloadService", () => {
   let service: DownloadService;
-  let mockKonvaStage: any;
+  let mockKonvaStage: Stage;
 
   beforeEach(() => {
     service = new DownloadService();
     vi.clearAllMocks();
 
     mockKonvaStage = {
-      toBlob: vi.fn(({ callback }) => {
+      toBlob: vi.fn(async ({ callback }) => {
         callback(new Blob(["test image data"], { type: "image/png" }));
       }),
-    };
+    } as unknown as Stage;
   });
 
   describe("downloadPanel", () => {
@@ -52,7 +53,10 @@ describe("DownloadService", () => {
     it("should handle Konva stage without toBlob method", async () => {
       const invalidStage = { toBlob: undefined };
 
-      const result = await service.downloadPanel(invalidStage as any, "test-panel-1.png");
+      const result = await service.downloadPanel(
+        invalidStage as unknown as Stage,
+        "test-panel-1.png",
+      );
 
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -61,7 +65,7 @@ describe("DownloadService", () => {
     });
 
     it("should handle blob creation failure", async () => {
-      mockKonvaStage.toBlob = vi.fn(({ callback }) => {
+      mockKonvaStage.toBlob = vi.fn(async ({ callback }) => {
         callback(null);
       });
 
@@ -98,7 +102,7 @@ describe("DownloadService", () => {
         { filename: "test-panel-5", stage: mockKonvaStage },
       ];
       const result = await service.downloadAll(panels);
-      const [blobArg, fileNameArg] = vi.mocked(saveAs).mock.calls[0];
+      // const [blobArg, fileNameArg] = vi.mocked(saveAs).mock.calls[0];
       const zipInstance = vi.mocked(JSZip).mock.instances[0];
 
       expect(result.success).toBe(true);
@@ -113,7 +117,9 @@ describe("DownloadService", () => {
 
     it("should handle failure", async () => {
       const invalidStage = { toBlob: undefined };
-      const panels: Array<DownloadItem> = [{ filename: "test-panel-1", stage: invalidStage as any }];
+      const panels: Array<DownloadItem> = [
+        { filename: "test-panel-1", stage: invalidStage as unknown as Stage },
+      ];
       const result = await service.downloadAll(panels);
 
       expect(result.success).toBe(false);

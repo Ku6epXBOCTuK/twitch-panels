@@ -2,30 +2,48 @@ import { PANEL_SETTINGS } from "$lib/constants";
 import { imageConfigState, ImageConfigState } from "$states/imageConfig.svelte";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-let lastOnload: (() => void) | null = null;
-let lastOnerror: (() => void) | null = null;
+type ImageEventHandler = ((this: HTMLImageElement, ev?: Event) => void) | null;
+type ImageErrorEventHandler =
+  | ((
+      this: HTMLImageElement,
+      ev?: string | Event,
+      source?: string,
+      lineno?: number,
+      colno?: number,
+      error?: Error,
+    ) => void)
+  | null;
+
+let lastOnload: ImageEventHandler = null;
+let lastOnerror: ImageErrorEventHandler = null;
 
 vi.stubGlobal(
   "Image",
   class {
-    _onload: (() => void) | null = null;
-    _onerror: (() => void) | null = null;
+    _onload: ImageEventHandler = null;
+    _onerror: ImageErrorEventHandler = null;
     _src: string = "";
     crossOrigin: string = "";
 
     set src(val: string) {
       this._src = val;
       if (val.includes("error")) {
-        setTimeout(() => this._onerror?.(), 1);
+        setTimeout(
+          () => this._onerror?.call(this as unknown as HTMLImageElement, new Event("error")),
+          1,
+        );
       } else {
-        setTimeout(() => this._onload?.(), 1);
+        setTimeout(
+          () => this._onload?.call(this as unknown as HTMLImageElement, new Event("load")),
+          1,
+        );
       }
     }
     get src() {
       return this._src;
     }
 
-    set onload(val: any) {
+    set onload(val: ImageEventHandler) {
       this._onload = val;
       if (val) lastOnload = val;
     }
@@ -33,7 +51,7 @@ vi.stubGlobal(
       return this._onload;
     }
 
-    set onerror(val: any) {
+    set onerror(val: ImageErrorEventHandler) {
       this._onerror = val;
       if (val) lastOnerror = val;
     }
@@ -94,7 +112,9 @@ describe("ImageConfigState", () => {
   });
 
   it("should handle image loading error", async () => {
-    await expect(imageConfigState.uploadImageByLink("error-link")).rejects.toThrow("Failed to load image");
+    await expect(imageConfigState.uploadImageByLink("error-link")).rejects.toThrow(
+      "Failed to load image",
+    );
 
     expect(imageConfigState.imageReady).toBe(false);
   });
@@ -173,7 +193,9 @@ describe("ImageConfigState", () => {
 
     imageConfigState.destroy();
 
-    if (lastOnload) lastOnload();
+    if (lastOnload) {
+      lastOnload.call(new Image() as HTMLImageElement, new Event("load"));
+    }
 
     await expect(promise).rejects.toThrow();
     expect(imageConfigState.imageReady).toBe(false);
@@ -184,7 +206,9 @@ describe("ImageConfigState", () => {
 
     imageConfigState.destroy();
 
-    if (lastOnerror) lastOnerror();
+    if (lastOnerror) {
+      lastOnerror.call(new Image() as HTMLImageElement, new Event("load"));
+    }
 
     await expect(promise).rejects.toThrow();
     expect(imageConfigState.imageReady).toBe(false);

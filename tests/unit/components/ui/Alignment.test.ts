@@ -30,7 +30,6 @@ describe("Alignment.svelte", () => {
   });
 
   it("should sync with initial state and change state", async () => {
-    const user = userEvent.setup();
     const { rerender } = render(AlignmentTest, { props: { align: TextAlign.RIGHT } });
     const stateDisplay = screen.getByTestId("align-value");
 

@@ -10,7 +10,6 @@
   let { title, children, titleSnippet = emptySnippet }: Props = $props();
 </script>
 
-<!-- svelte-ignore block_empty -->
 {#snippet emptySnippet()}{/snippet}
 
 <section class="card">

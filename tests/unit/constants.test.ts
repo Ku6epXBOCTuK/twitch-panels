@@ -13,7 +13,9 @@ describe("Application Constants Logic", () => {
 
       expect(TYPOGRAPHY.FONT_FAMILIES).toContain(TYPOGRAPHY.FONT_FAMILY_DEFAULT);
 
-      expect(PANEL_SETTINGS.PANEL_HEIGHT_DEFAULT).toBeLessThanOrEqual(PANEL_SETTINGS.PANEL_HEIGHT_MAX);
+      expect(PANEL_SETTINGS.PANEL_HEIGHT_DEFAULT).toBeLessThanOrEqual(
+        PANEL_SETTINGS.PANEL_HEIGHT_MAX,
+      );
 
       expect(TYPOGRAPHY.VERTICAL_OFFSET_MAX).toBeGreaterThan(TYPOGRAPHY.VERTICAL_OFFSET_MIN);
     });

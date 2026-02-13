@@ -17,7 +17,9 @@
   let current: number = $state(0);
   let direction: SlideDirectionType = $state("next");
 
-  let xDirection = $derived(direction == "next" ? PANEL_SETTINGS.PANEL_WIDTH : -PANEL_SETTINGS.PANEL_WIDTH);
+  let xDirection = $derived(
+    direction == "next" ? PANEL_SETTINGS.PANEL_WIDTH : -PANEL_SETTINGS.PANEL_WIDTH,
+  );
 
   $effect(() => {
     if (textsState.texts.length === 0) {
@@ -78,7 +80,13 @@
 
     <div class="panel-actions">
       <Button label="Скачать всё" ariaLabel="Download all" icon={Download} onclick={downloadAll} />
-      <Button label="Скачать" ariaLabel="Download current" type="secondary" icon={Download} onclick={downloadCurrent} />
+      <Button
+        label="Скачать"
+        ariaLabel="Download current"
+        type="secondary"
+        icon={Download}
+        onclick={downloadCurrent}
+      />
     </div>
   </div>
 </Card>

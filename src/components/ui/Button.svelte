@@ -56,7 +56,7 @@
     font-family: inherit;
     white-space: nowrap;
     background-color: var(--btn-main);
-    color: oklch(from var(--btn-main) 99% 0.05 h);
+    color: var(--text-action);
   }
 
   .btn :global(svg) {

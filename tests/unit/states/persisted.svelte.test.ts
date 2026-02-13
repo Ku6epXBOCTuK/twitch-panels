@@ -92,7 +92,10 @@ describe("persisted.svelte", () => {
 
       await Promise.resolve();
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith("test-key", JSON.stringify({ count: 2 }));
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        "test-key",
+        JSON.stringify({ count: 2 }),
+      );
 
       vi.useRealTimers();
     });
@@ -108,7 +111,10 @@ describe("persisted.svelte", () => {
 
       await Promise.resolve();
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith("test-key", JSON.stringify({ count: 2 }));
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        "test-key",
+        JSON.stringify({ count: 2 }),
+      );
     });
 
     it("should cleanup timeout on state change during debounce", async () => {
@@ -136,7 +142,10 @@ describe("persisted.svelte", () => {
       await Promise.resolve();
 
       expect(localStorageMock.setItem).toHaveBeenCalledTimes(1);
-      expect(localStorageMock.setItem).toHaveBeenCalledWith("test-key", JSON.stringify({ count: 3 }));
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        "test-key",
+        JSON.stringify({ count: 3 }),
+      );
 
       vi.useRealTimers();
     });

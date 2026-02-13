@@ -20,7 +20,7 @@ function createState() {
     paddingX: 10,
     offsetY: 0,
   };
-  let state: TextConfig = $state({ ...defaults });
+  const state: TextConfig = $state({ ...defaults });
 
   return {
     get fontSize() {

@@ -325,7 +325,12 @@ function handleCropMouseDown(e) {
   if (clickedHandle) {
     isResizing = true;
     resizeHandle = clickedHandle;
-  } else if (x >= cropBox.x && x <= cropBox.x + cropBox.width && y >= cropBox.y && y <= cropBox.y + cropBox.height) {
+  } else if (
+    x >= cropBox.x &&
+    x <= cropBox.x + cropBox.width &&
+    y >= cropBox.y &&
+    y <= cropBox.y + cropBox.height
+  ) {
     isDragging = true;
   }
 
@@ -350,38 +355,74 @@ function handleCropMouseMove(e) {
 
     switch (resizeHandle) {
       case "nw":
-        cropBox.x = Math.max(0, Math.min(cropBoxStart.x + dx, cropBoxStart.x + cropBoxStart.width - minSize));
-        cropBox.y = Math.max(0, Math.min(cropBoxStart.y + dy, cropBoxStart.y + cropBoxStart.height - minSize));
+        cropBox.x = Math.max(
+          0,
+          Math.min(cropBoxStart.x + dx, cropBoxStart.x + cropBoxStart.width - minSize),
+        );
+        cropBox.y = Math.max(
+          0,
+          Math.min(cropBoxStart.y + dy, cropBoxStart.y + cropBoxStart.height - minSize),
+        );
         cropBox.width = cropBoxStart.width - (cropBox.x - cropBoxStart.x);
         cropBox.height = cropBoxStart.height - (cropBox.y - cropBoxStart.y);
         break;
       case "ne":
-        cropBox.y = Math.max(0, Math.min(cropBoxStart.y + dy, cropBoxStart.y + cropBoxStart.height - minSize));
-        cropBox.width = Math.max(minSize, Math.min(cropBoxStart.width + dx, rect.width - cropBoxStart.x));
+        cropBox.y = Math.max(
+          0,
+          Math.min(cropBoxStart.y + dy, cropBoxStart.y + cropBoxStart.height - minSize),
+        );
+        cropBox.width = Math.max(
+          minSize,
+          Math.min(cropBoxStart.width + dx, rect.width - cropBoxStart.x),
+        );
         cropBox.height = cropBoxStart.height - (cropBox.y - cropBoxStart.y);
         break;
       case "sw":
-        cropBox.x = Math.max(0, Math.min(cropBoxStart.x + dx, cropBoxStart.x + cropBoxStart.width - minSize));
+        cropBox.x = Math.max(
+          0,
+          Math.min(cropBoxStart.x + dx, cropBoxStart.x + cropBoxStart.width - minSize),
+        );
         cropBox.width = cropBoxStart.width - (cropBox.x - cropBoxStart.x);
-        cropBox.height = Math.max(minSize, Math.min(cropBoxStart.height + dy, rect.height - cropBoxStart.y));
+        cropBox.height = Math.max(
+          minSize,
+          Math.min(cropBoxStart.height + dy, rect.height - cropBoxStart.y),
+        );
         break;
       case "se":
-        cropBox.width = Math.max(minSize, Math.min(cropBoxStart.width + dx, rect.width - cropBoxStart.x));
-        cropBox.height = Math.max(minSize, Math.min(cropBoxStart.height + dy, rect.height - cropBoxStart.y));
+        cropBox.width = Math.max(
+          minSize,
+          Math.min(cropBoxStart.width + dx, rect.width - cropBoxStart.x),
+        );
+        cropBox.height = Math.max(
+          minSize,
+          Math.min(cropBoxStart.height + dy, rect.height - cropBoxStart.y),
+        );
         break;
       case "n":
-        cropBox.y = Math.max(0, Math.min(cropBoxStart.y + dy, cropBoxStart.y + cropBoxStart.height - minSize));
+        cropBox.y = Math.max(
+          0,
+          Math.min(cropBoxStart.y + dy, cropBoxStart.y + cropBoxStart.height - minSize),
+        );
         cropBox.height = cropBoxStart.height - (cropBox.y - cropBoxStart.y);
         break;
       case "s":
-        cropBox.height = Math.max(minSize, Math.min(cropBoxStart.height + dy, rect.height - cropBoxStart.y));
+        cropBox.height = Math.max(
+          minSize,
+          Math.min(cropBoxStart.height + dy, rect.height - cropBoxStart.y),
+        );
         break;
       case "w":
-        cropBox.x = Math.max(0, Math.min(cropBoxStart.x + dx, cropBoxStart.x + cropBoxStart.width - minSize));
+        cropBox.x = Math.max(
+          0,
+          Math.min(cropBoxStart.x + dx, cropBoxStart.x + cropBoxStart.width - minSize),
+        );
         cropBox.width = cropBoxStart.width - (cropBox.x - cropBoxStart.x);
         break;
       case "e":
-        cropBox.width = Math.max(minSize, Math.min(cropBoxStart.width + dx, rect.width - cropBoxStart.x));
+        cropBox.width = Math.max(
+          minSize,
+          Math.min(cropBoxStart.width + dx, rect.width - cropBoxStart.x),
+        );
         break;
     }
   }
@@ -422,7 +463,17 @@ function applyCrop() {
   tempCanvas.width = cropWidth;
   tempCanvas.height = cropHeight;
 
-  tempCtx.drawImage(originalImage, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+  tempCtx.drawImage(
+    originalImage,
+    cropX,
+    cropY,
+    cropWidth,
+    cropHeight,
+    0,
+    0,
+    cropWidth,
+    cropHeight,
+  );
 
   const img = new Image();
   img.onload = () => {
@@ -480,7 +531,8 @@ function updatePanelNavigation() {
     panels.length > 0 ? `${currentPanelIndex + 1} / ${panels.length}` : "0 / 0";
 
   document.getElementById("prevPanel").disabled = currentPanelIndex === 0 || panels.length === 0;
-  document.getElementById("nextPanel").disabled = currentPanelIndex >= panels.length - 1 || panels.length === 0;
+  document.getElementById("nextPanel").disabled =
+    currentPanelIndex >= panels.length - 1 || panels.length === 0;
   document.getElementById("downloadCurrentBtn").disabled = panels.length === 0;
   document.getElementById("downloadAllBtn").disabled = panels.length === 0;
 }
@@ -498,7 +550,10 @@ function drawPanel(panel, canvasId) {
   if (backgroundImage) {
     ctx.filter = `brightness(${settings.bgBrightness}%) contrast(${settings.bgContrast}%)`;
 
-    const scale = Math.max(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+    const scale = Math.max(
+      canvas.width / backgroundImage.width,
+      canvas.height / backgroundImage.height,
+    );
     const scaledWidth = backgroundImage.width * scale;
     const scaledHeight = backgroundImage.height * scale;
     const x = (canvas.width - scaledWidth) / 2;

@@ -3,10 +3,6 @@ import { browser } from "$app/environment";
 export const STATE_DATA = Symbol("state-data");
 export const DEBOUNCE_DURATION = import.meta.env.MODE === "test" ? 0 : 500;
 
-type OnlyData<T> = {
-  [K in keyof T as T[K] extends Function ? never : K]: T[K];
-};
-
 export interface Persistable<D> {
   [STATE_DATA]: D;
 }

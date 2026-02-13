@@ -41,7 +41,7 @@ export class DownloadService {
   async downloadAll(panels: Array<DownloadItem>): Promise<DownloadResult> {
     try {
       const zip = new JSZip();
-      for (let panel of panels) {
+      for (const panel of panels) {
         const blob = await this.stageToBlob(panel.stage);
         zip.file(`${panel.filename}.png`, blob);
       }

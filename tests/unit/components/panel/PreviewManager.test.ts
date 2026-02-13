@@ -5,6 +5,7 @@ import { STATE_DATA } from "$states/persisted.svelte";
 import { textsState } from "$states/texts.svelte";
 import { render, screen, waitFor } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
+import type { Stage } from "svelte-konva";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("$services/downloadService", () => ({
@@ -57,7 +58,7 @@ describe("PreviewManager Integration", () => {
   it("should call downloadPanel with current active text", async () => {
     const user = userEvent.setup();
     textsState[STATE_DATA] = ["First", "Second"];
-    konvaStageState.stage = { node: { id: "stage-ref" } } as any;
+    konvaStageState.stage = { node: { id: "stage-ref" } } as unknown as Stage;
 
     render(PreviewManager);
 
