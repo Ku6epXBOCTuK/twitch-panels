@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
 
 export const STATE_DATA = Symbol("state-data");
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 export const DEBOUNCE_DURATION = import.meta.env.MODE === "test" ? 0 : 500;
 
 export interface Persistable<D> {

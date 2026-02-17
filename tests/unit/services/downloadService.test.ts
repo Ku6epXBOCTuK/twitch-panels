@@ -2,7 +2,7 @@ import { DownloadService, type DownloadItem } from "$services/downloadService";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import type { Stage } from "konva/lib/Stage";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("file-saver", () => {
   return {
@@ -58,10 +58,9 @@ describe("DownloadService", () => {
         "test-panel-1.png",
       );
 
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error).toContain("Konva Stage не найден или не поддерживает toBlob");
-      }
+      assert(result.success === false);
+
+      expect(result.error).toContain("Konva Stage не найден или не поддерживает toBlob");
     });
 
     it("should handle blob creation failure", async () => {
@@ -71,10 +70,9 @@ describe("DownloadService", () => {
 
       const result = await service.downloadPanel(mockKonvaStage, "test-panel-1.png");
 
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error).toContain("Не удалось создать изображение");
-      }
+      assert(result.success === false);
+
+      expect(result.error).toContain("Не удалось создать изображение");
     });
   });
 
@@ -122,10 +120,9 @@ describe("DownloadService", () => {
       ];
       const result = await service.downloadAll(panels);
 
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error).toContain("Ошибка сохранения архива");
-      }
+      assert(result.success === false);
+
+      expect(result.error).toContain("Ошибка сохранения архива");
     });
   });
 });

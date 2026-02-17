@@ -24,11 +24,13 @@ describe("Badge.svelte", () => {
   });
 
   it("should render with empty string", () => {
-    render(Badge, {
+    const { container } = render(Badge, {
       props: {
         text: "",
       },
     });
+
+    expect(container.textContent?.trim()).toBe("");
   });
 
   it("should render with zero", () => {

@@ -6,13 +6,19 @@
   import ColorPicker from "$components/ui/ColorPicker.svelte";
   import RangeSlider from "$components/ui/RangeSlider.svelte";
   import SelectFont from "$components/ui/SelectFont.svelte";
+  import { TYPOGRAPHY } from "$lib/constants";
   import { textConfigState } from "$states/textConfig.svelte";
 </script>
 
 <Card title="Настройки текста">
   <SettingsGrid>
     <SettingsRow label="Размер">
-      <RangeSlider bind:value={textConfigState.fontSize} min={10} max={100} step={1} />
+      <RangeSlider
+        bind:value={textConfigState.fontSize}
+        min={TYPOGRAPHY.FONT_SIZE_MIN}
+        max={TYPOGRAPHY.FONT_SIZE_MAX}
+        step={1}
+      />
     </SettingsRow>
     <SettingsRow label="Шрифт">
       <SelectFont bind:value={textConfigState.fontFamily} />
@@ -24,10 +30,20 @@
       <Alignment bind:align={textConfigState.align} />
     </SettingsRow>
     <SettingsRow label="Отступы">
-      <RangeSlider bind:value={textConfigState.paddingX} min={0} max={100} step={1} />
+      <RangeSlider
+        bind:value={textConfigState.paddingX}
+        min={TYPOGRAPHY.PADDING_X_MIN}
+        max={TYPOGRAPHY.PADDING_X_MAX}
+        step={1}
+      />
     </SettingsRow>
     <SettingsRow label="Смещение">
-      <RangeSlider bind:value={textConfigState.offsetY} min={-100} max={100} step={1} />
+      <RangeSlider
+        bind:value={textConfigState.offsetY}
+        min={TYPOGRAPHY.VERTICAL_OFFSET_MIN}
+        max={TYPOGRAPHY.VERTICAL_OFFSET_MAX}
+        step={1}
+      />
     </SettingsRow>
   </SettingsGrid>
 </Card>

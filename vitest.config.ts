@@ -17,7 +17,7 @@ export default defineConfig({
     include: ["tests/**/*.{test,spec}.{js,ts}"],
     exclude: ["**/node_modules/**", "**/dist/**", "**/.svelte-kit/**", "**/build/**"],
     env: {
-      DEBUG_PRINT_LIMIT: "0",
+      DEBUG_PRINT_LIMIT: "2000",
     },
     coverage: {
       provider: "istanbul",

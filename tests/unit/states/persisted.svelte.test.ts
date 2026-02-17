@@ -1,7 +1,7 @@
 import { STATE_DATA, withPersistence } from "$states/persisted.svelte";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-const localStorageMock = (() => {
+function createMock() {
   let store: Record<string, string> = {};
   return {
     getItem: vi.fn((key: string) => store[key] || null),
@@ -15,13 +15,20 @@ const localStorageMock = (() => {
       store = {};
     }),
   };
-})();
-
-Object.defineProperty(globalThis, "localStorage", {
-  value: localStorageMock,
-});
+}
 
 describe("persisted.svelte", () => {
+  let localStorageMock: ReturnType<typeof createMock>;
+
+  beforeAll(() => {
+    localStorageMock = createMock();
+    vi.stubGlobal("localStorage", localStorageMock);
+  });
+
+  afterAll(() => {
+    vi.unstubAllGlobals();
+  });
+
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllMocks();

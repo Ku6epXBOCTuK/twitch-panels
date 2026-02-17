@@ -8,7 +8,7 @@
   let { value = $bindable() }: Props = $props();
 </script>
 
-<input type="color" bind:value class="color-input" />
+<input type="color" role="button" bind:value class="color-input" />
 <span class="color-value">{value}</span>
 
 <style>

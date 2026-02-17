@@ -57,7 +57,7 @@ describe("Application Constants Logic", () => {
 
   describe("Assets Existence", () => {
     it("should verify that the default background image exists", () => {
-      const { DEFAULT_BACKGROUND_IMAGE } = Constants.PANEL_SETTINGS;
+      const { DEFAULT_BACKGROUND_IMAGE } = Constants.IMAGE_SETTINGS;
 
       const relativePath = DEFAULT_BACKGROUND_IMAGE.replace(/^\.\//, "");
       const fullPath = path.resolve(process.cwd(), "static", relativePath);

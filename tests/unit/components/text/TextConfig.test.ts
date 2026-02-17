@@ -1,13 +1,11 @@
 import TextConfig from "$components/text/TextConfig.svelte";
-import { cleanup, render } from "@testing-library/svelte";
-import { afterEach, describe, it } from "vitest";
-
-afterEach(() => {
-  cleanup();
-});
+import { render } from "@testing-library/svelte";
+import { describe, expect, it } from "vitest";
 
 describe("TextConfig.svelte", () => {
   it("should render without crashing", () => {
-    render(TextConfig);
+    const { container } = render(TextConfig);
+
+    expect(container).toBeTruthy();
   });
 });

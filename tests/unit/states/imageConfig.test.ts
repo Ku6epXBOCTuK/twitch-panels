@@ -1,5 +1,5 @@
 import { PANEL_SETTINGS } from "$lib/constants";
-import { imageConfigState, ImageConfigState } from "$states/imageConfig.svelte";
+import { imageState } from "$states/image.svelte";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 type ImageEventHandler = ((this: HTMLImageElement, ev?: Event) => void) | null;
@@ -61,15 +61,15 @@ vi.stubGlobal(
   },
 );
 
-describe("ImageConfigState", () => {
+describe("imageState", () => {
   beforeEach(() => {
     lastOnload = null;
     lastOnerror = null;
-    imageConfigState.reset();
+    imageState.reset();
   });
 
   it("should create new instance with default values", () => {
-    const newState = new ImageConfigState();
+    const newState = new imageState();
     expect(newState.image).toBeUndefined();
     expect(newState.imageLink).toBe("");
     expect(newState.imageReady).toBe(false);
@@ -81,136 +81,136 @@ describe("ImageConfigState", () => {
   });
 
   it("should initialize with default background image", async () => {
-    await imageConfigState.uploadImageByLink(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE);
+    await imageState.uploadImageByLink(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE);
 
-    expect(imageConfigState.imageReady).toBe(true);
-    expect(imageConfigState.image).toBeDefined();
-    expect(imageConfigState.imageLink).toBe(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE);
+    expect(imageState.imageReady).toBe(true);
+    expect(imageState.image).toBeDefined();
+    expect(imageState.imageLink).toBe(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE);
   });
 
   it("should handle manual image upload correctly", async () => {
     const testLink = "https://example.com/test.png";
-    const uploadPromise = imageConfigState.uploadImageByLink(testLink);
+    const uploadPromise = imageState.uploadImageByLink(testLink);
 
-    expect(imageConfigState.imageReady).toBe(false);
+    expect(imageState.imageReady).toBe(false);
 
     await uploadPromise;
-    expect(imageConfigState.imageReady).toBe(true);
-    expect(imageConfigState.imageLink).toBe(testLink);
+    expect(imageState.imageReady).toBe(true);
+    expect(imageState.imageLink).toBe(testLink);
   });
 
   it("should reset state to defaults", async () => {
-    await imageConfigState.uploadImageByLink("some-image.png");
-    imageConfigState.cropLeft = 100;
+    await imageState.uploadImageByLink("some-image.png");
+    imageState.cropLeft = 100;
 
-    imageConfigState.reset();
+    imageState.reset();
 
-    expect(imageConfigState.imageReady).toBe(false);
-    expect(imageConfigState.imageLink).toBe("");
-    expect(imageConfigState.cropLeft).toBe(0);
-    expect(imageConfigState.image).toBeUndefined();
+    expect(imageState.imageReady).toBe(false);
+    expect(imageState.imageLink).toBe("");
+    expect(imageState.cropLeft).toBe(0);
+    expect(imageState.image).toBeUndefined();
   });
 
   it("should handle image loading error", async () => {
-    await expect(imageConfigState.uploadImageByLink("error-link")).rejects.toThrow(
+    await expect(imageState.uploadImageByLink("error-link")).rejects.toThrow(
       "Failed to load image",
     );
 
-    expect(imageConfigState.imageReady).toBe(false);
+    expect(imageState.imageReady).toBe(false);
   });
 
   it("should abort previous upload when new upload starts", async () => {
-    const upload1 = imageConfigState.uploadImageByLink("test1.jpg");
-    const upload2 = imageConfigState.uploadImageByLink("test2.jpg");
+    const upload1 = imageState.uploadImageByLink("test1.jpg");
+    const upload2 = imageState.uploadImageByLink("test2.jpg");
 
     await expect(upload1).rejects.toThrow("Aborted");
     await expect(upload2).resolves.toBeUndefined();
 
-    expect(imageConfigState.imageLink).toBe("test2.jpg");
+    expect(imageState.imageLink).toBe("test2.jpg");
   });
 
   it("should cleanup previous image before loading new one", async () => {
-    await imageConfigState.uploadImageByLink("test1.jpg");
-    const firstImage = imageConfigState.image;
+    await imageState.uploadImageByLink("test1.jpg");
+    const firstImage = imageState.image;
 
-    await imageConfigState.uploadImageByLink("test2.jpg");
+    await imageState.uploadImageByLink("test2.jpg");
 
     expect(firstImage?.onload).toBeNull();
     expect(firstImage?.onerror).toBeNull();
   });
 
   it("should set crop values", () => {
-    imageConfigState.cropLeft = 10;
-    imageConfigState.cropTop = 20;
-    imageConfigState.cropRight = 30;
-    imageConfigState.cropBottom = 40;
+    imageState.cropLeft = 10;
+    imageState.cropTop = 20;
+    imageState.cropRight = 30;
+    imageState.cropBottom = 40;
 
-    expect(imageConfigState.cropLeft).toBe(10);
-    expect(imageConfigState.cropTop).toBe(20);
-    expect(imageConfigState.cropRight).toBe(30);
-    expect(imageConfigState.cropBottom).toBe(40);
+    expect(imageState.cropLeft).toBe(10);
+    expect(imageState.cropTop).toBe(20);
+    expect(imageState.cropRight).toBe(30);
+    expect(imageState.cropBottom).toBe(40);
   });
 
   it("should cleanup image event handlers on reset", async () => {
-    await imageConfigState.uploadImageByLink("test.jpg");
-    const img = imageConfigState.image;
+    await imageState.uploadImageByLink("test.jpg");
+    const img = imageState.image;
 
-    imageConfigState.reset();
+    imageState.reset();
 
     expect(img?.onload).toBeNull();
     expect(img?.onerror).toBeNull();
   });
 
   it("should abort ongoing upload on reset", async () => {
-    const upload = imageConfigState.uploadImageByLink("test.jpg");
+    const upload = imageState.uploadImageByLink("test.jpg");
 
-    imageConfigState.reset();
+    imageState.reset();
 
     await expect(upload).rejects.toThrow("Aborted");
   });
 
   it("should cleanup resources on destroy", async () => {
-    await imageConfigState.uploadImageByLink("test.jpg");
-    const img = imageConfigState.image;
+    await imageState.uploadImageByLink("test.jpg");
+    const img = imageState.image;
 
-    imageConfigState.destroy();
+    imageState.destroy();
 
-    expect(imageConfigState.image).toBeUndefined();
+    expect(imageState.image).toBeUndefined();
     expect(img?.onload).toBeNull();
     expect(img?.onerror).toBeNull();
   });
 
   it("should abort ongoing upload on destroy", async () => {
-    const upload = imageConfigState.uploadImageByLink("test.jpg");
+    const upload = imageState.uploadImageByLink("test.jpg");
 
-    imageConfigState.destroy();
+    imageState.destroy();
 
     await expect(upload).rejects.toThrow("Aborted");
   });
 
   it("should cover aborted onload branch", async () => {
-    const promise = imageConfigState.uploadImageByLink("test.png");
+    const promise = imageState.uploadImageByLink("test.png");
 
-    imageConfigState.destroy();
+    imageState.destroy();
 
     if (lastOnload) {
       lastOnload.call(new Image() as HTMLImageElement, new Event("load"));
     }
 
     await expect(promise).rejects.toThrow();
-    expect(imageConfigState.imageReady).toBe(false);
+    expect(imageState.imageReady).toBe(false);
   });
 
   it("should cover aborted onerror branch", async () => {
-    const promise = imageConfigState.uploadImageByLink("test.png");
+    const promise = imageState.uploadImageByLink("test.png");
 
-    imageConfigState.destroy();
+    imageState.destroy();
 
     if (lastOnerror) {
       lastOnerror.call(new Image() as HTMLImageElement, new Event("load"));
     }
 
     await expect(promise).rejects.toThrow();
-    expect(imageConfigState.imageReady).toBe(false);
+    expect(imageState.imageReady).toBe(false);
   });
 });

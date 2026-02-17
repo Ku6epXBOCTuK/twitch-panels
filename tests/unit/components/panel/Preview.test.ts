@@ -2,11 +2,11 @@ import Preview from "$components/panel/Preview.svelte";
 import { cleanup, render } from "@testing-library/svelte";
 import { afterEach, describe, expect, it } from "vitest";
 
-afterEach(() => {
-  cleanup();
-});
-
 describe("Preview.svelte", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it("should render without crashing", () => {
     const { container } = render(Preview, {
       props: {
