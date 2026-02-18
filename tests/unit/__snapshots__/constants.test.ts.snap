@@ -6,11 +6,17 @@ exports[`Application Constants Logic > Global Contract (Snapshot) > should match
   "IMAGE_SETTINGS": {
     "BRIGHTNESS_MAX": 100,
     "BRIGHTNESS_MIN": 0,
+    "CHROMA_MAX": 300,
+    "CHROMA_MIN": 0,
     "CONTRAST_MAX": 150,
     "CONTRAST_MIN": 50,
     "DEFAULT_BACKGROUND_IMAGE": "./backgrounds/b1.jpg",
     "DEFAULT_BRIGHTNESS": 100,
+    "DEFAULT_CHROMA": 100,
     "DEFAULT_CONTRAST": 100,
+    "DEFAULT_HUE": 0,
+    "HUE_MAX": 360,
+    "HUE_MIN": 0,
     "MAX_FILE_SIZE": 10485760,
     "SUPPORTED_FORMATS": [
       "image/jpeg",

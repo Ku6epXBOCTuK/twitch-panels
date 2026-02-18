@@ -1,7 +1,8 @@
 <script lang="ts">
   import AppHeader from "$components/layout/AppHeader.svelte";
-  import { PANEL_SETTINGS } from "$lib/constants";
-  import { imageConfigState } from "$states/imageConfig.svelte";
+  import { IMAGE_SETTINGS } from "$lib/constants";
+  import { uploadService } from "$services/uploadService";
+  import { imageState } from "$states/image.svelte";
   import { themeState } from "$states/theme.svelte";
   import { onMount, type Snippet } from "svelte";
   import "../app.css";
@@ -18,7 +19,12 @@
   let { children }: Props = $props();
 
   onMount(async () => {
-    await imageConfigState.uploadImageByLink(PANEL_SETTINGS.DEFAULT_BACKGROUND_IMAGE);
+    let defaultImage = await uploadService.fromUrl(IMAGE_SETTINGS.DEFAULT_BACKGROUND_IMAGE);
+    if (defaultImage.ok) {
+      imageState.fullImage = defaultImage.data;
+    } else {
+      console.error("Failed to load default image");
+    }
   });
 </script>
 

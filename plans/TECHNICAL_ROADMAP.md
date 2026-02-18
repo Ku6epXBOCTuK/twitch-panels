@@ -52,18 +52,18 @@ export const textsState = createState();
 export const konvaAllStagesState: Array<Stage> = $state([]);
 
 // ПЛОХО - класс с $state полями, но без фабрики
-export class ImageConfigState {
+export class imageState {
   image = $state<HTMLImageElement | undefined>(undefined);
   imageLink = $state("");
   // ...
 }
-export const imageConfigState = new ImageConfigState();
+export const imageState = new imageState();
 ```
 
 **Проблемы:**
 
 - `konvaAllStagesState` - глобальный изменяемый массив, нет контроля над операциями
-- `ImageConfigState` - класс с $state, но не фабрика, сложно тестировать
+- `imageState` - класс с $state, но не фабрика, сложно тестировать
 - Нет единого подхода
 
 #### Паттерн C: Смешанный (⚠️ НЕПРАВИЛЬНО)
@@ -151,14 +151,14 @@ export const imageConfigState = new ImageConfigState();
 **Оценка:** ⚠️ **Частично реализовано (нефункционально)**
 
 - ImageManager.svelte — UI есть, но кнопки не работают (Upload, Edit, Reset)
-- CropInline.svelte — визуальный crop box с handles, но нет интеграции с cropperjs и imageConfigState
+- CropInline.svelte — визуальный crop box с handles, но нет интеграции с cropperjs и imageState
 - Настройки яркости/контраста — только UI, нет логики применения
 - **Вывод:** Компоненты выглядят готовыми, но функциональность отсутствует
 
 **Рекомендации (High Priority):**
 
 - Реализовать imageService.ts и интегрировать в ImageManager
-- Добавить логику crop в CropInline (drag, resize, update imageConfigState)
+- Добавить логику crop в CropInline (drag, resize, update imageState)
 - Применить фильтры яркости/контраста к Konva Image в Preview.svelte
 
 ---
@@ -356,7 +356,7 @@ interface ImageService {
 **Архитектура:**
 
 ```
-textsState (массив текстов) + textConfigState (глобальные настройки) + imageConfigState (глобальное изображение)
+textsState (массив текстов) + textConfigState (глобальные настройки) + imageState (глобальное изображение)
          ↓
 PreviewManager (навигация по textsState)
          ↓
@@ -378,7 +378,7 @@ downloadService (экспорт)
 
 - `TextManager` → `textsState.addText()` / `removeText()`
 - `PreviewManager` → читает `textsState.texts` для навигации
-- `Preview` → читает `textsState.texts[current]` + `textConfigState` + `imageConfigState`
+- `Preview` → читает `textsState.texts[current]` + `textConfigState` + `imageState`
 
 Это **достаточно** для MVP.
 
@@ -559,7 +559,7 @@ it("should create panel with text and export it", async () => {
 **2. Изображение flow:**
 
 ```
-ImageManager → imageService → imageConfigState → Preview → export
+ImageManager → imageService → imageState → Preview → export
 ```
 
 **Тест:** [`tests/integration/image-flow.test.ts`](tests/integration/image-flow.test.ts)
@@ -567,7 +567,7 @@ ImageManager → imageService → imageConfigState → Preview → export
 ```typescript
 it("should upload image, crop it, and apply to panel", async () => {
   // 1. Загрузить изображение (mock file)
-  // 2. Проверить imageConfigState.image
+  // 2. Проверить imageState.image
   // 3. Установить crop values
   // 4. Проверить Preview отображает обрезанное изображение
 });

@@ -1,8 +1,11 @@
 <script lang="ts">
+  import { imageState } from "$states/image.svelte";
+
   let active = $state(false);
 </script>
 
 <div class="crop-canvas-container">
+  <img src={imageState.fullImage} alt="Background for use" />
   <canvas class="crop-canvas"></canvas>
   <div class="crop-box" class:active>
     <div class="crop-handle nw"></div>

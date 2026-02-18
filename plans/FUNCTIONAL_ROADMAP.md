@@ -94,7 +94,7 @@
    - **Контракт:** `filter: brightness(${brightness}%) contrast(${contrast}%)`
 
 4. **Сохранить обрезанное изображение**:
-   - Метод `imageConfigState.applyCrop()` должен обновлять `image` с обрезанными данными
+   - Метод `imageState.applyCrop()` должен обновлять `image` с обрезанными данными
    - Использовать canvas для actual cropping
 
 ### 2.2 Валидация и состояния загрузки (Medium Priority)
