@@ -2,7 +2,6 @@
 
 exports[`Application Constants Logic > Global Contract (Snapshot) > should match the previous configuration snapshot 1`] = `
 {
-  "DEFAULT_TEXT_ALIGN": "center",
   "IMAGE_SETTINGS": {
     "BRIGHTNESS_MAX": 100,
     "BRIGHTNESS_MIN": 0,
@@ -35,6 +34,7 @@ exports[`Application Constants Logic > Global Contract (Snapshot) > should match
     "NEXT": "next",
     "PREV": "prev",
   },
+  "TEXT_ALIGN_DEFAULT": "center",
   "TRANSITION_DURATION": 0,
   "TYPOGRAPHY": {
     "FONT_FAMILIES": [
@@ -52,12 +52,13 @@ exports[`Application Constants Logic > Global Contract (Snapshot) > should match
     "FONT_SIZE_MAX": 72,
     "FONT_SIZE_MIN": 10,
     "MAX_TEXT_LENGTH": 100,
+    "OFFSET_Y_DEFAULT": 0,
+    "OFFSET_Y_MAX": 100,
+    "OFFSET_Y_MIN": -100,
     "PADDING_X_DEFAULT": 10,
     "PADDING_X_MAX": 100,
     "PADDING_X_MIN": 0,
     "TEXT_COLOR_DEFAULT": "#ffffff",
-    "VERTICAL_OFFSET_MAX": 100,
-    "VERTICAL_OFFSET_MIN": -100,
   },
   "TextAlign": {
     "CENTER": "center",

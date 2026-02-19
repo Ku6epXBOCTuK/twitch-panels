@@ -17,7 +17,7 @@ describe("Application Constants Logic", () => {
         PANEL_SETTINGS.PANEL_HEIGHT_MAX,
       );
 
-      expect(TYPOGRAPHY.VERTICAL_OFFSET_MAX).toBeGreaterThan(TYPOGRAPHY.VERTICAL_OFFSET_MIN);
+      expect(TYPOGRAPHY.OFFSET_Y_MAX).toBeGreaterThan(TYPOGRAPHY.OFFSET_Y_MIN);
     });
 
     it("should not have duplicate values in lists", () => {

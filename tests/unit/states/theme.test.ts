@@ -1,5 +1,4 @@
 import { Theme } from "$lib/constants";
-import { STATE_DATA } from "$states/persisted.svelte";
 import { themeState } from "$states/theme.svelte";
 import { describe, expect, it } from "vitest";
 
@@ -33,12 +32,12 @@ describe("theme.svelte", () => {
     });
   });
 
-  describe("STATE_DATA", () => {
+  describe("persistence", () => {
     it("should serialize and deserialize theme", () => {
       themeState.current = Theme.DARK;
-      expect(themeState[STATE_DATA]).toEqual({ current: Theme.DARK });
+      expect(themeState.toSnapshot()).toEqual({ current: Theme.DARK });
 
-      themeState[STATE_DATA] = { current: Theme.LIGHT };
+      themeState.fromSnapshot({ current: Theme.LIGHT });
       expect(themeState.current).toBe(Theme.LIGHT);
     });
   });

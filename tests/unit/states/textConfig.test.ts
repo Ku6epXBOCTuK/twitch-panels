@@ -1,6 +1,5 @@
 import { TextAlign } from "$lib/constants";
 import type { HexColor } from "$lib/types";
-import { STATE_DATA } from "$states/persisted.svelte";
 import { textConfigState } from "$states/textConfig.svelte";
 import { describe, expect, it } from "vitest";
 
@@ -37,9 +36,8 @@ describe("textConfig.svelte", () => {
     });
   });
 
-  describe("STATE_DATA", () => {
+  describe("persistence", () => {
     it("should serialize and deserialize state", () => {
-      // Set custom values
       textConfigState.fontSize = 18;
       textConfigState.fontFamily = "Georgia";
       textConfigState.color = "#00ff00" as HexColor;
@@ -47,8 +45,7 @@ describe("textConfig.svelte", () => {
       textConfigState.paddingX = 5;
       textConfigState.offsetY = 15;
 
-      // Get serialized data
-      const data = textConfigState[STATE_DATA];
+      const data = textConfigState.toSnapshot();
       expect(data).toEqual({
         fontSize: 18,
         fontFamily: "Georgia",
@@ -56,17 +53,17 @@ describe("textConfig.svelte", () => {
         align: TextAlign.RIGHT,
         paddingX: 5,
         offsetY: 15,
+        outlined: false,
       });
 
-      // Restore from serialized data
-      textConfigState[STATE_DATA] = {
+      textConfigState.fromSnapshot({
         fontSize: 24,
         fontFamily: "Arial",
         color: "#ffffff" as HexColor,
         align: TextAlign.CENTER,
         paddingX: 10,
         offsetY: 0,
-      };
+      });
 
       expect(textConfigState.fontSize).toBe(24);
       expect(textConfigState.fontFamily).toBe("Arial");

@@ -1,11 +1,10 @@
-import { STATE_DATA } from "$states/persisted.svelte";
-import { createState } from "$states/texts.svelte";
+import { TextsState } from "$states/texts.svelte";
 import { describe, expect, it } from "vitest";
 
 describe("texts.svelte", () => {
   describe("addText", () => {
     it("should add new text with unique ID", () => {
-      const state = createState();
+      const state = new TextsState();
       const initialLength = state.texts.length;
 
       state.addText("Test text");
@@ -16,7 +15,7 @@ describe("texts.svelte", () => {
     });
 
     it("should not add empty text", () => {
-      const state = createState();
+      const state = new TextsState();
       const initialLength = state.texts.length;
 
       state.addText("");
@@ -28,7 +27,7 @@ describe("texts.svelte", () => {
 
   describe("removeText", () => {
     it("should remove text by ID", () => {
-      const state = createState();
+      const state = new TextsState();
       const idToRemove = state.texts[0].id;
       const initialLength = state.texts.length;
 
@@ -39,7 +38,7 @@ describe("texts.svelte", () => {
     });
 
     it("should not affect other texts when removing", () => {
-      const state = createState();
+      const state = new TextsState();
       const remainingTexts = state.texts.filter((item) => item.id !== state.texts[0].id);
       const idToRemove = state.texts[0].id;
 
@@ -51,7 +50,7 @@ describe("texts.svelte", () => {
 
   describe("clear", () => {
     it("should remove all texts", () => {
-      const state = createState();
+      const state = new TextsState();
       state.addText("Test 1");
       state.addText("Test 2");
       state.addText("Test 3");
@@ -62,19 +61,18 @@ describe("texts.svelte", () => {
     });
   });
 
-  describe("STATE_DATA", () => {
+  describe("persistence", () => {
     it("should serialize and deserialize texts", () => {
-      const state = createState();
+      const state = new TextsState();
       state.clear();
       state.addText("First");
       state.addText("Second");
       state.addText("Third");
 
-      const data = state[STATE_DATA];
+      const data = state.toSnapshot();
       expect(data).toEqual(["First", "Second", "Third"]);
 
-      // Restore from serialized data
-      state[STATE_DATA] = ["New 1", "New 2"];
+      state.fromSnapshot(["New 1", "New 2"]);
 
       expect(state.texts).toHaveLength(2);
       expect(state.texts[0].text).toBe("New 1");
@@ -84,10 +82,10 @@ describe("texts.svelte", () => {
     });
 
     it("should handle empty array", () => {
-      const state = createState();
+      const state = new TextsState();
       state.addText("Test");
 
-      state[STATE_DATA] = [];
+      state.fromSnapshot([]);
 
       expect(state.texts).toHaveLength(0);
     });

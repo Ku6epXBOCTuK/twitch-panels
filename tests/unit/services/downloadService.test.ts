@@ -100,7 +100,6 @@ describe("DownloadService", () => {
         { filename: "test-panel-5", stage: mockKonvaStage },
       ];
       const result = await service.downloadAll(panels);
-      // const [blobArg, fileNameArg] = vi.mocked(saveAs).mock.calls[0];
       const zipInstance = vi.mocked(JSZip).mock.instances[0];
 
       expect(result.success).toBe(true);

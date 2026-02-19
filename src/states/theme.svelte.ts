@@ -1,28 +1,28 @@
 import { Theme, type ThemeType } from "$lib/constants";
-import { STATE_DATA, withPersistence } from "./persisted.svelte";
+import { withPersistence, type Persistable } from "./persisted.svelte";
 
-function createState() {
-  let current: ThemeType = $state(Theme.LIGHT);
-
-  return {
-    get current() {
-      return current;
-    },
-    set current(value: ThemeType) {
-      current = value;
-    },
-    toggle() {
-      current = current === Theme.DARK ? Theme.LIGHT : Theme.DARK;
-    },
-    get [STATE_DATA]() {
-      return {
-        current,
-      };
-    },
-    set [STATE_DATA](data: { current: ThemeType }) {
-      current = data.current;
-    },
-  };
+export interface Theme {
+  current: ThemeType;
 }
 
-export const themeState = withPersistence("theme", createState());
+export class ThemeState implements Persistable<Theme> {
+  current: ThemeType = $state(Theme.LIGHT);
+
+  toggle() {
+    this.current = this.current === Theme.DARK ? Theme.LIGHT : Theme.DARK;
+  }
+
+  toSnapshot(): Theme {
+    return {
+      current: this.current,
+    };
+  }
+
+  fromSnapshot(data: Partial<Theme>): void {
+    if (data.current !== undefined) {
+      this.current = data.current;
+    }
+  }
+}
+
+export const themeState = withPersistence("theme", new ThemeState());

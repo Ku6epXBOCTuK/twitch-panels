@@ -40,8 +40,8 @@
     <SettingsRow label="Смещение">
       <RangeSlider
         bind:value={textConfigState.offsetY}
-        min={TYPOGRAPHY.VERTICAL_OFFSET_MIN}
-        max={TYPOGRAPHY.VERTICAL_OFFSET_MAX}
+        min={TYPOGRAPHY.OFFSET_Y_MIN}
+        max={TYPOGRAPHY.OFFSET_Y_MAX}
         step={1}
       />
     </SettingsRow>

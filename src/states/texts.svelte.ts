@@ -1,43 +1,50 @@
-import { STATE_DATA, withPersistence } from "./persisted.svelte";
+import { withPersistence, type Persistable } from "./persisted.svelte";
 
 export interface TextItem {
   text: string;
   id: number;
 }
 
-const defaultTexts: Array<TextItem> = ["About me", "Links", "Projects"].map((text, idx) => ({
-  text,
-  id: idx,
-}));
+export type TextState = Array<TextItem>;
+export type TextStateDTO = Array<string>;
 
-export function createState() {
-  let texts: Array<TextItem> = $state(defaultTexts);
-  let nextId = $state(defaultTexts.length);
+const defaultTexts: TextStateDTO = ["About me", "Links", "Projects"];
 
-  return {
-    get texts() {
-      return texts;
-    },
-    addText(text: string) {
-      if (text.trim().length === 0) return;
-      texts.push({ text, id: nextId });
-      nextId++;
-    },
-    removeText(id: number) {
-      texts = texts.filter((textItem) => textItem.id !== id);
-    },
-    clear() {
-      texts = [];
-      nextId = 0;
-    },
-    get [STATE_DATA]() {
-      return texts.map(({ text }) => text);
-    },
-    set [STATE_DATA](newTexts: Array<string>) {
-      texts = newTexts.map((text, idx) => ({ text, id: idx }));
-      nextId = newTexts.length;
-    },
-  };
+export class TextsState implements Persistable<TextStateDTO> {
+  #texts: Array<TextItem> = $state(this.fromDTO(defaultTexts));
+  #nextId = $state(defaultTexts.length);
+
+  get texts() {
+    return this.#texts;
+  }
+
+  addText(text: string) {
+    if (text.trim().length === 0) return;
+    this.#texts.push({ text, id: this.#nextId });
+    this.#nextId++;
+  }
+
+  removeText(id: number) {
+    this.#texts = this.#texts.filter((textItem) => textItem.id !== id);
+  }
+
+  clear() {
+    this.#texts = [];
+    this.#nextId = 0;
+  }
+
+  toSnapshot(): TextStateDTO {
+    return this.#texts.map(({ text }) => text);
+  }
+
+  fromSnapshot(data: TextStateDTO) {
+    this.#texts = this.fromDTO(data);
+    this.#nextId = data.length;
+  }
+
+  fromDTO(data: TextStateDTO): TextState {
+    return data.map((text, idx) => ({ text, id: idx }));
+  }
 }
 
-export const textsState = withPersistence("texts", createState());
+export const textsState = withPersistence("texts", new TextsState());

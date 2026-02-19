@@ -35,8 +35,9 @@ export const TYPOGRAPHY = {
   PADDING_X_MAX: 100,
 
   // Vertical offset for range inputs
-  VERTICAL_OFFSET_MAX: 100,
-  VERTICAL_OFFSET_MIN: -100,
+  OFFSET_Y_MAX: 100,
+  OFFSET_Y_MIN: -100,
+  OFFSET_Y_DEFAULT: 0,
 
   // Colors
   TEXT_COLOR_DEFAULT: "#ffffff",
@@ -82,7 +83,7 @@ export const TextAlign = {
 
 export type TextAlignType = (typeof TextAlign)[keyof typeof TextAlign];
 
-export const DEFAULT_TEXT_ALIGN: TextAlignType = TextAlign.CENTER;
+export const TEXT_ALIGN_DEFAULT: TextAlignType = TextAlign.CENTER;
 
 export const Theme = {
   DARK: "dark",
