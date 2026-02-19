@@ -44,7 +44,7 @@
     --btn-main: var(--action-primary);
     --btn-hover: var(--action-primary-hover);
     padding: 10px 16px;
-    border: none;
+    border: 1px solid var(--btn-main);
     border-radius: var(--radius);
     font-size: 13px;
     font-weight: 500;

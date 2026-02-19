@@ -4,6 +4,7 @@
   import SettingsRow from "$components/layout/SettingsRow.svelte";
   import Alignment from "$components/ui/Alignment.svelte";
   import ColorPicker from "$components/ui/ColorPicker.svelte";
+  import Outline from "$components/ui/Outline.svelte";
   import RangeSlider from "$components/ui/RangeSlider.svelte";
   import SelectFont from "$components/ui/SelectFont.svelte";
   import { TYPOGRAPHY } from "$lib/constants";
@@ -23,8 +24,9 @@
     <SettingsRow label="Шрифт">
       <SelectFont bind:value={textConfigState.fontFamily} />
     </SettingsRow>
-    <SettingsRow label="Цвет">
+    <SettingsRow label="Цвет" noLabel={true}>
       <ColorPicker bind:value={textConfigState.color} />
+      <Outline bind:outlined={textConfigState.outlined} />
     </SettingsRow>
     <SettingsRow label="Выравнивание" noLabel={true}>
       <Alignment bind:align={textConfigState.align} />

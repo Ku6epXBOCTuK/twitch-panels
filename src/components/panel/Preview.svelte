@@ -31,8 +31,8 @@
       {width}
       {height}
       fontSize={textConfigState.fontSize}
-      stroke={textConfigState.color}
-      fill="transparent"
+      stroke={textConfigState.outlined ? textConfigState.color : "transparent"}
+      fill={textConfigState.outlined ? "transparent" : textConfigState.color}
       fontFamily={textConfigState.fontFamily}
       align={textConfigState.align}
       wrap="none"
