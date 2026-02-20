@@ -25,8 +25,8 @@
     <Button icon={Plus} ariaLabel="Add text" onclick={addText} />
   </InputGroup>
   <ul class="texts-list">
-    {#each textsState.texts as { text, id } (id)}
-      <TextInlineEdit {id} {text} ondelete={() => deleteText(id)} />
+    {#each textsState.texts as { id }, idx (id)}
+      <TextInlineEdit {id} bind:text={textsState.texts[idx].text} ondelete={() => deleteText(id)} />
     {/each}
   </ul>
 </Card>
