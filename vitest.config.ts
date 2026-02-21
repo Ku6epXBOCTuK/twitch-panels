@@ -1,12 +1,24 @@
 import { sveltekit } from "@sveltejs/kit/vite";
+import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [
+    sveltekit(),
+    Icons({
+      compiler: "svelte",
+    }),
+  ],
   test: {
     environment: "jsdom",
+    globals: true,
+    isolate: true,
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/**/*.{test,spec}.{js,ts}"],
+    exclude: ["**/node_modules/**", "**/dist/**", "**/.svelte-kit/**", "**/build/**"],
+    env: {
+      DEBUG_PRINT_LIMIT: "2000",
+    },
     coverage: {
       provider: "istanbul",
       enabled: true,
@@ -20,6 +32,11 @@ export default defineConfig({
         "**/node_modules/**",
         "**/coverage/**",
       ],
+    },
+    server: {
+      deps: {
+        inline: [/unplugin-icons/],
+      },
     },
   },
   resolve: process.env.VITEST

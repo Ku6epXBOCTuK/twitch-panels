@@ -1,0 +1,38 @@
+<script lang="ts">
+  import { PANEL_SETTINGS } from "$lib/constants";
+  import { imageState } from "$states/image.svelte";
+  import { textConfigState } from "$states/textConfig.svelte";
+  import { Image, Layer, Stage, Text } from "svelte-konva";
+
+  interface Props {
+    text: string;
+    stage: Stage | undefined;
+  }
+
+  let { text, stage = $bindable() }: Props = $props();
+
+  let x = $derived(textConfigState.paddingX);
+  let y = $derived(textConfigState.offsetY);
+  let width = $derived(PANEL_SETTINGS.PANEL_WIDTH - 2 * textConfigState.paddingX);
+</script>
+
+<Stage
+  width={PANEL_SETTINGS.PANEL_WIDTH}
+  height={PANEL_SETTINGS.PANEL_HEIGHT_DEFAULT}
+  bind:this={stage}
+>
+  <Layer>
+    <Image image={imageState.masterImage} listening={false} />
+    <Text
+      {text}
+      {x}
+      {y}
+      {width}
+      fontSize={textConfigState.fontSize}
+      stroke={textConfigState.outlined ? textConfigState.color : "transparent"}
+      fill={textConfigState.outlined ? "transparent" : textConfigState.color}
+      fontFamily={textConfigState.fontFamily}
+      align={textConfigState.align}
+    />
+  </Layer>
+</Stage>

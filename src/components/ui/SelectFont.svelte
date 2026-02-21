@@ -1,0 +1,38 @@
+<script lang="ts">
+  interface Props {
+    value: string;
+  }
+
+  let { value = $bindable() }: Props = $props();
+</script>
+
+<select class="select-input" bind:value>
+  <option value="Arial">Arial</option>
+  <option value="Verdana">Verdana</option>
+  <option value="Georgia">Georgia</option>
+  <option value="Times New Roman">Times New Roman</option>
+  <option value="Courier New">Courier New</option>
+  <option value="Impact">Impact</option>
+  <option value="Comic Sans MS">Comic Sans MS</option>
+  <option value="Trebuchet MS">Trebuchet MS</option>
+</select>
+
+<style>
+  .select-input {
+    padding: 8px 10px;
+    border: 1px solid var(--border-main);
+    border-radius: var(--radius);
+    background: var(--surface-main);
+    color: var(--text-main);
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    width: 100%;
+  }
+
+  .select-input:focus {
+    outline: none;
+    border-color: var(--border-strong);
+  }
+</style>

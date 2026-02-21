@@ -1,68 +1,67 @@
 <script lang="ts">
-  type ButtonVariant = "primary" | "secondary" | "danger";
-  type ButtonSize = "sm" | "md" | "lg";
-  type ButtonType = "button" | "submit" | "reset";
+  import type { Component } from "svelte";
+  import type { MouseEventHandler } from "svelte/elements";
 
   interface Props {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
+    icon: Component;
+    ariaLabel: string;
+    onclick?: MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
-    type?: ButtonType;
-    fullWidth?: boolean;
-    loading?: boolean;
-    class?: string;
-    children?: any;
-    onclick?: (event: MouseEvent) => void;
-    [key: string]: any;
+    label?: string;
+    type?: "primary" | "secondary" | "danger" | "outline" | "mini";
+    extra?: "grow";
   }
 
   let {
-    variant = "primary",
-    size = "md",
+    icon: Icon,
+    ariaLabel,
+    onclick = () => {},
     disabled = false,
-    type = "button",
-    fullWidth = false,
-    loading = false,
-    class: className = "",
-    children,
-    ...restProps
+    label = "",
+    type = "primary",
+    extra,
   }: Props = $props();
 </script>
 
 <button
-  {type}
+  class="btn"
+  class:btn-primary={type === "primary"}
+  class:btn-secondary={type === "secondary"}
+  class:btn-outline={type === "outline" || type === "mini"}
+  class:btn-danger={type === "danger"}
+  class:btn-mini={type === "mini"}
+  class:grow={extra === "grow"}
   {disabled}
-  class:btn-primary={variant === "primary"}
-  class:btn-secondary={variant === "secondary"}
-  class:btn-danger={variant === "danger"}
-  class:btn-sm={size === "sm"}
-  class:btn-md={size === "md"}
-  class:btn-lg={size === "lg"}
-  class:btn-full={fullWidth}
-  class:btn-loading={loading}
-  class={className}
-  {...restProps}
+  {onclick}
+  aria-label={ariaLabel}
 >
-  {#if loading}
-    <span class="btn-spinner"></span>
-  {/if}
-  {@render children?.()}
+  <Icon />
+  {label}
 </button>
 
 <style>
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
+    --btn-main: var(--action-primary);
+    --btn-hover: var(--action-primary-hover);
+    padding: 10px 16px;
+    border: 1px solid var(--btn-main);
+    border-radius: var(--radius);
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
     white-space: nowrap;
+    background-color: var(--btn-main);
+    color: var(--text-action);
+  }
+
+  .btn :global(svg) {
+    width: 16px;
+    height: 16px;
   }
 
   .btn:disabled {
@@ -70,73 +69,47 @@
     cursor: not-allowed;
   }
 
-  /* Sizes */
-  .btn-sm {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-  }
-
-  .btn-md {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-  }
-
-  .btn-lg {
-    padding: 1rem 2rem;
-    font-size: 1.125rem;
-  }
-
-  .btn-full {
-    width: 100%;
-  }
-
-  /* Variants */
-  .btn-primary {
-    background: #007bff;
-    color: white;
-  }
-
-  .btn-primary:hover:not(:disabled) {
-    background: #0056b3;
+  .btn:hover:not(:disabled) {
+    background-color: var(--btn-hover);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-secondary {
-    background: #6c757d;
-    color: white;
+    --btn-main: var(--action-secondary);
+    --btn-hover: var(--action-secondary-hover);
   }
 
-  .btn-secondary:hover:not(:disabled) {
-    background: #545b62;
+  .btn-mini {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border-main);
+    border-radius: var(--radius);
+    justify-content: center;
+  }
+
+  .btn-mini:hover:not(:disabled) {
+    border-color: var(--border-main);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-strong);
+  }
+
+  .btn-outline:hover:not(:disabled) {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    color: var(--text-main);
   }
 
   .btn-danger {
-    background: #dc3545;
-    color: white;
+    --btn-main: var(--danger-base);
   }
 
-  .btn-danger:hover:not(:disabled) {
-    background: #c82333;
-  }
-
-  /* Loading state */
-  .btn-loading {
-    position: relative;
-    pointer-events: none;
-  }
-
-  .btn-spinner {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    border: 2px solid currentColor;
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+  .grow {
+    flex-grow: 1;
+    justify-content: center;
   }
 </style>
