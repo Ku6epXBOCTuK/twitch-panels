@@ -1,12 +1,56 @@
 <script lang="ts">
+  import { IMAGE_SETTINGS, PANEL_SETTINGS } from "$lib/constants";
   import { imageState } from "$states/image.svelte";
+  import Konva from "konva";
+  import { onMount } from "svelte";
+  import { Image, Layer, Stage } from "svelte-konva";
 
   let active = $state(false);
+  let masterImage: Image | undefined = $state();
+
+  let contrast = $derived(imageState.appliedFilters.contrast);
+  let brightness = $derived(imageState.appliedFilters.brightness);
+  let hue = $derived(imageState.appliedFilters.hue);
+  let saturation = $derived(imageState.appliedFilters.saturation);
+  let luminance = $derived(imageState.appliedFilters.luminance);
+
+  function updateMasterImage() {
+    if (masterImage?.node && masterImage?.node?.width() > 0) {
+      masterImage?.node.cache();
+      imageState.masterImage = masterImage?.node.toCanvas();
+    }
+  }
+
+  $effect(() => {
+    void contrast;
+    void brightness;
+    void hue;
+    void saturation;
+    void luminance;
+    updateMasterImage();
+  });
+
+  onMount(async () => {
+    updateMasterImage();
+  });
 </script>
 
 <div class="crop-canvas-container">
-  <img src={imageState.fullImage} alt="Background for use" />
-  <canvas class="crop-canvas"></canvas>
+  <Stage width={PANEL_SETTINGS.PANEL_WIDTH} height={PANEL_SETTINGS.PANEL_HEIGHT_DEFAULT}>
+    <Layer>
+      <Image
+        image={imageState.croppedImage}
+        bind:this={masterImage}
+        filters={[Konva.Filters.Brightness, Konva.Filters.Contrast, Konva.Filters.HSL]}
+        brightness={brightness / IMAGE_SETTINGS.BRIGHTNESS_DIVIDER}
+        {contrast}
+        {hue}
+        saturation={saturation / IMAGE_SETTINGS.SATURATION_DIVIDER}
+        luminance={luminance / IMAGE_SETTINGS.LUMINANCE_DIVIDER}
+      />
+    </Layer>
+  </Stage>
+
   <div class="crop-box" class:active>
     <div class="crop-handle nw"></div>
     <div class="crop-handle ne"></div>
@@ -28,12 +72,6 @@
     border-radius: var(--radius);
     overflow: hidden;
     cursor: crosshair;
-  }
-
-  .crop-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
   }
 
   .crop-box {

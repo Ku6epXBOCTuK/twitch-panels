@@ -14,7 +14,6 @@
   let x = $derived(textConfigState.paddingX);
   let y = $derived(textConfigState.offsetY);
   let width = $derived(PANEL_SETTINGS.PANEL_WIDTH - 2 * textConfigState.paddingX);
-  let height = PANEL_SETTINGS.PANEL_HEIGHT_DEFAULT;
 </script>
 
 <Stage
@@ -23,20 +22,17 @@
   bind:this={stage}
 >
   <Layer>
-    <Image image={imageState.croppedImage}></Image>
+    <Image image={imageState.masterImage} listening={false} />
     <Text
       {text}
       {x}
       {y}
       {width}
-      {height}
       fontSize={textConfigState.fontSize}
       stroke={textConfigState.outlined ? textConfigState.color : "transparent"}
       fill={textConfigState.outlined ? "transparent" : textConfigState.color}
       fontFamily={textConfigState.fontFamily}
       align={textConfigState.align}
-      wrap="none"
-      ellipsis={true}
     />
   </Layer>
 </Stage>

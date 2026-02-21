@@ -1,19 +1,34 @@
 <script lang="ts">
   import type { ChangeEventHandler } from "svelte/elements";
+  import Reset from "~icons/lucide/rotate-ccw";
+  import Button from "./Button.svelte";
 
   interface Props {
     value: number;
     min?: number;
     max?: number;
     step?: number;
+    defaultValue?: number;
+    showReset?: boolean;
     onchange?: ChangeEventHandler<HTMLInputElement>;
   }
 
-  let { value = $bindable(), min = 0, max = 100, step = 1, onchange = () => {} }: Props = $props();
+  let {
+    value = $bindable(),
+    min = 0,
+    max = 100,
+    step = 1,
+    onchange = () => {},
+    defaultValue = 0,
+    showReset = false,
+  }: Props = $props();
 </script>
 
 <input type="range" {min} {max} {step} bind:value class="slider" {onchange} />
 <span class="value-display">{value}</span>
+{#if showReset}
+  <Button ariaLabel="Reset" icon={Reset} type="mini" onclick={() => (value = defaultValue)} />
+{/if}
 
 <style>
   .slider {

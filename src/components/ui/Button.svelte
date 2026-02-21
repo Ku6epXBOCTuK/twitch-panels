@@ -27,7 +27,7 @@
   class="btn"
   class:btn-primary={type === "primary"}
   class:btn-secondary={type === "secondary"}
-  class:btn-outline={type === "outline"}
+  class:btn-outline={type === "outline" || type === "mini"}
   class:btn-danger={type === "danger"}
   class:btn-mini={type === "mini"}
   class:grow={extra === "grow"}
@@ -79,6 +79,19 @@
     --btn-hover: var(--action-secondary-hover);
   }
 
+  .btn-mini {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border-main);
+    border-radius: var(--radius);
+    justify-content: center;
+  }
+
+  .btn-mini:hover:not(:disabled) {
+    border-color: var(--border-main);
+  }
+
   .btn-outline {
     background: transparent;
     color: var(--text-main);
@@ -93,19 +106,6 @@
 
   .btn-danger {
     --btn-main: var(--danger-base);
-  }
-
-  .btn-mini {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: 1px solid var(--border-main);
-    border-radius: var(--radius);
-    justify-content: center;
-  }
-
-  .btn-mini:hover:not(:disabled) {
-    border-color: var(--border-main);
   }
 
   .grow {

@@ -4,11 +4,13 @@
   import Button from "$components/ui/Button.svelte";
   import { PANEL_SETTINGS, TRANSITION_DURATION, type SlideDirectionType } from "$lib/constants";
   import { downloadService, type DownloadItem } from "$services/downloadService";
+  import { imageState } from "$states/image.svelte";
   import { konvaAllStagesState } from "$states/konvaAllStages.svelte";
   import { konvaStageState } from "$states/konvaStage.svelte";
   import { textsState } from "$states/texts.svelte";
   import { fly } from "svelte/transition";
   import Download from "~icons/lucide/download";
+  import Loader from "~icons/lucide/loader";
   import StickyNote from "~icons/lucide/sticky-note";
   import Preview from "./Preview.svelte";
   import PreviewAll from "./PreviewAll.svelte";
@@ -67,6 +69,9 @@
             in:fly={{ x: xDirection, duration: TRANSITION_DURATION }}
             out:fly={{ x: -xDirection, duration: TRANSITION_DURATION }}
           >
+            <div class="loader" class:loading={imageState.isReady === false}>
+              <Loader />
+            </div>
             <Preview {text} bind:stage={konvaStageState.stage} />
           </div>
         {/key}
@@ -140,5 +145,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+    opacity: 0;
+    &.loading {
+      opacity: 1;
+      animation: spin 3s linear infinite;
+    }
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>

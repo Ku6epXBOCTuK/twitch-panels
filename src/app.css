@@ -48,10 +48,9 @@
 
   --text-main: oklch(from var(--brand-main) 0.94 0.01 h);
   --text-muted: oklch(from var(--brand-main) 0.75 0.02 h);
-  /* --text-action: oklch(from var(--brand-main) 0.12 0.02 h); */
 
-  --border-main: oklch(from var(--brand-main) 0.22 0.04 h);
-  --border-strong: oklch(from var(--brand-main) 0.3 0.06 h);
+  --border-main: oklch(from var(--brand-main) 0.26 0.04 h);
+  --border-strong: oklch(from var(--brand-main) 0.4 0.06 h);
 
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);

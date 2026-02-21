@@ -9,10 +9,11 @@
   import SelectFont from "$components/ui/SelectFont.svelte";
   import { TYPOGRAPHY } from "$lib/constants";
   import { textConfigState } from "$states/textConfig.svelte";
+  import TextSettings from "~icons/lucide/text-initial";
 </script>
 
 <Card title="Настройки текста">
-  <SettingsGrid>
+  <SettingsGrid label="Настройки шрифта" icon={TextSettings}>
     <SettingsRow label="Размер">
       <RangeSlider
         bind:value={textConfigState.fontSize}

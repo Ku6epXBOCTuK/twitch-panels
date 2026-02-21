@@ -7,7 +7,7 @@ describe("imageState", () => {
   });
 
   it("should create new instance with default values", () => {
-    expect(imageState.fullImage).toBeNull();
+    expect(imageState.fullImage).toBe("");
     expect(imageState.croppedImage).toBeUndefined();
     expect(imageState.cropRect).toStrictEqual({ left: 0, top: 0, right: 0, bottom: 0 });
   });
