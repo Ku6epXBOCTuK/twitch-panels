@@ -41,15 +41,16 @@
 - Использование file-saver и JSZip
 - **Приоритет:** High - финальная цель пользователя
 
-#### 1.4 Система фоновых изображений (частичная)
+#### 1.4 Система фоновых изображений
 
-**Файлы:** [`src/states/imageConfig.svelte.ts`](src/states/imageConfig.svelte.ts), [`src/components/image/ImageManager.svelte`](src/components/image/ImageManager.svelte), [`src/components/image/CropInline.svelte`](src/components/image/CropInline.svelte)
+**Файлы:** [`src/states/image.svelte.ts`](src/states/image.svelte.ts), [`src/components/image/ImageManager.svelte`](src/components/image/ImageManager.svelte), [`src/components/image/CropInline.svelte`](src/components/image/CropInline.svelte), [`src/services/uploadService.ts`](src/services/uploadService.ts)
 
-- Загрузка изображения по URL (только UI кнопки)
+- Загрузка изображений из файла, URL или буфера обмена
 - Визуальный интерфейс для обрезки (crop box с handles)
-- Настройки яркости и контраста (только UI слайдеры)
-- Автозагрузка дефолтного фона при старте
-- **Приоритет:** Low - нерабочая система
+- Настройки яркости, контраста, оттенка, насыщенности и яркости
+- Применение фильтров с debounce (150ms)
+- Сохранение настроек в localStorage
+- **Приоритет:** High - полностью рабочий функционал
 
 #### 1.5 Базовый UI/UX
 
@@ -66,67 +67,55 @@
 
 ---
 
-## 2. Low-hanging fruit (Ближайшие улучшения)
+## 2. Ближайшие улучшения
 
-### 2.1 Завершение системы изображений (High Priority)
+### 2.1 Улучшение валидации и UX (Medium Priority)
 
-**Проблема:** [`src/components/image/ImageManager.svelte`](src/components/image/ImageManager.svelte) имеет UI, но нет логики загрузки/обработки.
+**Текущее состояние:** Основной функционал работает, но можно улучшить пользовательский опыт.
 
-**Требуемые правки:**
+**Требуемые улучшения:**
 
-1. **Реализовать загрузку изображений** в [`src/services/imageService.ts`](src/services/imageService.ts):
-   - Drag & drop поддержка
-   - Paste из буфера обмена
-   - Загрузка по URL с валидацией
-   - Валидация форматов (JPEG, PNG, WebP, GIF) и размера (10MB max)
-   - **Контракт:** `imageService.uploadImage(source: File | string): Promise<ImageConfig>`
+1. **Валидация текстов:**
+   - Добавить ограничение на длину текста (max 100 символов)
+   - Показать счетчик символов
+   - Визуальная индикация ошибки при превышении лимита
 
-2. **Интегрировать cropperjs** в [`src/components/image/CropInline.svelte`](src/components/image/CropInline.svelte):
-   - Инициализация cropper.js на canvas
-   - Привязка crop box к данным состояния
-   - Реализовать drag & drop для перемещения
-   - Реализовать resize через 8 handles
-   - **Контракт:** `onCropChange(crop: { left, top, right, bottom })`
+2. **Валидация изображений:**
+   - Проверка формата (JPEG, PNG, WebP, GIF)
+   - Проверка размера файла (10MB max)
+   - Показать ошибку при неудачной загрузке
 
-3. **Применить фильтры яркости/контраста**:
-   - В [`src/states/imageConfig.svelte.ts`](src/states/imageConfig.svelte.ts) добавить `brightness: number`, `contrast: number`
-   - Применить CSS filters к Konva Image в [`src/components/panel/Preview.svelte`](src/components/panel/Preview.svelte)
-   - **Контракт:** `filter: brightness(${brightness}%) contrast(${contrast}%)`
+3. **Состояния загрузки:**
+   - Показать индикатор загрузки при загрузке по URL
+   - Отключить кнопки во время загрузки
+   - Показать toast уведомление об успехе/ошибке
 
-4. **Сохранить обрезанное изображение**:
-   - Метод `imageState.applyCrop()` должен обновлять `image` с обрезанными данными
-   - Использовать canvas для actual cropping
+4. **Пустые состояния:**
+   - Показать красивый empty state когда нет текстов
+   - Показать placeholder с инструкцией когда нет изображения
 
-### 2.2 Валидация и состояния загрузки (Medium Priority)
+### 2.2 Улучшение доступности (Medium Priority)
 
-**Тексты:**
+**Файлы для правок:**
 
-- [`src/components/text/TextInput.svelte`](src/components/text/TextInput.svelte): добавить валидацию длины (max 100 chars из [`src/lib/constants.ts`](src/lib/constants.ts):32)
-- Показать ошибку при превышении длины
-- Добавить счетчик символов "3/100"
+- Все кнопки уже имеют `aria-label` ✅
+- [`src/components/text/TextInput.svelte`](src/components/text/TextInput.svelte): добавить `aria-describedby` для валидации
+- [`src/components/text/TextInlineEdit.svelte`](src/components/text/TextInlineEdit.svelte): добавить `aria-label` на delete button (уже есть)
+- Добавить `role="region"` и `aria-label` на карточки
+- Убедиться, что фокусный порядок логичен (Tab navigation)
 
-**Изображения:**
+### 2.3 Расширенные настройки текста (Medium Priority)
 
-- [`src/components/image/ImageManager.svelte`](src/components/image/ImageManager.svelte): показать состояние загрузки (spinner) при загрузке по URL
-- Показать ошибку при неудачной загрузке
-- Валидация формата/размера до загрузки
+**Файлы для модификации:** [`src/states/textConfig.svelte.ts`](src/states/textConfig.svelte.ts), [`src/components/text/TextConfig.svelte`](src/components/text/TextConfig.svelte)
 
-**Экспорт:**
+Добавить:
 
-- [`src/services/downloadService.ts`](src/services/downloadService.ts): показать прогресс-бар при `downloadAll()`
-- Отключить кнопки во время экспорта
-- Показать toast уведомление об успехе/ошибке
+- **Тень текста:** `textShadow: { offsetX, offsetY, blur, color }`
+- **Прозрачность:** `opacity: number` (0-100)
+- **Градиент:** `gradient: { type: 'linear' | 'radial', colors: HexColor[], angle? }` (сложнее)
+- **Несколько текстовых блоков на панели:** потребует переархитектуры Preview.svelte
 
-### 2.3 Пустые состояния (Medium Priority)
-
-**Списки:**
-
-- [`src/components/text/TextManager.svelte`](src/components/text/TextManager.svelte): когда `textsState.texts.length === 0`, показать красивый empty state вместо пустого UL
-- [`src/components/panel/PreviewManager.svelte`](src/components/panel/PreviewManager.svelte): уже есть empty state, но можно улучшить (иконка + текст + CTA)
-
-**Изображение:**
-
-- [`src/components/image/ImageManager.svelte`](src/components/image/ImageManager.svelte): когда нет изображения, показать placeholder с инструкцией
+**Приоритет:** Medium - улучшает качество панелей, но требует работы с Konva.
 
 ### 2.4 Улучшение доступности (Medium Priority)
 
