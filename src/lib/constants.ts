@@ -99,4 +99,4 @@ export const Theme = {
 
 export type ThemeType = (typeof Theme)[keyof typeof Theme];
 
-export const TRANSITION_DURATION = import.meta.env.MODE === "test" ? 0 : 300;
+export const TRANSITION_DURATION = import.meta.env.MODE === "test" ? 0 : 200;
