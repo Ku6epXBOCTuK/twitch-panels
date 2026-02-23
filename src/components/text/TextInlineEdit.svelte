@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$components/ui/Button.svelte";
   import { TRANSITION_DURATION } from "$lib/constants";
-  import { fly } from "svelte/transition";
+  import { fly, slide } from "svelte/transition";
   import Cross from "~icons/lucide/x";
 
   interface Props {
@@ -13,9 +13,18 @@
   let { text = $bindable(), id, ondelete }: Props = $props();
 </script>
 
-<li class="text-item" transition:fly={{ x: 600, duration: TRANSITION_DURATION }}>
-  <input type="text" bind:value={text} />
-  <Button icon={Cross} ariaLabel="Delete" type="danger" onclick={() => ondelete(id)} />
+<li
+  in:slide={{ duration: TRANSITION_DURATION / 2 }}
+  out:slide={{ duration: TRANSITION_DURATION / 2, delay: TRANSITION_DURATION }}
+>
+  <div
+    class="text-item"
+    in:fly={{ x: 600, duration: TRANSITION_DURATION, delay: TRANSITION_DURATION }}
+    out:fly={{ x: 600, duration: TRANSITION_DURATION }}
+  >
+    <input type="text" bind:value={text} />
+    <Button icon={Cross} ariaLabel="Delete" type="danger" onclick={() => ondelete(id)} />
+  </div>
 </li>
 
 <style>
