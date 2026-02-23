@@ -16,7 +16,7 @@
 <div class="settings-grid">
   <label>
     {label}
-    <Button {icon} ariaLabel="Expand" type="mini" onclick={() => (expanded = !expanded)} />
+    <Button {icon} ariaLabel="Expand" size="mini" onclick={() => (expanded = !expanded)} />
   </label>
   {#if expanded}
     {@render children()}

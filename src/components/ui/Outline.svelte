@@ -13,5 +13,5 @@
   icon={TypeOutline}
   ariaLabel="toggle outline"
   onclick={() => (outlined = !outlined)}
-  type={outlined ? "outline" : "primary"}
+  variant={outlined ? "outline" : "primary"}
 />

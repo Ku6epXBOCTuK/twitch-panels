@@ -26,9 +26,9 @@
     <CropInline />
 
     <div class="crop-controls">
-      <Button label="Загрузить" ariaLabel="Upload" icon={Upload} type="primary" />
-      <Button label="Редактировать" ariaLabel="Edit" icon={Pencil} type="secondary" />
-      <Button label="Сбросить" ariaLabel="Reset" icon={Reset} type="outline" />
+      <Button label="Загрузить" ariaLabel="Upload" icon={Upload} variant="primary" />
+      <Button label="Редактировать" ariaLabel="Edit" icon={Pencil} variant="secondary" />
+      <Button label="Сбросить" ariaLabel="Reset" icon={Reset} variant="outline" />
     </div>
 
     <SettingsGrid label="Настройки изображения" icon={Sliders}>
