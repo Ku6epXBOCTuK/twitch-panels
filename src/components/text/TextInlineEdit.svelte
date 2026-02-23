@@ -23,7 +23,13 @@
     out:fly={{ x: 600, duration: TRANSITION_DURATION }}
   >
     <input type="text" bind:value={text} />
-    <Button icon={Cross} ariaLabel="Delete" type="danger" onclick={() => ondelete(id)} />
+    <Button
+      icon={Cross}
+      ariaLabel="Delete"
+      variant="danger"
+      size="mini"
+      onclick={() => ondelete(id)}
+    />
   </div>
 </li>
 

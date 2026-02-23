@@ -29,12 +29,12 @@
 <Button
   icon={ChevronLeft}
   ariaLabel="Previous slide"
-  type="mini"
+  size="mini"
   onclick={prev}
   disabled={isFirst}
 />
 <span class="panel-indicator">{current + 1} / {max}</span>
-<Button icon={ChevronRight} ariaLabel="Next slide" type="mini" onclick={next} disabled={isLast} />
+<Button icon={ChevronRight} ariaLabel="Next slide" size="mini" onclick={next} disabled={isLast} />
 
 <style>
   .panel-indicator {

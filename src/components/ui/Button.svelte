@@ -8,8 +8,8 @@
     onclick?: MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
     label?: string;
-    type?: "primary" | "secondary" | "danger" | "outline" | "mini";
-    extra?: "grow";
+    variant?: "primary" | "secondary" | "danger" | "outline";
+    size?: "default" | "mini";
   }
 
   let {
@@ -18,19 +18,18 @@
     onclick = () => {},
     disabled = false,
     label = "",
-    type = "primary",
-    extra,
+    variant = "primary",
+    size = "default",
   }: Props = $props();
 </script>
 
 <button
   class="btn"
-  class:btn-primary={type === "primary"}
-  class:btn-secondary={type === "secondary"}
-  class:btn-outline={type === "outline" || type === "mini"}
-  class:btn-danger={type === "danger"}
-  class:btn-mini={type === "mini"}
-  class:grow={extra === "grow"}
+  class:btn-primary={variant === "primary"}
+  class:btn-secondary={variant === "secondary"}
+  class:btn-outline={variant === "outline"}
+  class:btn-danger={variant === "danger"}
+  class:btn-mini={size === "mini"}
   {disabled}
   {onclick}
   aria-label={ariaLabel}
@@ -79,17 +78,8 @@
     --btn-hover: var(--action-secondary-hover);
   }
 
-  .btn-mini {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: 1px solid var(--border-main);
-    border-radius: var(--radius);
-    justify-content: center;
-  }
-
-  .btn-mini:hover:not(:disabled) {
-    border-color: var(--border-main);
+  .btn-danger {
+    --btn-main: var(--danger-base);
   }
 
   .btn-outline {
@@ -104,12 +94,11 @@
     color: var(--text-main);
   }
 
-  .btn-danger {
-    --btn-main: var(--danger-base);
-  }
-
-  .grow {
-    flex-grow: 1;
+  .btn-mini {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: var(--radius);
     justify-content: center;
   }
 </style>

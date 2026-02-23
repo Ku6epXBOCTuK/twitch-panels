@@ -27,7 +27,13 @@
 <input type="range" {min} {max} {step} bind:value class="slider" {onchange} />
 <span class="value-display">{value}</span>
 {#if showReset}
-  <Button ariaLabel="Reset" icon={Reset} type="mini" onclick={() => (value = defaultValue)} />
+  <Button
+    ariaLabel="Reset"
+    icon={Reset}
+    size="mini"
+    variant="outline"
+    onclick={() => (value = defaultValue)}
+  />
 {/if}
 
 <style>

@@ -12,7 +12,7 @@
   --surface-subtle: oklch(from var(--brand-main) 0.95 0.1 h);
   --surface-elevated: oklch(from var(--brand-main) 0.99 0.05 h);
   --surface-control: oklch(from var(--brand-main) 0.85 0.04 h);
-  --surface-hover: oklch(from var(--brand-main) 0.9 0.1 h);
+  --surface-hover: oklch(from var(--brand-main) 0.8 0.1 h);
 
   --action-primary: oklch(from var(--brand-main) var(--action-lightness) var(--action-chroma) h);
   --action-primary-hover: oklch(from var(--action-primary) calc(l - var(--hover-step)) c h);
@@ -23,8 +23,8 @@
   --text-muted: oklch(from var(--brand-main) 0.45 0.02 h);
   --text-action: oklch(from var(--brand-main) 0.99 0.02 h);
 
-  --border-main: oklch(from var(--brand-main) 0.9 0.04 h);
-  --border-strong: oklch(from var(--brand-main) 0.8 0.06 h);
+  --border-main: oklch(from var(--brand-main) 0.7 0.1 h);
+  --border-strong: oklch(from var(--brand-main) 0.6 0.1 h);
 
   --shadow: 0 1px 3px oklch(from var(--brand-main) 0.2 0.05 h / 0.1);
   --shadow-md: 0 4px 12px oklch(from var(--brand-main) 0.2 0.05 h / 0.1);
@@ -41,7 +41,7 @@
   --surface-subtle: oklch(from var(--brand-main) 0.16 0.03 h);
   --surface-elevated: oklch(from var(--brand-main) 0.2 0.03 h);
   --surface-control: oklch(from var(--brand-main) 0.4 0.06 h);
-  --surface-hover: oklch(from var(--brand-main) 0.24 0.04 h);
+  --surface-hover: oklch(from var(--brand-main) 0.4 0.04 h);
 
   --action-primary-hover: oklch(from var(--action-primary) calc(l + var(--hover-step)) c h);
   --action-secondary-hover: oklch(from var(--action-secondary) calc(l + var(--hover-step)) c h);
@@ -49,8 +49,8 @@
   --text-main: oklch(from var(--brand-main) 0.94 0.01 h);
   --text-muted: oklch(from var(--brand-main) 0.75 0.02 h);
 
-  --border-main: oklch(from var(--brand-main) 0.26 0.04 h);
-  --border-strong: oklch(from var(--brand-main) 0.4 0.06 h);
+  --border-main: oklch(from var(--brand-main) 0.3 0.1 h);
+  --border-strong: oklch(from var(--brand-main) 0.4 0.1 h);
 
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);

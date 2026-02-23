@@ -88,7 +88,7 @@
       <Button
         label="Скачать"
         ariaLabel="Download current"
-        type="secondary"
+        variant="secondary"
         icon={Download}
         onclick={downloadCurrent}
       />
