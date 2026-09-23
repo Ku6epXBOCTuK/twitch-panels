@@ -4,7 +4,7 @@
 
 ## 🌐 Демонстрация
 
-Приложение доступно по адресу: https://ku6epxboctuk.github.io/twitch-panels/
+Приложение доступно [тут](https://ku6epxboctuk.is-a.dev/twitch-panels/)
 
 ## 📋 Описание
 
@@ -96,3 +96,7 @@ npm run test:coverage
 ## 📞 Контакты
 
 Если у вас есть вопросы или предложения, пожалуйста, создайте issue в репозитории проекта.
+
+## 📄 Дополнительные ссылки
+
+- [BrowserStack](https://www.browserstack.com/) This project is tested with BrowserStack

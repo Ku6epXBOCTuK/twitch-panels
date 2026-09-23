@@ -21,7 +21,7 @@
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write . --log-level=warn"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.2",
